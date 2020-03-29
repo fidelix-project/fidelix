@@ -78,11 +78,11 @@ GCC_VERSION=9.2.0
 
 include arch/$(ARCH).mk
 
-.SECONDARY: $(OUTPUT_FILE)
 $(OUTPUT_FILE): build
 	tar cf $@ $(PREFIX)
 
 # Download all of the sources, verify their integrity, and extract them.
+.SECONDARY: src
 src: download verify extract
 
 # Make the necessary perparations for the build environment
@@ -97,8 +97,12 @@ build: .stamp_prepare $(PACKAGES)
 clean:
 	rm -rf build download src .stamp_*
 
+.PHONY: clean-up
+clean-up:
+	rm -rf build download src
+
 .PHONY: clean-prepare
-clean-prepare:
+clean-prepare: clean-chroot
 	rm -rf build
 	rm -rf .stamp_pkg_*
 	rm -rf .stamp_test_*
@@ -131,7 +135,7 @@ extract: .stamp_extract
 	cd src; cat ../download/*.tar.xz | tar xJvi
 	touch $@
 
-.stamp_prepare: src
+.stamp_prepare: .stamp_extract
 	mkdir -p $(PREFIX)
 	rm -rf $(PREFIX)/*
 	cd $(PREFIX); ln -s lib lib$(ARCH_BITS)
@@ -418,8 +422,12 @@ prepare-chroot: .stamp_chroot_prepare .stamp_chroot_ossrc
 .stamp_chroot_ossrc: .stamp_chroot_prepare
 	mkdir -p "$(CHROOT)/usr/src"
 	cp -r ossrc/* "$(CHROOT)/usr/src/"
-	cp -r ossrc/.* "$(CHROOT)/usr/src/"
+	cp -r ossrc/.g* "$(CHROOT)/usr/src/"
 	touch $@
+
+.PHONY: clean-chroot
+clean-chroot:
+	rm .stamp_chroot*
 
 .PHONY: chroot
 chroot: prepare-chroot
