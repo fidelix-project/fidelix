@@ -1,0 +1,5 @@
+Package management tools
+
+The pkgtools package management system. Provides the installpkg, removepkg, and
+upgradepkg commands for managaing packages and the makepkg command for creating
+packages. Pkgtools was written by Scott Court.

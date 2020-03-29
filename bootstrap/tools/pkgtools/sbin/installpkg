@@ -1,0 +1,134 @@
+#!/bin/sh
+
+# Copyright 2020 Scott Court
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# 
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+usage () {
+	cat << EOF
+Usage: installpkg [-hvr] [-d ROOT_DIR] <PACKAGE_FILE>
+
+Install a package.
+
+	-d	The root directory to install the package to. If this is
+		omitted, defaults to /
+	-r      If the package is already installed, reinstall it.
+	-h	Print a help message.
+	-v	Print version information.
+EOF
+}
+
+# Parse the arguments
+do_reinstall=false
+O=`getopt hvrd: "$@"` || exit 1
+eval set -- "$O"
+while true; do
+	case "$1" in
+	-h)
+		usage
+		exit
+		;;
+	-v)
+		echo pkgtools %PKGTOOLS_VERSION%
+		exit
+		;;
+	-r)
+		do_reinstall=true
+		shift
+		;;
+	-d)
+		root_dir=$2
+		shift 2
+		;;
+	--)
+		shift
+		break
+		;;
+	*)
+		pkgfile=$1
+		shift 1
+		;;
+	esac
+done
+pkgfile=$1
+
+# Set the argument variables to their default values if they were not
+# specified.
+if [ -z "$pkgfile" ]; then
+	echo "Must specify package to install. See installpkg -h" >&2
+	exit 1
+fi
+if [ ! -f "$pkgfile" ]; then
+	echo "file not found: $pkgfile" >&2
+	exit 1
+fi
+pkgname=$(echo $pkgfile | rev | cut -d . -f 2- | cut -d / -f 1 | rev)
+root_dir=${root_dir:-/}
+
+# Determine the flags to pass to tar
+output_file_ext=$(echo $pkgfile | rev | cut -d . -f 1 | rev)
+case $output_file_ext in
+	tbz)	tar_flags=-j	;;
+	txz)	tar_flags=-J	;;
+	tgz)	tar_flags=-z	;;
+	*)
+		echo "Invalid output file extension $output_file_ext" >&2
+		exit 1
+		;;
+esac
+
+# Check if the package is installed
+if [ -d "$root_dir/var/pkgdb/$pkgname" ]; then
+	# If -r was specified, prepare to reinstall it
+	if [ "$do_reinstall" == "true" ]; then
+		mv "$root_dir/var/pkgdb/$pkgname" \
+			"$root_dir/var/pkgdb/$pkgname@oldpkg" 
+	else
+	# Otherwise error and exit
+		cat >&2 << EOF
+The package $pkgname 
+is already installed. If you wish to reinstall it, please uninstall the current
+package with removepkg first or sepcify the -r flag.
+EOF
+		exit 2
+	fi
+fi
+
+# Install the package
+tar xf "$pkgfile" -C "$root_dir"
+tar tf "$pkgfile" | sed -e 's@^\./@/@g' > \
+	"$root_dir/var/pkgdb/$pkgname/contents"
+if [ -x "$root_dir/var/pkgdb/$pkgname/doinst.sh" ] \
+&& [ "$do_upgradepkg" != "true" ]; then
+	(
+		cd "$root_dir"
+		./var/pkgdb/$pkgname/doinst.sh
+	)
+fi
+if [ -f "$root_dir/var/pkgdb/$pkgname/README.install" ] \
+&& [ "$do_upgradepkg" != "true" ]; then
+	cat "$root_dir/var/pkgdb/$pkgname/README.install" 
+fi
+
+if [ -d "$root_dir/var/pkgdb/$pkgname@oldpkg" ]; then
+	sed -i "$root_dir/var/pkgdb/$pkgname@oldpkg/contents" -e \
+		"s#^/var/pkgdb/$pkgname#^/var/pkgdb/$pkgname@oldpkg#g"
+	do_upgrade=true removepkg "$pkgname@oldpkg" 
+fi
+

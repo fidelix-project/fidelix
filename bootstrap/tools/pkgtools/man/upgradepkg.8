@@ -1,0 +1,52 @@
+.\" Copyright 2020 Scott Court
+.\"
+.\" Permission is hereby granted, free of charge, to any person obtaining a copy
+.\" of this software and associated documentation files (the "Software"), todeal
+.\" in the Software without restriction, including without limitation the
+.\" rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+.\" sell copies of the Software, and to permit persons to whom the Software is
+.\" furnished to do so, subject to the following conditions:
+.\"
+.\" The above copyright notice and this permission notice shall be included in
+.\" all copies or substantial portions of the Software.
+.\"
+.\" THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+.\" IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+.\" FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+.\" AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+.\" LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+.\" FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+.\" IN THE SOFTWARE.
+.TH UPGRADEPKG 8 2020-03-24 "Linux" "Linux System Administrator's Manual"
+.SH NAME
+upgradepkg \- upgrade a package
+
+.SH SYNOPSIS
+.B upgradepkg [-hir] [-d ROOT_DIR] <PACKAGE_FILE>
+
+.SH DESCRIPTION
+Upgrades the package PACKAGE_FILE. It does this by first installing the new version of the package and then removing all old versions of the package.
+
+.PP
+Options:
+.TP
+\fB-d <root directory>\fR
+Causes the package to be upgraded in the specified root directory instead of
+the default of /.
+.TP                                                                         
+\fB-r\fR                                                                       
+If the package is already installed, reinstall it.                              
+.TP
+\fB-h\fR
+Displays a help message.
+.TP
+\fB-i\fR
+If the package is not already installed, install it.
+
+.SH AUTHOR
+Upgradepkg was written by Scott Court (z5t1@z5t1.com).
+
+.SH SEE ALSO
+.BR installpkg(8)
+.BR removepkg(8)
+.BR makepkg(8)

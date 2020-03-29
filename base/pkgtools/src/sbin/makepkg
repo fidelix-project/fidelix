@@ -1,0 +1,142 @@
+#!/bin/sh
+
+# Copyright 2020 Scott Court
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# 
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+usage () {
+	cat << EOF
+Usage: makepkg [-h] [-d ROOT_DIR] [-m METADATA_DIR] -o <OUTPUT_FILE>
+
+Make an installable package from the contents of a directory. 
+
+	-o	The name of the file to write the package archive to. By
+		convention, this is of the form
+		name-version-architecture-osrelease-build.tgz
+		Valid file extensions are .tgz and .tbz.
+	-d	The root directory to make the package from. If this is 
+		omitted, defaults to the current working directory.
+	-m	The directory containing the package metadata. If this is
+		omitted, defaults to root_dir/var/pkgdb/output_file_name.
+
+The following files are permitted in the metadata directory:
+	description       Contains a description of the package (optionally
+			  multiline).
+	README.install    A README to display when installing the package.
+	README.upgrade    A README to display when upgrading the package.
+	README.uninstall  A README to display when uninstalling the
+			  package.
+	doinst.sh	  A shell script to run after installing the package.
+	douninst.sh	  A shell script to run before uninstalling the
+			  package.
+EOF
+}
+
+# Parse the arguments
+O=`getopt hd:m:o: "$@"` || exit 1
+eval set -- "$O"
+while true; do
+	case "$1" in
+	-h)
+		usage
+		exit
+		;;
+	-m)
+		meta_dir=$2
+		shift 2
+		;;
+	-d)
+		root_dir=$2
+		shift 2
+		;;
+	-o)
+		output_file=$2
+		shift 2
+		;;
+	--)
+		break
+		;;
+	*)
+		exit 1
+		;;
+	esac
+done
+
+# Set the argument variables to their default values if they were not
+# specified.
+if [ -z "$output_file" ]; then
+	echo "Must specify an output file. See makepkg -h" >&2
+	exit 1
+fi
+pkgname=$(echo $output_file | rev | cut -d . -f 2- | rev)
+root_dir=${root_dir:-$PWD}
+meta_dir=${meta_dir:-$root_dir/var/pkgdb/$pkgname}
+meta_destdir=$root_dir/var/pkgdb/$pkgname
+
+# Determine the flags to pass to tar
+output_file_ext=$(echo $output_file | rev | cut -d . -f 1 | rev)
+case $output_file_ext in
+	tbz)	tar_flags=-j	;;
+	tgz)	tar_flags=-z	;;
+	*)
+		echo "Invalid output file extension $output_file_ext" >&2
+		exit 1
+		;;
+esac
+
+# Remove any metadata for other packages
+destpkgdb=$(echo $meta_destdir | rev | cut -d / -f 2- | rev)
+if [ -d "$destpkgdb" ]; then
+	for pkg in $(ls "$destpkgdb"); do
+		if [ "$pkg" != "$pkgname" ]; then
+			rm -rf "$destpkgdb/$pkg"
+		fi
+	done
+fi
+
+# Copy the metadata over
+mkdir -p "$meta_destdir" || exit 2
+if [ "$meta_dir" != "$meta_destdir" ]; then
+	for file in \
+		description \
+		README.install \
+		README.uninstall \
+		README.upgrade; 
+	do
+		if [ -e "$meta_dir/$file" ]; then
+			cp "$meta_dir/$file" "$meta_destdir/" || exit 2
+		fi
+	done
+	for file in \
+		doinst.sh \
+		douninst.sh; 
+	do
+		if [ -e "$meta_dir/$file" ]; then
+			cp "$meta_dir/$file" "$meta_destdir/" || exit 2
+			chmod 755 "$meta_destdir/$file" || exit 2
+		fi
+	done
+fi
+
+# Create the build stamp
+date > "$meta_destdir/builddate" || exit 2
+
+# Compress the package
+tar c $tar_flags -C "$root_dir" -f "$output_file" ./
+

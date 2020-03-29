@@ -1,0 +1,4 @@
+C++ Standard Library
+
+Provides the standard C++ library, libstdc++. Libstdc++ is required to run C++
+applications.

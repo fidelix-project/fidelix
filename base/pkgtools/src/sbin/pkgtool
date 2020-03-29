@@ -1,0 +1,114 @@
+#!/bin/sh
+
+# Copyright 2020 Scott Court
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# 
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+usage () {
+	cat << EOF
+Usage: pkgtool <SUBCOMMAND> [OPTIONS]
+
+Provides several useful subcommands for package creation and management.
+
+Subcommands:
+	help		Displays this help message.
+	version		Displays the version of pkgtools.
+	preserve-file	Preserves a configuration file when making a packags so
+			it is not overwritten on upgrades.
+	install-new-file  Installs a new file without blindly overwriting any
+			prexisting old files.
+
+Full help for each subcommand can be viewed in the pkgtool(8) manual page.
+EOF
+}
+
+version () {
+	echo %PKGTOOLS_VERSION%
+}
+
+preserve_file () {
+	if [ $# -ne 1 ]; then
+		echo "Usage: pkgtool preserve-file <FILENAME>" >&2
+		exit 1
+	fi
+
+	mv "$1" "$1.new"
+}
+
+install_new_file () {
+	if [ $# -ne 1 ]; then
+		echo "Usage: pkgtool install-new-file <FILENAME>" >&2
+		exit 1
+	fi
+	
+	# If no .new file exists, abort
+	if [ ! -e "$1.new" ]; then
+		echo "New file $1.new does not exist" >&2
+		exit 1
+	fi
+
+	# If no prexisting file exists, install the .new one
+	if [ ! -e "$1" ]; then
+		mv "$1.new" "$1"
+		return
+	fi
+
+	# Check if the files differ
+	if diff -s "$1" "$1.new"; then
+		rm "$1.new"
+		return
+	fi
+
+	# Install the .new file
+	case "$NEW_FILE_ACTION" in
+	OVERWRITE)
+		mv "$1.new" "$1"
+		echo "Overwrote $1 with $1.new"
+		;;
+	REPLACE)
+		mv "$1" "$1.old"
+		mv "$1.new" "$1"
+		echo "Replaced $1: old file is at $1.old"
+		;;
+	*)
+		echo "New file for consideration: $1"
+		;;
+	esac
+
+}
+
+# Check that an subcommand was specified
+if [ $# -eq 0 ]; then
+	echo "No subcommand specified. See pkgtool help." >&2
+	exit 1
+fi
+
+subcommand=$1
+shift 1
+case $subcommand in
+	help)		usage ;;
+	version)	version ;;
+	preserve-file)	preserve_file $@ ;;
+	install-new-file)  install_new_file $@ ;;
+	*)
+		echo "Unknown subcommand $subcommand. See pkgtool help." >&2
+		exit 1
+		;;
+esac
+

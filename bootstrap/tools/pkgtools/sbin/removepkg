@@ -1,0 +1,133 @@
+#!/bin/sh
+
+# Copyright 2020 Scott Court
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# 
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+# Removes the file $1 if and only if it is not contained in any other packages.
+removepkg_rmfile () {
+	count=$(grep -r "^$1\$" $contents_files | wc -l)
+	if [ $count -eq 1 ]; then
+		rm -f "./$1"
+	fi	
+}
+
+# Removes the directory $1 if and only if it is not contained in any other
+# packages and is empty.
+removepkg_rmdir () {
+	if [ "$1" == "/" ]; then
+		return
+	fi
+	count=$(grep -r "^$1\$" $contents_files | wc -l)
+	if [ $count -eq 1 ]; then
+		rmdir --ignore-fail-on-non-empty -p "./$1"
+		removepkg_rmdir "$(dirname $1)"
+	fi	
+}
+
+
+
+usage () {
+	cat << EOF
+Usage: removepkg [-h] [-d ROOT_DIR] <PACKAGE_NAME>
+
+Remove a package. This will remove all of the files provided by the package,
+except for files that are also provided by one or more other packages. It also
+removes any directories provided by the package that are empty after the
+package is uninstalled.
+
+	-d	The root directory to install the package to. If this is
+		omitted, defaults to /
+	-h	Print a help message.
+EOF
+}
+
+# Parse the arguments
+O=`getopt hd: "$@"` || exit 1
+eval set -- "$O"
+while true; do
+	case "$1" in
+	-h)
+		usage
+		exit
+		;;
+	-d)
+		root_dir=$2
+		shift 2
+		;;
+	--)
+		shift
+		break
+		;;
+	*)
+		pkgfile=$1
+		shift 1
+		;;
+	esac
+done
+pkgname=$1
+
+# Set the argument variables to their default values if they were not
+# specified.
+if [ -z "$pkgname" ]; then
+	echo "Must specify package to install. See installpkg -h" >&2
+	exit 1
+fi
+root_dir=${root_dir:-/}
+
+# Check if the package is installed
+if [ ! -d "$root_dir/var/pkgdb/$pkgname" ]; then
+	cat >&2 << EOF
+The package $pkgname is not installed.
+EOF
+	exit 2
+fi
+
+# Uninstall the package
+cd "$root_dir"
+
+# Generate a list of contents files in the pkgdb
+contents_files=$(find var/pkgdb -name contents)
+
+if [ -x "var/pkgdb/$pkgname/douninst.sh" ] \
+&& [ "$do_upgradepkg" != "true" ]; then
+	./var/pkgdb/$pkgname/douninst.sh
+fi
+if [ -f "var/pkgdb/$pkgname/README.uninstall" ] \
+&& [ "$do_upgradepkg" != "true" ]; then
+	cat "var/pkgdb/$pkgname/README.uninstall" 
+fi
+
+# Iterate through the package files
+while read file; do
+	if [ ! -d "./$file" ]; then
+		removepkg_rmfile "$file"
+	fi
+done < "var/pkgdb/$pkgname/contents"
+
+# Iterate through the package directories
+while read file; do
+	if [ -d "./$file" ]; then
+		removepkg_rmdir "$file"
+	fi
+done < "var/pkgdb/$pkgname/contents"
+
+# Finally, remove the package contents
+rm -rf "var/pkgdb/$pkgname"
+

@@ -1,0 +1,81 @@
+.\" Copyright 2020 Scott Court
+.\"
+.\" Permission is hereby granted, free of charge, to any person obtaining a copy
+.\" of this software and associated documentation files (the "Software"), todeal
+.\" in the Software without restriction, including without limitation the
+.\" rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+.\" sell copies of the Software, and to permit persons to whom the Software is
+.\" furnished to do so, subject to the following conditions:
+.\"
+.\" The above copyright notice and this permission notice shall be included in
+.\" all copies or substantial portions of the Software.
+.\"
+.\" THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+.\" IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+.\" FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+.\" AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+.\" LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+.\" FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+.\" IN THE SOFTWARE.
+.TH MAKEPKG 8 2020-03-24 "Linux" "Linux System Administrator's Manual"
+.SH NAME
+makepkg \- creates an installable package
+
+.SH SYNOPSIS
+.B makepkg [-h] [-d ROOT_DIR] [-m METADATA_DIR] -o <OUTPUT_FILE>
+
+.SH DESCRIPTION
+Make an installable package from the contents of a directory. The resulting
+package can be installed with
+.BR installpkg(8)
+
+.PP
+Options:
+.TP
+\fB-o <output file>\fR
+The name of the file to write the package archive to. By convention, this is of the form
+.B name-version-architecture-osrelease-build.tgz
+Valid file extensions are .tgz and .tbz.
+.TP
+\fB-d <root directory>\fR
+The root directory to make the package from. If this is omitted, defaults to
+the current working directory.
+.TP
+\fB-m <metadata directory>\fR
+The directory containing the package metadata. If this is omitted, defaults to
+ROOT_DIR/var/pkgdb/output_file_basename.
+.TP
+\fB-h\fR
+Displays a help message.
+
+.SH METADATA
+The following files are permitted in the metadata directory. If using 
+.B -m 
+to specify a different metadata directory, only these files will be copied and
+all other files will be ignored.
+.TP
+\fBdescription\fR
+Contains a description of the package (optionally multiline).
+.TP
+\fBREADME.install\fR
+A README to display when installing the package.
+.TP
+\fBREADME.upgrade\fR
+A README to display when upgrading the package.
+.TP
+\fBREADME.uninstall\fR
+A README to display when uninstalling the package.
+.TP
+\fBdoinst.sh\fR
+A shell script to run after installing the package.
+.TP
+\fBdouninst.sh\fR
+A shell script to run before uninstalling the package.
+
+.SH AUTHOR
+Makepkg was written by Scott Court (z5t1@z5t1.com).
+
+.SH SEE ALSO
+.BR makepkg(8)
+.BR removepkg(8)
+.BR upgradepkg(8)

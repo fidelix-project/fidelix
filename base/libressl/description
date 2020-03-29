@@ -1,0 +1,9 @@
+LibreSSL Crytography Library
+
+LibreSSL is a version of the TLS/crypto stack forked from OpenSSL in 2014, with
+goals of modernizing the codebase, improving security, and applying best
+practice development processes. 
+
+Primary development occurs inside the OpenBSD source tree with the usual care
+the project is known for. On a regular basis the code is re-packaged for
+portable use by other operating systems.

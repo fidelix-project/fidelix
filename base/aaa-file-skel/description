@@ -1,0 +1,4 @@
+Basic files
+
+This package creates some basic files when it is installed if they do not
+already exists. This package should never be uninstalled.

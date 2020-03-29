@@ -1,0 +1,51 @@
+.\" Copyright 2020 Scott Court
+.\"
+.\" Permission is hereby granted, free of charge, to any person obtaining a copy
+.\" of this software and associated documentation files (the "Software"), todeal
+.\" in the Software without restriction, including without limitation the
+.\" rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+.\" sell copies of the Software, and to permit persons to whom the Software is
+.\" furnished to do so, subject to the following conditions:
+.\"
+.\" The above copyright notice and this permission notice shall be included in
+.\" all copies or substantial portions of the Software.
+.\"
+.\" THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+.\" IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+.\" FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+.\" AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+.\" LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+.\" FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+.\" IN THE SOFTWARE.
+.TH REMOVEPKG 8 2020-03-24 "Linux" "Linux System Administrator's Manual"
+.SH NAME
+removepkg \- remove a package
+
+.SH SYNOPSIS
+.B removepkg [-h] [-d ROOT_DIR] <PACKAGE_NAME>
+
+.SH DESCRIPTION
+Uninstalls the package PACKAGE_NAME that was previously installed with
+.BR installpkg(8)
+This will remove all of the files provided by the package, except for files
+that are also provided by one or more other packages. It also removes any
+directories provided by the package that are empty after the package is
+uninstalled.
+
+.PP
+Options:
+.TP
+\fB-d <root directory>\fR
+Causes the package to be removed from the specified root directory instead of
+the default of /.
+.TP
+\fB-h\fR
+Displays a help message.
+
+.SH AUTHOR
+Removepkg was written by Scott Court (z5t1@z5t1.com).
+
+.SH SEE ALSO
+.BR makepkg(8)
+.BR installpkg(8)
+.BR upgradepkg(8)

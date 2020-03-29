@@ -1,0 +1,118 @@
+#!/bin/sh
+
+# Copyright 2020 Scott Court
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# 
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+usage () {
+	cat << EOF
+Usage: upgrade [-hir] [-d ROOT_DIR] <PACKAGE_FILE>
+
+Upgrades a package. It does this by first installing the new version of the
+package and then removing all old versions of the package.
+
+	-d	The root directory to upgrade the package in. If this is
+		omitted, defaults to /
+	-i	If the package is not already installed, install it.
+	-r	If the package is already installed, reinstall it.
+EOF
+}
+
+# Parse the arguments
+do_install=false
+do_reinstall=false
+O=`getopt hird: "$@"` || exit 1
+eval set -- "$O"
+while true; do
+	case "$1" in
+	-h)
+		usage
+		exit
+		;;
+	-i)
+		do_install=true
+		shift 1
+		;;
+	-r)
+		do_reinstall=true
+		installpkg_flags=' -r'
+		shift 1
+		;;
+	-d)
+		root_dir=$2
+		shift 2
+		;;
+	--)
+		shift
+		break
+		;;
+	*)
+		pkgfile=$1
+		shift 1
+		;;
+	esac
+done
+pkgfile=$1
+name=$(echo $pkgfile | rev | cut -d - -f 5- | cut -d / -f 1 | rev)
+
+# Set the argument variables to their default values if they were not
+# specified.
+if [ -z "$pkgfile" ]; then
+	echo "Must specify package to upgrade. See upgradepkg -h" >&2
+	exit 1
+fi
+if [ ! -f "$pkgfile" ]; then                                              
+        echo "file not found: $pkgfile" >&2                                  
+        exit 1                                                          
+fi                                                                             
+pkgname=$(echo $pkgfile | rev | cut -d . -f 2- | cut -d / -f 1 | rev)
+root_dir=${root_dir:-/}
+
+# Check if the package is installed
+is_installed=false
+old_versions=""
+for pkg in $(ls "$root_dir/var/pkgdb"); do
+	installed_name=$(echo $pkg | rev | cut -d - -f 5- | rev)
+	if [ "$installed_name" = "$name" ]; then
+		is_installed=true
+		if [ "$pkg" != "$pkgname" ]; then
+			old_versions="$old_versions $pkg"
+		fi
+	fi
+done
+
+if [ $is_installed == false ] && [ $do_install == false ]; then
+	echo "Error: $name is not installed and -i was not specified." >&2
+	exit 1
+elif [ $is_installed == false ] && [ $do_install == true ]; then
+	installpkg -d "$root_dir" "$pkgfile"
+	exit $?
+else
+	do_upgradepkg=true installpkg $installpkg_flags -d "$root_dir" \
+		"$pkgfile" || exit 1
+	for pkg in $old_versions; do
+		do_upgradepkg=true removepkg -d "$root_dir" "$pkg" || exit 1
+	done
+fi
+
+# Display the Upgrade README
+if [ -f "$root_dir/var/pkgdb/$pkgname/README.upgrade" ]; then
+	cat "$root_dir/var/pkgdb/$pkgname/README.upgrade" 
+fi
+

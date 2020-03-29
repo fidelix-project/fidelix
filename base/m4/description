@@ -1,0 +1,4 @@
+M4 Macro Preprocessor
+
+The M4 package contains a macro processor. It is required to build several
+packages.
