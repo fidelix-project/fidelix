@@ -5,8 +5,9 @@ musl
 binutils (pass 2)
 libstdc++
 gcc (pass 2)
-m4
-bison
 busybox
 make
+perl
+texinfo
+pkgtools
 
