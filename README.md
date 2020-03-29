@@ -2,7 +2,7 @@ Fidelix /usr/src README
 ================================================================================
 
 This directory contains a series of Makefiles that can be used for building,
-installing, and maintaining the Fidelix system software. It function very
+installing, and maintaining the Fidelix system software. It functions very
 similarly to the BSD /usr/src and /usr/ports heirarchies.
 
 Fidelix is a light weight Linux distribution that focuses on proactive
