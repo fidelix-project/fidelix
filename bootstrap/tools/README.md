@@ -59,10 +59,11 @@ variable.
 
 ## Setup
 
-The source for the target system must be placed in the `ossrc` directory. If
-you are bootstrapping from Fidelix and wish to build the version you have
-installed, a simple `cp -r /usr/src ossrc` will do the trick. Note that this
-can also be a symlink to the source directory.
+The source for the target system must be placed in the `ossrc` directory. Note
+that this can also be a symlink to the source directory. By default, this is a
+symlink to the parent of the Fidelix source tree (../../). If you wish to
+bootstrap to a different version of Fidelix, place the source code for that
+version in the `ossrc` directory.
 
 Once you have done this, prepare the chroot environment by issuing the
 following Make command:
