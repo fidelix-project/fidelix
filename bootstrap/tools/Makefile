@@ -382,7 +382,7 @@ extract-pkg-%:
 	mkdir -p build/busybox
 	cp -r src/busybox-*/* build/busybox/
 	cp meta/busybox-config build/busybox/.config
-	cd build/busybox; make -j$(MAXJOBS)
+	cd build/busybox; make -j$(MAXJOBS) CROSS_COMPILE=$(PREFIX)/bin/
 	cd build/busybox; make CONFIG_PREFIX=$(PREFIX) install
 	touch $@
 
