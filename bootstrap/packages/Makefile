@@ -26,7 +26,27 @@ BSPACKAGES=\
 	texinfo
 
 .PHONY: install
-install: $(BSPACKAGES)
+install: packages cleanup-tools
+
+.PHONY: packages
+packages: .stamp_packages
+
+.stamp_packages:
+	make $(BSPACKAGES)
+	touch $@
+
+.PHONY: cleanup-tools
+cleanup-tools: .stamp_cleanup_tools
+
+.stamp_cleanup_tools: .stamp_packages
+	make -C "$(OS_SRC_DIR)" neat
+	mv $(PREFIX) $(PREFIX).disabled
+	@echo The bootstrap tools have been disabled and moved to $(PREFIX).disabled.
+	@echo Assuming everything went well, it is safe to remove this directory.
+	@echo
+	@echo '*** It is now safe to make install your system ***'
+	@echo
+	touch $@
 
 .stamp_temporary_symlinks:
 	ln -svf $(PREFIX)/bin/sh /bin
