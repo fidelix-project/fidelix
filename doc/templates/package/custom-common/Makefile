@@ -14,6 +14,6 @@ include package.mk
 
 # Put custom build rules here. This target runs with $PWD set to the directory
 # of this Makefile. Do NOT delete the touch $@.
-stamp_custom_build: 
+.stamp_custom_build: 
 	touch $@
 
