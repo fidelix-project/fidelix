@@ -57,6 +57,14 @@ The Makefile assumes that the partition/directory you want to chroot to is
 mounted at /mnt. This can be overridden by setting the `CHROOT` enviornment
 variable.
 
+## Download the Package Sources
+
+It is recommended to download the source code for the system packages now.
+Downloading the source code does not work in the bootstrap environment without
+additional setup. Use the following command:
+
+    make -C ossrc -I ossrc/include download
+
 ## Setup
 
 The source for the target system must be placed in the `ossrc` directory. Note
@@ -90,7 +98,6 @@ The system source code will already be set up in /usr/src. Bootstrapping the
 rest of the system should be as simple as the following:
 
     cd /usr/src
-    make -I /usr/src/include scrub && \
     make -I /usr/src/include from-bootstrap && \
     make -I /usr/src/include install
 
