@@ -70,6 +70,10 @@ following Make command:
 
     make prepare-chroot
 
+**Note:** If you leave the default `ossrc` symlink in place, you may want to
+run `make tidy` before running `make prepare-chroot`. This will save you from
+copying over 10 GB of unnecessary files.
+
 ## Entering
 
 Once you have completed the necessary setup, enter the chroot with the
