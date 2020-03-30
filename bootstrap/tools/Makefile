@@ -107,12 +107,12 @@ build: .stamp_prepare $(PACKAGES)
 clean:
 	rm -rf build download src .stamp_*
 
-.PHONY: clean-up
-clean-up:
+.PHONY: tidy
+tidy:
 	rm -rf build download src
 
-.PHONY: clean-prepare
-clean-prepare: clean-chroot
+.PHONY: scrub
+scrub: clean-chroot
 	rm -rf build
 	rm -rf .stamp_pkg_*
 	rm -rf .stamp_test_*
