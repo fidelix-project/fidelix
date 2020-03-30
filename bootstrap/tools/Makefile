@@ -445,7 +445,7 @@ prepare-chroot: .stamp_chroot_prepare .stamp_chroot_ossrc
 
 .PHONY: clean-chroot
 clean-chroot:
-	rm .stamp_chroot*
+	rm -f .stamp_chroot*
 
 .PHONY: chroot
 chroot: prepare-chroot
