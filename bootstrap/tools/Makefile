@@ -70,6 +70,16 @@ PACKAGES+=\
 	.stamp_pkg_texinfo \
 	.stamp_pkg_pkgtools
 
+DOWNLOADED_PACKAGES=\
+	binutils \
+	gcc \
+	linux \
+	musl \
+	busybox \
+	make \
+	perl \
+	texinfo
+
 export PATH:=$(PREFIX)/bin:$(PATH)
 
 export LC_ALL=POSIX
@@ -115,7 +125,7 @@ download: .stamp_download
 .stamp_download: meta/wget_urls
 	rm -rf download
 	mkdir -p download
-	cd download; wget -i ../meta/wget_urls
+	cd download; wget $$(cat ../meta/wget_urls)
 	touch $@
 
 .SECONDARY: verify
@@ -128,12 +138,17 @@ verify: .stamp_verify
 .SECONDARY: extract
 extract: .stamp_extract
 
-.stamp_extract: .stamp_download .stamp_verify
-	mkdir -p src
-	cd src; cat ../download/*.tar.gz | tar xzvi
-	cd src; cat ../download/*.tar.bz2 | tar xjvi
-	cd src; cat ../download/*.tar.xz | tar xJvi
+.stamp_extract: .stamp_download .stamp_verify .stamp_extract_prepare
+	make $(addprefix extract-pkg-,$(DOWNLOADED_PACKAGES))
 	touch $@
+
+.stamp_extract_prepare:
+	mkdir -p src
+	touch $@
+
+.PHONY: extract-pkg-%
+extract-pkg-%:
+	tar x -C src -f download/$*-*.tar*
 
 .stamp_prepare: .stamp_extract
 	mkdir -p $(PREFIX)
