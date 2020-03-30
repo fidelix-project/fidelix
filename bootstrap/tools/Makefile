@@ -73,6 +73,9 @@ PACKAGES+=\
 DOWNLOADED_PACKAGES=\
 	binutils \
 	gcc \
+	gmp \
+	mpfr \
+	mpc \
 	linux \
 	musl \
 	busybox \
