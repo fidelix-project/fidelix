@@ -41,6 +41,8 @@ endif
 autoconf-prepackage:
 	install -dm 755 $(PKG_ROOT)/lib
 	install -m 755 cpp-shim $(PKG_ROOT)/lib/cpp
+	install -dm 755 $(PKG_ROOT)/usr/bin
+	ln -s gcc $(PKG_ROOT)/usr/bin/cc
 
 include package.mk
 
