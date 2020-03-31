@@ -6,3 +6,5 @@
 *.t?z
 pkg_src/*
 pkg_root/*
+a.out
+*.log
