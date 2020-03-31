@@ -114,8 +114,7 @@ fi
 tar xf "$pkgfile" -C "$root_dir"
 tar tf "$pkgfile" | sed -e 's@^\./@/@g' > \
 	"$root_dir/var/pkgdb/$pkgname/contents"
-if [ -x "$root_dir/var/pkgdb/$pkgname/doinst.sh" ] \
-&& [ "$do_upgradepkg" != "true" ]; then
+if [ -x "$root_dir/var/pkgdb/$pkgname/doinst.sh" ]; then
 	(
 		cd "$root_dir"
 		./var/pkgdb/$pkgname/doinst.sh
