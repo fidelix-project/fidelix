@@ -30,9 +30,22 @@ if [ ! -e etc/group ]; then
 	utmp:x:13:
 	usb:x:14:
 	cdrom:x:15:
+	shadow:x:16:
 	EOF
 	chmod 644 etc/group
 	chown 0:0 etc/group
+fi
+
+if [ ! -e etc/shadow ]; then
+	cat > etc/shadow <<- EOF
+	root::::::::
+	bin:*:::::::
+	daemon:*:::::::
+	messagebus:*:::::::
+	nobody:*:::::::
+	EOF
+	chmod 640 etc/shadow
+	chown root:shadow etc/shadow
 fi
 
 ln -svf /proc/self/mounts etc/mtab
