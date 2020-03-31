@@ -435,6 +435,7 @@ prepare-chroot: .stamp_chroot_prepare .stamp_chroot_ossrc
 	mkdir -p "$(CHROOT)/etc"
 	install -m 644 /etc/resolv.conf "$(CHROOT)/etc/"
 	mkdir -p "$(CHROOT)/dev"
+	mkdir -p "$(CHROOT)/proc"
 	touch $@
 
 .stamp_chroot_ossrc: .stamp_chroot_prepare
@@ -455,10 +456,11 @@ chroot: prepare-chroot
 		"$(CHROOT)/etc" \
 		"$(CHROOT)/etc/resolv.conf" \
 		"$(CHROOT)/usr/src" 
-ifeq ($(wildcard "$(CHROOT)/dev/null"),)
-	mount --bind /dev "$(CHROOT)/dev"
-endif
+	[ -e /dev/null ] || mount --bind /dev "$(CHROOT)/dev"
+	[ -e /proc/self ] || mount --bind /proc "$(CHROOT)/proc"
 	chroot "$(CHROOT)" /bin/sh -c \
 		'export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$(PREFIX)/sbin:$(PREFIX)/bin; \
+		mount | grep -q /proc || mount -t proc proc /proc; \
+		mount | grep -q /dev || mount -t devtmpfs dev /dev; \
 		/bin/sh'
 
