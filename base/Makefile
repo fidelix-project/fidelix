@@ -19,7 +19,8 @@ PACKAGES=\
 	busybox \
 	make \
 	perl \
-	texinfo
+	texinfo \
+	mandoc
 
 # Non-package subdirectories contained in this directory that should be
 # included when searching for packages
