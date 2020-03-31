@@ -1,6 +1,6 @@
 PKG_NAME=busybox
 PKG_VERSION=1.31.1
-PKG_BUILD=1
+PKG_BUILD=2
 PKG_BUILDSYSTEM=custom-common
 
 # Build time dependencies for this package
@@ -22,5 +22,7 @@ else
 endif
 	make -C pkg_src/$(PKG_SRC_DIR) $(MAKE_FLAGS)
 	make -C pkg_src/$(PKG_SRC_DIR) install CONFIG_PREFIX=$(PKG_ROOT)
+	mkdir -p $(PKG_ROOT)/usr/share/man/man1
+	install pkg_src/$(PKG_SRC_DIR)/docs/busybox.1 $(PKG_ROOT)/usr/share/man/man1
 	touch $@
 
