@@ -1,6 +1,6 @@
 PKG_NAME=zoneinfo
 PKG_VERSION=2019c
-PKG_BUILD=1
+PKG_BUILD=2
 PKG_BUILDSYSTEM=make
 
 PKG_BUILD_DEPENDS=
@@ -31,4 +31,5 @@ make-preinstall:
 
 # Commands to run after make install
 make-prepackage:
+	pkgtool preserve-file $(PKG_ROOT)/etc/localtime
 
