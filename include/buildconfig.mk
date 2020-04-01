@@ -1,5 +1,8 @@
 # Build environment configuration
 
+ifndef _INC_BUILDCONFIG
+_INC_BUILDCONFIG=y
+
 # The maximum number of make jobs to run in parallel when building a package.
 MAKE_MAXJOBS?=20
 
@@ -14,4 +17,7 @@ MAKE_FLAGS=-j $(MAKE_MAXJOBS) -l $(MAKE_MAXLOAD)
 # the packages are created.
 NEW_FILE_ACTION?=
 export NEW_FILE_ACTION
+
+-include config.local.mk
+endif
 

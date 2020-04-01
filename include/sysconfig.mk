@@ -1,5 +1,8 @@
 # Main Source Configuration File
 
+ifndef _INC_SYSCONFIG
+_INC_SYSCONFIG=y
+
 # General system configuration
 OS_NAME:=Fidelix
 OS_NAME_LOWERCASE:=fidelix
@@ -18,4 +21,7 @@ PKG_EXTENSION:=tgz
 OS_ARCH:=x86_64
 include arch/$(OS_ARCH).mk
 OS_TARGET_TRIPLET:=$(OS_ARCH)-$(OS_NAME_LOWERCASE)-linux-musl
+
+-include config.local.mk
+endif
 

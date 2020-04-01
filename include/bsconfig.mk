@@ -1,5 +1,8 @@
 # Include file for the bootstrap environment
 
+ifndef _INC_BSCONFIG
+_INC_BSCONFIG=y
+
 # The prefix to place the bootstrap environment in.
 PREFIX=/opt/bootstrap
 
@@ -21,4 +24,7 @@ ARCH=x86_64
 DISTID=bootstrap
 
 TARGET=$(ARCH)-$(DISTID)-linux-musl
+
+-include config.local.mk
+endif
 
