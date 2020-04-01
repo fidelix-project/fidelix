@@ -2,6 +2,9 @@ DIR:=
 SUBDIRS:=\
 	base
 
+.PHONY: default
+default: install
+
 # Handle bootstrapping targets
 .PHONY: bootstrap-%
 bootstrap-%:
