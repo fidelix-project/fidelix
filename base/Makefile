@@ -20,7 +20,9 @@ PACKAGES=\
 	make \
 	perl \
 	texinfo \
-	mandoc
+	mandoc \
+	man-pages \
+	zoneinfo
 
 # Non-package subdirectories contained in this directory that should be
 # included when searching for packages
