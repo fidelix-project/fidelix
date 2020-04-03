@@ -1,7 +1,8 @@
 include sysconfig.mk
 include buildconfig.mk
 
-_PKG_DB_DIR:=/var/pkgdb
+SYSROOT?=/
+_PKG_DB_DIR:=$(SYSROOT)/var/pkgdb
 _PKG_FULL_NAME=$(PKG_NAME)-$(PKG_VERSION)-$(OS_ARCH)-$(OS_PKG_TAG)-$(PKG_BUILD)
 _PKG_FILE=$(_PKG_FULL_NAME).$(PKG_EXTENSION)
 PKG_ROOT=$(CURDIR)/pkg_root
@@ -38,7 +39,7 @@ reinstall: $(_PKG_DB_DIR)/$(_PKG_FULL_NAME)
 	touch $@
 
 $(_PKG_DB_DIR)/$(_PKG_FULL_NAME): $(_PKG_FILE)
-	upgradepkg -ri $(CURDIR)/$(_PKG_FILE)
+	upgradepkg -d "$(SYSROOT)" -ri $(CURDIR)/$(_PKG_FILE)
 
 .PHONY: clean
 clean:
