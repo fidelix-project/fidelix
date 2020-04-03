@@ -19,9 +19,13 @@ PKG_EXTENSION:=tgz
 
 # Set the system architecture
 OS_ARCH:=x86_64
-include arch/$(OS_ARCH).mk
 OS_TARGET_TRIPLET:=$(OS_ARCH)-$(OS_NAME_LOWERCASE)-linux-musl
 
+# Set the system type
+OS_SYSTEM:=generic-$(OS_ARCH)
+
 -include config.local.mk
+include arch/$(OS_ARCH).mk
+include system/$(OS_SYSTEM).mk
 endif
 
