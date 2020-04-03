@@ -1,5 +1,5 @@
 PKG_NAME=pkgtools
-PKG_VERSION=0.0.10
+PKG_VERSION=0.0.11
 PKG_BUILD=1
 PKG_BUILDSYSTEM=custom
 
@@ -17,5 +17,7 @@ include package.mk
 		MANDIR=$(PKG_ROOT)/usr/share/man \
 		DESTDIR=$(PKG_ROOT) \
 		install
+	sed -e 's/Fidelix/Fidelix $(OS_VERSION)/g' \
+		-i $(PKG_ROOT)/usr/share/man/man8/*
 	touch $@
 
