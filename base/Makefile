@@ -25,7 +25,8 @@ PACKAGES=\
 	zoneinfo \
 	ncurses \
 	bison \
-	flex
+	flex \
+	libelf
 
 # Non-package subdirectories contained in this directory that should be
 # included when searching for packages
