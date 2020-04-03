@@ -1,0 +1,6 @@
+Libelf ELF handling library.
+
+Libelf is a library for handling ELF (Executable and Linkable Format) files.
+This version of libelf is a port of FreeBSD 12's libelf to Linux. It is
+maintained primarily in the Fidelix source tree. A standalone version is also
+available at https://github.com/Z5T1/libelf-portable.
