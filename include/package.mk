@@ -9,10 +9,12 @@ PKG_ROOT=$(CURDIR)/pkg_root
 PKG_SRC=$(CURDIR)/pkg_src/$(PKG_SRC_DIR)
 
 ifdef PKG_BUILD_DEPENDS
-$(_PKG_FILE): .stamp_dependencies .stamp_build
+$(_PKG_FILE): .stamp_dependencies
+	make .stamp_build
 	makepkg -d $(PKG_ROOT) -m $(CURDIR) -o $(_PKG_FILE)
 else
-$(_PKG_FILE): .stamp_build
+$(_PKG_FILE):
+	make .stamp_build
 	makepkg -d $(PKG_ROOT) -m $(CURDIR) -o $(_PKG_FILE)
 endif
 
@@ -39,7 +41,7 @@ reinstall: $(_PKG_DB_DIR)/$(_PKG_FULL_NAME)
 	touch $@
 
 $(_PKG_DB_DIR)/$(_PKG_FULL_NAME): $(_PKG_FILE)
-	upgradepkg -d "$(SYSROOT)" -ri $(CURDIR)/$(_PKG_FILE)
+	upgradepkg -d $(SYSROOT) -ri $(CURDIR)/$(_PKG_FILE)
 
 .PHONY: clean
 clean:
