@@ -1,0 +1,4 @@
+Generic Linux Kernel
+
+This package provides a generic Linux kernel containing the modules for most
+common hardware. It should be sufficient to boot on most systems.
