@@ -5,6 +5,7 @@ _PKG_DB_DIR:=/var/pkgdb
 _PKG_FULL_NAME=$(PKG_NAME)-$(PKG_VERSION)-$(OS_ARCH)-$(OS_PKG_TAG)-$(PKG_BUILD)
 _PKG_FILE=$(_PKG_FULL_NAME).$(PKG_EXTENSION)
 PKG_ROOT=$(CURDIR)/pkg_root
+PKG_SRC=$(CURDIR)/pkg_src/$(PKG_SRC_DIR)
 
 ifdef PKG_BUILD_DEPENDS
 $(_PKG_FILE): .stamp_dependencies .stamp_build
