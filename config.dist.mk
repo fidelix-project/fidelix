@@ -48,9 +48,17 @@ ifdef _INC_SYSCONFIG
 #OS_ARCH:=x86_64
 #OS_TARGET_TRIPLET:=$(OS_ARCH)-$(OS_NAME_LOWERCASE)-linux-musl
 
+# Set the system type. On Intel/AMD systems, generic-$(OS_ARCH) is usually
+# sufficient. On embedded systems, it may be necessary to specify a different
+# system to get the correct kernel and bootloader installed. A list of
+# supported systems can be found by examining the include/system directory.
+#OS_SYSTEM:=generic-$(OS_ARCH)
+
 endif
 
 ########################## Bootstrap Configuration #############################
+
+# NOTE: Configuration in this section affects only the bootstrap directory.
 
 ifdef _INC_BSCONFIG
 
