@@ -23,7 +23,9 @@ PACKAGES=\
 	mandoc \
 	man-pages \
 	zoneinfo \
-	ncurses
+	ncurses \
+	bison \
+	flex
 
 # Non-package subdirectories contained in this directory that should be
 # included when searching for packages
