@@ -8,3 +8,6 @@ ARCH_FAMILY=intel
 # this will be the native word size.
 ARCH_LIBDIR_SUFFIX=64
 
+# The directory for this architecture in the Linux kernel source
+ARCH_KERNEL=x86
+

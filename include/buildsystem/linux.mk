@@ -2,12 +2,17 @@
 
 .SECONDARY: .stamp_build
 .stamp_build: pkg_build_prepare
-	cp -v $(KERNEL_CONFIG) pkg_src/.config
+	cp -uv $(KERNEL_CONFIG) pkg_src/.config
 	make linux-prebuild
 	make -C pkg_src $(MAKE_FLAGS)
 	make linux-preinstall
-	make -C pkg_src modules_install DESTDIR=$(PKG_ROOT)
-	make -C pkg_src install DESTDIR=$(PKG_ROOT)
+	make -C pkg_src modules_install INSTALL_MOD_PATH=$(PKG_ROOT)
+	install -dm 755 $(PKG_ROOT)/boot
+	cp -v $(PKG_SRC)/arch/$(ARCH_KERNEL)/boot/bzImage \
+		$(PKG_ROOT)/boot/vmlinuz-$(PKG_VERSION)
+	ln -s vmlinuz-$(PKG_VERSION) $(PKG_ROOT)/boot/vmlinuz
+	cp -v $(PKG_SRC)/System.map $(PKG_ROOT)/boot/System.map-$(PKG_VERSION)
+	cp -v $(PKG_SRC)/.config $(PKG_ROOT)/boot/config-$(PKG_VERSION)
 	make linux-postinstall
 
 ifeq "$(wildcard pkg_src/Makefile)" ""
