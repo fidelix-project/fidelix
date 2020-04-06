@@ -5,6 +5,7 @@
 *.tar
 *.t?z
 pkg_src/
+pkg_src_prev/
 pkg_root/
 a.out
 *.log
