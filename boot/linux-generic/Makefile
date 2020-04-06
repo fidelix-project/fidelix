@@ -1,7 +1,7 @@
 PKG_NAME=linux-generic
 PKG_MAJOR_VERSION=5
 PKG_VERSION=5.4.29
-PKG_BUILD=1
+PKG_BUILD=5
 PKG_BUILDSYSTEM=linux
 
 # Build time dependencies for this package

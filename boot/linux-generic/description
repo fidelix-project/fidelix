@@ -1,4 +1,7 @@
 Generic Linux Kernel
 
 This package provides a generic Linux kernel containing the modules for most
-common hardware. It should be sufficient to boot on most systems.
+common hardware. It should be sufficient to boot on most systems. Drivers for
+most common disk and USB controllers are built into the kernel, making it
+sufficient for booting most systems from disk or USB flash drive without an
+initramfs.
