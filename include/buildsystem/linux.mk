@@ -1,6 +1,5 @@
 # This Makefile builds a Linux kernel.
 
-.SECONDARY: .stamp_build
 .stamp_build: pkg_build_prepare
 	cp -uv $(KERNEL_CONFIG) pkg_src/.config
 	make linux-prebuild
@@ -14,14 +13,13 @@
 	cp -v $(PKG_SRC)/System.map $(PKG_ROOT)/boot/System.map-$(PKG_VERSION)
 	cp -v $(PKG_SRC)/.config $(PKG_ROOT)/boot/config-$(PKG_VERSION)
 	make linux-postinstall
+	touch $@
 
 ifeq "$(wildcard pkg_src/Makefile)" ""
-SRC_VERSION := 0
+SRC_VERSION := none
 else
-SRC_VERSION := $(shell cd pkg_src; make -s kernelversion)
+SRC_VERSION := $(shell make --no-print-directory -C pkg_src -s kernelversion)
 endif
-
-ifneq "$(PKG_VERSION)" "$(SRC_VERSION)"
 
 PKG_WGET_URLS=https://cdn.kernel.org/pub/linux/kernel/v$(PKG_MAJOR_VERSION).x/linux-$(PKG_VERSION).tar.xz
 PKG_SRC_ARCHIVES=linux-$(PKG_VERSION).tar.xz
@@ -44,12 +42,9 @@ verify: .stamp_verify_$(PKG_NAME)-$(PKG_VERSION)
 	sha3sum -a 512 -c sha3-512sums
 	touch $@
 
-.SECONDARY: pkg_build_prepare
-pkg_build_prepare: pkg_src_prepare pkg_root_prepare $(PKG_SRC_ARCHIVES)
-
 .SECONDARY: pkg_src_prepare
 pkg_src_prepare: .stamp_verify_$(PKG_NAME)-$(PKG_VERSION)
-	rm -rf pkg_src
+	[ ! -e pkg_src ] || mv -f pkg_src pkg_src_prev
 
 .SECONDARY: $(PKG_SRC_ARCHIVES)
 $(PKG_SRC_ARCHIVES): pkg_src_prepare
@@ -57,7 +52,17 @@ $(PKG_SRC_ARCHIVES): pkg_src_prepare
 	mv linux-$(PKG_VERSION) pkg_src
 	make -C pkg_src mrproper
 
+ifneq "$(PKG_VERSION)" "$(SRC_VERSION)"
+
+$(info Rebuilding kernel source tree: current tree version ($(SRC_VERSION)) \
+does not match the package version ($(PKG_VERSION)).)
+
+.SECONDARY: pkg_build_prepare
+pkg_build_prepare: pkg_src_prepare pkg_root_prepare $(PKG_SRC_ARCHIVES)
+
 else
+
+$(info Using in place kernel source tree)
 
 .SECONDARY: pkg_build_prepare
 pkg_build_prepare: pkg_root_prepare
