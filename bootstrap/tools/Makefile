@@ -455,10 +455,10 @@ chroot: prepare-chroot
 		"$(CHROOT)/etc" \
 		"$(CHROOT)/etc/resolv.conf" \
 		"$(CHROOT)/usr/src" 
-ifeq ($(wildcard "$(CHROOT)/dev/null"),)
-	mount --bind /dev "$(CHROOT)/dev"
-endif
 	chroot "$(CHROOT)" /bin/sh -c \
 		'export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$(PREFIX)/sbin:$(PREFIX)/bin; \
+		[ -e /proc/self ] || mount -t proc proc /proc; \
+		[ -d /sys/kernel ] || mount -t sysfs sys /sys; \
+		mdev -s; mdev -d; \
 		/bin/sh'
 
