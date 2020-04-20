@@ -1,0 +1,4 @@
+# Variable	Required?	Prompt		Default Value (Optional)
+GRUB_DRIVE	required	Enter the drive to install GRUB2 on (usually /dev/sda)	/dev/sda
+INSTALL_MBR	required	Should Grub be installed to the MBR? If you choose n, additional configuration will be necessary to boot your system. Unless you know what you're doing, select y. [y/n]
+INSTALL_GRUBCFG	required	Do you want to install a new grub.cfg? If you choose no, additional configuration will be necessary to boot your system. If you choose yes, any other existing operating systems you may have installed will temporarily be rendered unbootable. [y/n]

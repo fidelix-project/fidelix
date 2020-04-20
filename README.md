@@ -122,6 +122,28 @@ system. If you wish to skip redownloading all the package sources, use
 
 # Notes
 
+## Influential Variables
+
+If set, these variables override certain default actions of make.
+
+### SYSROOT
+
+Causes make to use `$SYSROOT` as the system root directory instead of /. This
+is used primarily when installing a new system, creating a chroot/docker
+environment, or creating installation images.
+
+For example, to install the operating system to /mnt, use the floowing:
+
+    make SYSROOT=/mnt install
+
+### SYSTEM
+
+Changes the target system type. On most systems, the default of `generic-$ARCH`
+will be sufficient; however, some systems (particularly embedded systems)
+require a different `SYSTEM` to be specified so that the correct kernel and/or
+bootloader are installed. Possible values for `$SYSTEM` can be found by
+examining the `./include/system` directory.
+
 ## Parallelism
 
 When invoking `make` from the /usr/src heirarchy, you should **never** pass the

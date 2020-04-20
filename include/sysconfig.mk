@@ -22,7 +22,9 @@ OS_ARCH:=x86_64
 OS_TARGET_TRIPLET:=$(OS_ARCH)-$(OS_NAME_LOWERCASE)-linux-musl
 
 # Set the system type
-OS_SYSTEM:=generic-$(OS_ARCH)
+SYSTEM?=generic-$(OS_ARCH)
+OS_SYSTEM:=$(SYSTEM)
+SYSROOT?=/
 
 -include config.local.mk
 include arch/$(OS_ARCH).mk

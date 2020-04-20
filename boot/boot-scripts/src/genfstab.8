@@ -1,0 +1,58 @@
+.\" Copyright 2020 Scott Court
+.\"
+.\" Permission is hereby granted, free of charge, to any person obtaining a copy
+.\" of this software and associated documentation files (the "Software"), todeal
+.\" in the Software without restriction, including without limitation the
+.\" rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+.\" sell copies of the Software, and to permit persons to whom the Software is
+.\" furnished to do so, subject to the following conditions:
+.\"
+.\" The above copyright notice and this permission notice shall be included in
+.\" all copies or substantial portions of the Software.
+.\"
+.\" THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+.\" IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+.\" FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+.\" AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+.\" LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+.\" FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+.\" IN THE SOFTWARE.
+.TH GENFSTAB 8 2020-04-19 "Fidelix" "Linux System Administrator's Manual"
+.SH NAME
+genfstab \- Generate a new fstab, suitable for use as /etc/fstab
+
+.SH SYNOPSIS
+.B genfstab [OPTIONS] [SYSROOT]
+
+.SH DESCRIPTION
+Generate a new fstab, suitable for use as /etc/fstab, from the currently
+mounted partitions. Optionally, SYSROOT can specify a directory to use as the
+relative root for the new fstab. If SYSROOT is not specified, a default of /
+will be used. SYSROOT can also be specified as an environment variable.
+
+.PP
+Options:
+.TP
+\fB-d\fR
+Use device node paths when generating fstab. Negates the effects of -u.
+.TP
+\fB-h\fR
+Print a help message.
+.TP
+\fB-p\fR
+Operate in permissive mode. Negates the effects of -s.
+.TP
+\fB-s\fR
+Operate in secure mode. Additional security hardening options will be enabled,
+such as disallowing SUID root executables on the root partition. This is the
+default.
+.TP
+\fB-u\fR
+Use UUIDs instead of device node paths when generating fstab. This is the
+default.
+
+.SH AUTHOR
+Genfstab was written by Scott Court (z5t1@z5t1.com).
+
+.SH HISTORY
+Genfstab first appeared in Fidelix 0.1

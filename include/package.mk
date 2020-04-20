@@ -1,7 +1,6 @@
 include sysconfig.mk
 include buildconfig.mk
 
-SYSROOT?=/
 _PKG_DB_DIR:=$(SYSROOT)/var/pkgdb
 _PKG_FULL_NAME=$(PKG_NAME)-$(PKG_VERSION)-$(OS_ARCH)-$(OS_PKG_TAG)-$(PKG_BUILD)
 _PKG_FILE=$(_PKG_FULL_NAME).$(PKG_EXTENSION)

@@ -4,8 +4,7 @@
 # based systems.
 
 # The packages in the boot group to build for this system
-BOOT_PACKAGES=linux-generic grub
-
+BOOT_PACKAGES=linux-generic linux-firmware grub boot-scripts fstab  
 # The bootloader to install
-BOOT_LOADER=grub
+BOOT_LOADER=grub-pc
 

@@ -2,7 +2,11 @@ DIR:=boot
 
 PACKAGES=\
 	linux-generic \
-	grub
+	linux-firmware \
+	grub \
+	boot-scripts \
+	fstab \
+	bootloader
 
 DEFAULT_PACKAGES=$(BOOT_PACKAGES)
 

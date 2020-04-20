@@ -52,7 +52,11 @@ ifdef _INC_SYSCONFIG
 # sufficient. On embedded systems, it may be necessary to specify a different
 # system to get the correct kernel and bootloader installed. A list of
 # supported systems can be found by examining the include/system directory.
-#OS_SYSTEM:=generic-$(OS_ARCH)
+#SYSTEM:=generic-$(OS_ARCH)
+
+# The directory to use as the system root when installing and upgrading
+# packages.
+#SYSROOT=/
 
 endif
 

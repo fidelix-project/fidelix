@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/x86 5.4.29 Kernel Configuration
+# Linux/x86 5.4.33 Kernel Configuration
 #
 
 #
@@ -1649,7 +1649,8 @@ CONFIG_PCCARD_NONSTATIC=y
 #
 # Generic Driver Options
 #
-# CONFIG_UEVENT_HELPER is not set
+CONFIG_UEVENT_HELPER=y
+CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
 CONFIG_DEVTMPFS=y
 # CONFIG_DEVTMPFS_MOUNT is not set
 CONFIG_STANDALONE=y

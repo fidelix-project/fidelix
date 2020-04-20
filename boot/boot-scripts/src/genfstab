@@ -1,0 +1,140 @@
+#!/bin/sh
+
+# Copyright 2020 Scott Court
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# 
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+SYSROOT=${SYSROOT:-/}
+
+usage () {
+cat << EOF
+Usage: genfstab [OPTIONS] [SYSROOT]
+
+Generate a new fstab, suitable for use as /etc/fstab, from the currently
+mounted partitions. Optionally, SYSROOT can specify a directory to use as the
+relative root for the new fstab. If SYSROOT is not specified, a default of /
+will be used. SYSROOT can also be specified as an environment variable.
+
+Options:
+
+	-d	Use device node paths when generating fstab. Negates the
+		effects of -u.
+	-h	Print a help message.
+	-p	Operate in permissive mode. Negates the effects of -s.
+	-s	Operate in secure mode. Additional security hardening options
+		will be enabled, such as disallowing SUID root executables on
+		the root partition. This is the default.
+	-u	Use UUIDs instead of device node paths when generating fstab.
+		This is the default.
+EOF
+}
+
+# Gets the UUID of the disk specified by $1
+get_disk_uuid () {
+	blkid | grep ^$1: | tr ' ' '\n' | grep ^UUID= | cut -d '"' -f 2
+}
+
+# Gets the options for a mountpoint $1, with any options from mount being in $2
+get_options () {
+	local lopts=""
+
+	# Preserve any opts in here. We are selective about which ones we
+	# preserve.
+	for opt in $(echo "$2" | tr ',()' ' '); do
+		case "$opt" in
+		ro)	lopts="$lopts,ro"		;;
+		esac
+	done
+
+	# If we're in secure mode, disable SUID root on every partition except
+	# /usr/local and /opt (some third party applications may require this).
+	if [ "$secmode" = "secure" ]; then
+		case "$1" in
+		/usr/local*)	;;
+		/opt*)		;;
+		*)		lopts="$lopts,nosuid"	;;
+		esac
+	fi
+
+	# If we don't have any lopts, use the defaults
+	[ -z "$lopts" ] && lopts=defaults
+
+	echo "$lopts" | sed -e 's/^,//g'
+}
+
+# Parse the arguments                                                          
+secmode=secure
+useuuid=true
+O=`getopt adhpsu "$@"` || exit 1                                                
+eval set -- "$O"                                                               
+while true; do                                                       
+        case "$1" in   
+        -h)                                                                 
+                usage                                
+                exit                                        
+                ;;                                                             
+        -s)                                                                    
+                secmode=secure
+                shift                     
+                ;;                                                   
+        -p)                                
+		secmode=permissive
+                shift
+                ;;                                    
+	-d)
+		useuuid=false
+		shift
+		;;
+	-u)
+		useuuid=true
+		shift
+		;;
+        --)                                   
+                shift                                                   
+                break                                                
+                ;;                                                
+        esac                                        
+done                                                 
+SYSROOT=${1:-$SYSROOT}
+
+# Strip any trailing / from SYSROOT
+SYSROOT=$(echo $SYSROOT | sed -e 's@/$@@g')
+
+echo Generating fstab for $SYSROOT >&2
+echo -e '# DEVICE	MOUNTPOINT	TYPE	OPTIONS	DUMP	PASS'
+
+mount | grep " on $SYSROOT" | while read mount; do
+	dev=$(echo $mount | awk '{print $1}')
+	mountpoint=$(echo $mount | awk '{print $3}' | sed -e "s@^$SYSROOT@@g")
+	[ -z "$mountpoint" ] && mountpoint=/
+	type=$(echo $mount | awk '{print $5}')
+	options=$(get_options $mountpoint $(echo $mount | awk '{print $6}'))
+
+	# Skip sys and proc. They are handled elsewhere
+	if [ "$type" = "proc" ] || [ "$type" = "sysfs" ]; then
+		continue
+	fi
+
+	if [ $useuuid = true ]; then
+		echo "# $mountpoint was on $dev during fstab generation"
+		dev=UUID=$(get_disk_uuid $dev)
+	fi
+	echo -e "$dev	$mountpoint	$type	$options	0	0"
+done
+
