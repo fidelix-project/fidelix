@@ -26,7 +26,8 @@ PACKAGES=\
 	ncurses \
 	bison \
 	flex \
-	libelf
+	libelf \
+	kmod
 
 # Non-package subdirectories contained in this directory that should be
 # included when searching for packages
