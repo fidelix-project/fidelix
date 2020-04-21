@@ -68,7 +68,8 @@ get_options () {
 		case "$1" in
 		/usr/local*)	;;
 		/opt*)		;;
-		*)		lopts="$lopts,nosuid"	;;
+		/srv*)		lopts="$lopts,nosuid,noexec,nodev"	;;
+		*)		lopts="$lopts,nosuid,nodev"	;;
 		esac
 	fi
 
@@ -127,7 +128,8 @@ mount | grep " on $SYSROOT" | while read mount; do
 	options=$(get_options $mountpoint $(echo $mount | awk '{print $6}'))
 
 	# Skip sys and proc. They are handled elsewhere
-	if [ "$type" = "proc" ] || [ "$type" = "sysfs" ]; then
+	if [ "$type" = "proc" ] || [ "$type" = "sysfs" ] || \
+		[ "$type" = devpts ] || [ "$mountpoint" = "/dev" ]; then
 		continue
 	fi
 

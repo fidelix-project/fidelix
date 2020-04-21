@@ -13,12 +13,15 @@
 
 # Mount /sys and /proc
 echo Mounting /proc
-mount -t proc proc /proc
+mount -t proc -o nosuid,noexec,nodev proc /proc
 echo Mounting /sys
-mount -t sysfs sys /sys
+mount -t sysfs -o nosuid,noexec,nodev sys /sys
 
 # Populate /dev and start the mdev daemon
 echo Starting mdev
+mount -t tmpfs -o nosuid tmpfs /dev
+install -dm 755 -o 0 -g 0 /dev/pts
+mount -t devpts -o nosuid,noexec devpts /dev/pts
 echo "/sbin/hotplug" > /proc/sys/kernel/hotplug
 mdev -s
 mdev -d &
