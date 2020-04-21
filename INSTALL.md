@@ -9,10 +9,53 @@ documented below.
 This method can be used to install Fidelix from the installation images or from
 an existing system.
 
-## Mount the Installation Target Devices
+## Mounting the Installation Target Devices
 
 Mount all of the drives and partitions that you are installing Fidelix to
 under `/mnt` using the heirarchy you want for the final system.
+
+### Note on Partitioning
+
+For security purposes, it is recommended that you do not put the entire system
+on a single partition for a couple of reasons:
+
+* Security: some default security options (such as `nosuid`) are enabled by
+  default for most partitions, but may need to be disabled for certain
+  partitions in order for third party software to function properly.
+* Stability: if the entire system is on one partition, one misbehaving
+  unprivileged program or user can easily cause a system wide denial of service
+  by filling the root partition with garbage data. If the system programs are
+  on a separate parition, they are more likely to continue to function if a
+  partition becomes full.
+
+At a bare minimum, it is recommended that the following separate partitions
+exist:
+
+* /: The root partition.
+* /usr/local: Locally installed third party programs. By default, this will be
+  the only partition mounted with suid enabled. If it is not a separate
+  partition, suid will be disabled for software on /usr/local, which may break
+  some third party programs.
+* /tmp: Temporary files. Since any user/application can write here, this should
+  be separate to keep the system from crashing if /tmp becomes full. This can
+  be either a tmpfs or a real partition.
+* /home: User home directories. Recommended to be separatae to keep the system
+  from crashing in the event that a user writes too much data to his home
+  directory.
+
+The following additional partitions may be desirable for certain systems:
+
+* /srv: Service data (if you are planning on running daemons). This keeps a
+  misbehaving/compromised service from filling the root partition. It will
+  also be mounted with `nosuid,nodev,noexec` by default. 
+* /opt: Optional data. If /opt is on a separate partition, the partition will
+  be mounted with suid enabled. This may be necessary for certain third party
+  programs that reside on /opt to function correctly. Note that any partition
+  mounted under /opt will alco be mounded with suid enabled.
+* /var: Variable data. Traditionally, this is sometimes put on a separate
+  partition.
+* /usr: User programs. Traditionally, this is sometimes put on a separate
+  partition.
 
 ## Installing the System Software
 
