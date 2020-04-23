@@ -1,6 +1,6 @@
 PKG_NAME=busybox
 PKG_VERSION=1.31.1
-PKG_BUILD=9
+PKG_BUILD=10
 PKG_BUILDSYSTEM=custom-common
 
 # Build time dependencies for this package
@@ -27,6 +27,8 @@ endif
 	chmod 755 $(PKG_ROOT)/lib*/libbusybox.so.*
 	install -d $(PKG_ROOT)/usr/share/udhcpc
 	install -m 755 udhcpc.script $(PKG_ROOT)/usr/share/udhcpc/default.script
+	install -d $(PKG_ROOT)/etc
+	install -m 644 ashrc $(PKG_ROOT)/etc/
 
 	mkdir -p $(PKG_ROOT)/usr/share/man/man1
 	install pkg_src/$(PKG_SRC_DIR)/docs/busybox.1 $(PKG_ROOT)/usr/share/man/man1
