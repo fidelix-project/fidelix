@@ -1,6 +1,15 @@
 include sysconfig.mk
 include depends.mk
 
+# Bundle a bunch of modules that might be necessary for booting on some
+# platforms since we don't know what platform(s) this image will be booted on.
+GRUB_MODULES=part_gpt part_msdos ntfs ntfscomp hfsplus fat ext2 normal chain \
+	boot configfile linux multiboot iso9660 gfxmenu gfxterm loadenv \
+	png ext2 ntfscomp loopback search \
+	minicmd cat cpuid elf usb videotest halt help ls reboot echo \
+	test normal sleep memdisk tar font video_fb video gettext true \
+	video_bochs video_cirrus multiboot2 acpi
+
 # Determine whether to install the MBR. For a live image, people probably want
 # this installed, so we'll default to y.
 ifeq ($(INSTALL_MBR), n)
@@ -60,6 +69,8 @@ want to install Grub to. If in doubt, /dev/sda is usually a good choice. ***"; \
 		exit 1; \
 	fi
 	grub-install --boot-directory=$(SYSROOT)/boot \
+		--verbose \
+		--modules="$(GRUB_MODULES)" \
 		$(_GRUB_ARGS) $(GRUB_DRIVE)
 
 .PHONY: grub.cfg

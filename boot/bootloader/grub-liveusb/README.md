@@ -39,3 +39,18 @@ installation if set:
 * `OS_NAME`: The operating system name to display on the boot menu.
 * `OS_VERSION`: The operating system version to display on the boot menu.
 
+# Known Issues
+
+## Your core.img is too Large
+
+In order for the live USB image to be bootable on some platforms, modules must
+be built in to GRUB's core.img that would usually not be. This causes core.img
+to be larger than it usually would be and can cause an error if the area on the
+disk reserved for embedding the bootloader is not large enougn.
+
+To fix this error, do one of the following:
+* For MBR partitioned disks, leave at least 512 KB (1024 sectors) before the
+  start of the first partition.
+* For GPT partitioned disks, make sure there is a BIOS boot partition on the
+  disk that is at least 512 KB in size.
+
