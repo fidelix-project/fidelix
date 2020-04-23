@@ -93,7 +93,19 @@ Documentation for your system's bootloader can be found in
 `./boot/bootloader/BOOT_LOADER`, where BOOT_LOADER is the bootloader target
 for your system. The bootloader for your system can be determined by running:
 
-    `make -C boot/bootloader which`
+    make -C boot/bootloader which
+
+## Install the System Source Code
+
+This step is optional. If you wish to install the source code for the operating
+system to /usr/src, run:
+
+    make SYSROOT=/mnt copy-src
+
+## Umount and Reboot
+
+Installation is now complete. Unmount all of the partitions under /mnt and then
+reboot into your new system.
 
 # Bootstrapping from an Existing Linux Distribution
 

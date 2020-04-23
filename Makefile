@@ -15,5 +15,10 @@ bootstrap-%:
 from-bootstrap:
 	make -C bootstrap/packages
 
+# Handle /usr/src copying
+copy-src:
+	cp -au $(OS_SRC_DIR)/* $(SYSROOT)/usr/src/
+
+include sysconfig.mk
 include dir.mk
 
