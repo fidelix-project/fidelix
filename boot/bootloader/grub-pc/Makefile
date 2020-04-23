@@ -29,7 +29,7 @@ ifeq ($(ROOT_PART), PARTUUID=)
 ROOT_PART=$(ROOT_DEV)
 endif
 
-KERNEL_ARGS+=root=$(ROOT_PART) rw
+KERNEL_ARGS+= root=$(ROOT_PART) rw
 
 ########### End Kernel Arguments ##########
 
@@ -66,5 +66,5 @@ want to install Grub to. If in doubt, /dev/sda is usually a good choice. ***"; \
 
 .PHONY: grub.cfg
 grub.cfg: package-blkid
-	./makegrubcfg.sh > grub.cfg
+	$(OS_SRC_DIR)/scripts/makegrubcfg.sh > grub.cfg
 
