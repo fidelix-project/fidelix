@@ -1,4 +1,5 @@
 include sysconfig.mk
+include depends.mk
 
 # Determine whether to install the MBR
 ifeq ($(INSTALL_MBR), y)
@@ -18,9 +19,14 @@ endif
 ########### Begin Kernel Arguments ##########
 
 # Determine the root partition.
-ROOT_PART?=$(shell mountpoint -n $(SYSROOT) | awk '{ print $$1 }')
-ifeq ($(ROOT_PART), UNKNOWN)
+ROOT_DEV?=$(shell mountpoint -n $(SYSROOT) | awk '{ print $$1 }')
+ifeq ($(ROOT_DEV), UNKNOWN)
 $(error $(SYSROOT) is on an unknown partition)
+endif
+# Try to get the PARTUUID
+ROOT_PART?=PARTUUID=$(shell util-linux-blkid $(ROOT_DEV) -s PARTUUID -o value)
+ifeq ($(ROOT_PART), PARTUUID=)
+ROOT_PART=$(ROOT_DEV)
 endif
 
 KERNEL_ARGS+=root=$(ROOT_PART) rw
@@ -59,6 +65,6 @@ want to install Grub to. If in doubt, /dev/sda is usually a good choice. ***"; \
 		$(_GRUB_ARGS) $(GRUB_DRIVE)
 
 .PHONY: grub.cfg
-grub.cfg:
+grub.cfg: package-blkid
 	./makegrubcfg.sh > grub.cfg
 
