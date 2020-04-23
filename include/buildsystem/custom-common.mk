@@ -11,8 +11,9 @@
 
 include package-common.mk
 
-.SECONDARY: .stamp_build
-.stamp_build: .stamp_custom_build
+.stamp_build_%: .stamp_custom_build
+	touch $@
 
+.PHONY: stamp_custom_build
 .stamp_custom_build: pkg_build_prepare
 

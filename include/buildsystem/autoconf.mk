@@ -9,7 +9,7 @@ _AUTOCONF_HELPER_TARGETS=\
 
 .PHONY: $(_AUTOCONF_HELPER_TARGETS)
 
-.stamp_build: pkg_build_prepare
+.stamp_build_%: pkg_build_prepare
 	make autoconf-preconfigure
 	cd pkg_src/$(PKG_SRC_DIR); ./configure \
 		$(AUTOCONF_CONFIGURE_ARGS) 

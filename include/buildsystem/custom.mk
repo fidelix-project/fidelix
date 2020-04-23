@@ -6,3 +6,6 @@
 %:
 	$(info Target $@ is not implemented for $(PKG_NAME))
 
+.stamp_build_%: .stamp_build
+	touch $@
+

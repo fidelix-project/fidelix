@@ -9,11 +9,11 @@ PKG_SRC=$(CURDIR)/pkg_src/$(PKG_SRC_DIR)
 
 ifdef PKG_BUILD_DEPENDS
 $(_PKG_FILE): .stamp_dependencies
-	make .stamp_build
+	make .stamp_build_$(_PKG_FULL_NAME)
 	makepkg -d $(PKG_ROOT) -m $(CURDIR) -o $(_PKG_FILE)
 else
 $(_PKG_FILE):
-	make .stamp_build
+	make .stamp_build_$(_PKG_FULL_NAME)
 	makepkg -d $(PKG_ROOT) -m $(CURDIR) -o $(_PKG_FILE)
 endif
 

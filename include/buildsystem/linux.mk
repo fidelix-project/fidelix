@@ -1,6 +1,6 @@
 # This Makefile builds a Linux kernel.
 
-.stamp_build: pkg_build_prepare
+.stamp_build_%: pkg_build_prepare
 	cp -uv $(KERNEL_CONFIG) pkg_src/.config
 	make linux-prebuild
 	make -C pkg_src $(MAKE_FLAGS)

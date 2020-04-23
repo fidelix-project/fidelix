@@ -9,7 +9,7 @@ _MAKE_HELPER_TARGETS=\
 
 .PHONY: $(_make_HELPER_TARGETS)
 
-.stamp_build: pkg_build_prepare
+.stamp_build_%: pkg_build_prepare
 	make make-premake
 	cd pkg_src/$(PKG_SRC_DIR); \
 		make $(MAKE_ARGS) \
