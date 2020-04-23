@@ -19,8 +19,10 @@ _AUTOCONF_HELPER_TARGETS=\
 		-j $(MAKE_MAXJOBS) \
 		-l $(MAKE_MAXLOAD)
 	make autoconf-preinstall
+ifneq ($(AUTOCONF_SKIP_MAKE_INSTALL), y)
 	cd pkg_src/$(PKG_SRC_DIR); \
 		make $(AUTOCONF_MAKE_INSTALL_ARGS) install DESTDIR=$(PKG_ROOT)
+endif
 	make autoconf-prepackage
 	touch $@
 

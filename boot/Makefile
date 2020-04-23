@@ -4,6 +4,7 @@ PACKAGES=\
 	linux-generic \
 	linux-firmware \
 	grub \
+	blkid \
 	boot-scripts \
 	fstab \
 	bootloader

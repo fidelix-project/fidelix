@@ -1,0 +1,4 @@
+Util-linux blkid
+
+This package provides the util-linux version of blkid. Some bootloader targets
+need the real blkid.
