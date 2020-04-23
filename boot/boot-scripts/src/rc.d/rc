@@ -17,6 +17,10 @@ mount -t proc -o nosuid,noexec,nodev proc /proc
 echo Mounting /sys
 mount -t sysfs -o nosuid,noexec,nodev sys /sys
 
+# Remount root filesystem as writeable
+echo Remounting / as rw,nosuid,nodev
+mount -o remount,rw,nosuid,nodev /
+
 # Populate /dev and start the mdev daemon
 echo Starting mdev
 mount -t tmpfs -o nosuid tmpfs /dev
