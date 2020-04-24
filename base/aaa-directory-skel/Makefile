@@ -1,6 +1,6 @@
 PKG_NAME=aaa-directory-skel
 PKG_VERSION=$(OS_VERSION)
-PKG_BUILD=1
+PKG_BUILD=2
 PKG_BUILDSYSTEM=custom
 
 include sysconfig.mk
@@ -22,7 +22,7 @@ include package.mk
 	install -d -m 700 -o 0 -g 0 $(PKG_ROOT)/root
 	install -d -m 755 -o 0 -g 0 $(PKG_ROOT)/srv
 	install -d -m 755 -o 0 -g 0 $(PKG_ROOT)/sys
-	install -d -m 1755 -o 0 -g 0 $(PKG_ROOT)/tmp
+	install -d -m 1777 -o 0 -g 0 $(PKG_ROOT)/tmp
 	install -d -m 755 -o 0 -g 0 $(PKG_ROOT)/usr
 	install -d -m 755 -o 0 -g 0 $(PKG_ROOT)/var
 ifneq ($(ARCH_LIBDIR_SUFFIX),)
