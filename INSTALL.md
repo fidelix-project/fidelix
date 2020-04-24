@@ -51,7 +51,7 @@ The following additional partitions may be desirable for certain systems:
 * /opt: Optional data. If /opt is on a separate partition, the partition will
   be mounted with suid enabled. This may be necessary for certain third party
   programs that reside on /opt to function correctly. Note that any partition
-  mounted under /opt will alco be mounded with suid enabled.
+  mounted under /opt will alco be mounted with suid enabled.
 * /var: Variable data. Traditionally, this is sometimes put on a separate
   partition.
 * /usr: User programs. Traditionally, this is sometimes put on a separate
