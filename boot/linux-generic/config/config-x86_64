@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/x86 5.4.33 Kernel Configuration
+# Linux/x86 5.4.35 Kernel Configuration
 #
 
 #
@@ -6218,7 +6218,7 @@ CONFIG_USB_FUNCTIONFS=m
 CONFIG_USB_FUNCTIONFS_ETH=y
 CONFIG_USB_FUNCTIONFS_RNDIS=y
 CONFIG_USB_FUNCTIONFS_GENERIC=y
-# CONFIG_USB_MASS_STORAGE is not set
+CONFIG_USB_MASS_STORAGE=m
 # CONFIG_USB_GADGET_TARGET is not set
 CONFIG_USB_G_SERIAL=m
 # CONFIG_USB_MIDI_GADGET is not set
