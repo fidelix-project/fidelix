@@ -1,0 +1,54 @@
+Add support bcrypt to BusyBox chpasswd & passwd.
+
+--- busybox/include/libbb.h
++++ busybox-bcrypt/include/libbb.h
+@@ -1633,8 +1633,8 @@
+  * (otherwise we risk having same salt generated)
+  */
+ extern int crypt_make_salt(char *p, int cnt /*, int rnd*/) FAST_FUNC;
+-/* "$N$" + sha_salt_16_bytes + NUL */
+-#define MAX_PW_SALT_LEN (3 + 16 + 1)
++/* "$Na$10$" + bcrypt_salt_24_bytes + NUL */
++#define MAX_PW_SALT_LEN (7 + 24 + 1)
+ extern char* crypt_make_pw_salt(char p[MAX_PW_SALT_LEN], const char *algo) FAST_FUNC;
+ 
+ 
+--- busybox/libbb/pw_encrypt.c
++++ busybox-bcrypt/libbb/pw_encrypt.c
+@@ -67,6 +67,17 @@
+ 			len = 16/2;
+ 		}
+ #endif
++#if ENABLE_USE_BCRYPT 
++		if ((algo[0]|0x20) == 'b') { /* bcrypt */
++			salt[1] = '2';
++			salt[2] = 'a';
++			*salt_ptr++ = '$';
++			*salt_ptr++ = '1';
++			*salt_ptr++ = '0';
++			*salt_ptr++ = '$';
++			len = 24/2;
++		}
++#endif
+ 	}
+ 	crypt_make_salt(salt_ptr, len);
+ 	return salt_ptr;
+--- busybox/loginutils/Config.src
++++ busybox-bcrypt/loginutils/Config.src
+@@ -93,4 +93,16 @@
+ 
+ INSERT
+ 
++config USE_BCRYPT
++	bool "Enable the bcrypt crypt function"
++	default n
++	depends on !USE_BB_CRYPT
++	help
++	Enable this if you have passwords starting with $2a$ in your
++	/etc/passwd or /etc/shadow files. These passwords are hashed
++	using the bcrypt algorithm. Requires the use of a C library
++	that supports bcrypt.
++	With this option off, login will fail password check for any
++	user which has password encrypted with this algorithms.
++
+ endmenu
