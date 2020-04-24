@@ -17,7 +17,8 @@ verify: .stamp_verify_$(PKG_NAME)-$(PKG_VERSION)
 	touch $@
 
 .SECONDARY: pkg_build_prepare
-pkg_build_prepare: pkg_src_prepare pkg_root_prepare $(PKG_SRC_ARCHIVES)
+pkg_build_prepare: pkg_src_prepare pkg_root_prepare $(PKG_SRC_ARCHIVES) \
+	apply-patches
 
 .SECONDARY: pkg_src_prepare
 pkg_src_prepare: .stamp_verify_$(PKG_NAME)-$(PKG_VERSION)
@@ -27,6 +28,16 @@ pkg_src_prepare: .stamp_verify_$(PKG_NAME)-$(PKG_VERSION)
 .SECONDARY: $(PKG_SRC_ARCHIVES)
 $(PKG_SRC_ARCHIVES): pkg_src_prepare
 	tar xf $@ -C pkg_src
+
+.PHONY: apply-patches
+ifneq ($(wildcard $(CURDIR)/patches), )
+apply-patches: $(addprefix apply-patch-,$(shell ls $(CURDIR)/patches))
+endif
+apply-patches:
+
+.PHONY: apply-patch-%
+apply-patch-%: $(PKG_SRC_ARCHIVES)
+	cd pkg_src/$(PKG_SRC_DIR) && patch -p1 < $(CURDIR)/patches/$*
 
 .SECONDARY: pkg_root_prepare
 pkg_root_prepare: .stamp_verify_$(PKG_NAME)-$(PKG_VERSION)
