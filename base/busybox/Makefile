@@ -1,6 +1,6 @@
 PKG_NAME=busybox
 PKG_VERSION=1.31.1
-PKG_BUILD=13
+PKG_BUILD=14
 PKG_BUILDSYSTEM=custom-common
 
 # Build time dependencies for this package
@@ -32,6 +32,7 @@ endif
 	install -dm 755 $(PKG_ROOT)/etc/init.d
 	install -m 644 ashrc $(PKG_ROOT)/etc/
 	install -m 755 init.d/syslogd $(PKG_ROOT)/etc/init.d/
+	install -m 755 init.d/klogd $(PKG_ROOT)/etc/init.d/
 	install -m 755 init.d/crond $(PKG_ROOT)/etc/init.d/
 
 	mkdir -p $(PKG_ROOT)/usr/share/man/man1

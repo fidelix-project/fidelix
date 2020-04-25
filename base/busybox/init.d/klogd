@@ -1,0 +1,12 @@
+#!/bin/sh
+
+Name=klogd
+PidFile=/run/klogd.pid
+StartCmd="/sbin/klogd -c 3"
+
+Description="BusyBox Kernel Logging Daemon"
+DefaultStart=yes
+StartPriority=15
+
+source /etc/init.d/common-core
+
