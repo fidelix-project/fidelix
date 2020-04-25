@@ -96,10 +96,10 @@ svc_status () {
 	stat $ENABLEDIR/*$name >/dev/null 2>&1 && enabled=Yes
 
 	if [ $status -eq 0 ]; then
-		echo -en "\e[92m$bullet\e[39m "
+		echo -en "\e[92m$bullet\e[0m "
 		statusmsg="\e[1m\e[92m$statusmsg\e[0m"
 	else
-		echo -en "\e[91m$bullet\e[39m "
+		echo -en "\e[91m$bullet\e[0m "
 		statusmsg="\e[1m\e[91m$statusmsg\e[0m"
 	fi
 	echo -e "$name - $description"

@@ -29,28 +29,31 @@ die () {
 }
 
 cc_ok () {
+	echo -en "\r[\e[92m\e[1m OK \e[0m] $1 $Name"
 	if [ $# -eq 1 ]; then
-		echo -e "\r[ OK ] $1 $Name"
+		echo
 	else
-		echo -e "\r[ OK ] $1 $Name: $2"
+		echo ": $2"
 	fi
 	exit 0
 }
 
 cc_warn () {
+	echo -en "\r[\e[93m\e[1mWARN\e[0m] $1 $Name"
 	if [ $# -eq 1 ]; then
-		echo -e "\r[WARN] $1 $Name"
+		echo
 	else
-		echo -e "\r[WARN] $1 $Name: $2"
+		echo ": $2"
 	fi
 	exit 0
 }
 
 cc_fail () {
+	echo -en "\r[\e[91m\e[1mFAIL\e[0m] $1 $Name"
 	if [ $# -eq 1 ]; then
-		echo -e "\r[FAIL] $1 $Name"
+		echo
 	else
-		echo -e "\r[FAIL] $1 $Name: $2"
+		echo ": $2"
 	fi
 	exit 1
 }
