@@ -107,6 +107,17 @@ system to /usr/src, run:
 Installation is now complete. Unmount all of the partitions under /mnt and then
 reboot into your new system.
 
+## Initial System Configuration
+
+After booting into your system, you can optionally perform the initial system
+configuration (setting the root password, enabling the default services, etc)
+by running:
+
+    sysconfig initial
+
+After performing the configuration it will be necessary to reboot your system
+a final time for the configuration to take full effect.
+
 # Bootstrapping from an Existing Linux Distribution
 
 This method of installation is very similar to
