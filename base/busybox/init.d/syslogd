@@ -1,0 +1,12 @@
+#!/bin/sh
+
+Name=syslogd
+PidFile=/run/syslogd.pid
+StartCmd=/sbin/syslogd
+
+Description="BusyBox System Logging Daemon"
+DefaultStart=yes    
+StartPriority=10
+
+source /etc/init.d/common-core
+

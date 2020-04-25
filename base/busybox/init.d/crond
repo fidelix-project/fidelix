@@ -1,0 +1,12 @@
+#!/bin/sh
+
+Name=crond
+PidFile=/run/crond.pid
+StartCmd=/usr/sbin/crond
+
+Description="BusyBox Cron Daemon"
+DefaultStart=yes
+StartPriority=20
+
+source /etc/init.d/common-core
+
