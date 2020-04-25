@@ -17,6 +17,13 @@ if [ -x /etc/rc.d/rc.local.shutdown ]; then
 	/etc/rc.d/rc.local.shutdown
 fi
 
+# Stop any enabled services
+if [ -d /etc/rc.d/enabled ]; then
+        for service in $(ls -r /etc/rc.d/enabled); do
+                /etc/rc.d/enabled/$service stop
+        done                          
+fi                                   
+
 # Unmount any mounted filesystems
 echo Unmounting filesystems
 swapoff -a

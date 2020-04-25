@@ -1,6 +1,6 @@
 PKG_NAME=boot-scripts
 PKG_VERSION=$(OS_VERSION)
-PKG_BUILD=8
+PKG_BUILD=9
 PKG_BUILDSYSTEM=custom
 
 # Build time dependencies for this package
@@ -13,6 +13,8 @@ TARGETS=\
 	/sbin/genfstab /usr/share/man/man8/genfstab.8 \
 	/etc/mdev.conf.new \
 	/etc/inittab.new \
+	/etc/rc.d/enabled \
+	/etc/rc.d/README.md \
 	/etc/rc.d/rc \
 	/etc/rc.d/rc.shutdown
 
@@ -34,6 +36,9 @@ $(PKG_ROOT)/etc/mdev.conf.new: src/mdev.conf $(PKG_ROOT)/etc
 	install -m 644 $< $@
 
 $(PKG_ROOT)/etc/inittab.new: src/inittab $(PKG_ROOT)/etc
+	install -m 644 $< $@
+
+$(PKG_ROOT)/etc/rc.d/README.md: src/rc.d/README.md $(PKG_ROOT)/etc/rc.d
 	install -m 644 $< $@
 
 $(PKG_ROOT)/etc/rc.d/rc: src/rc.d/rc $(PKG_ROOT)/etc/rc.d

@@ -46,6 +46,13 @@ if [ -r /etc/hostname ]; then
 	hostname -F /etc/hostname
 fi
 
+# Start any enabled services
+if [ -d /etc/rc.d/enabled ]; then
+	for service in $(ls /etc/rc.d/enabled); do
+		/etc/rc.d/enabled/$service start
+	done
+fi
+
 # Run the local startup script (if any)
 if [ -x /etc/rc.d/rc.local ]; then
 	echo Running rc.local
