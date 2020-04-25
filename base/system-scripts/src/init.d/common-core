@@ -82,6 +82,7 @@ cc_stop () {
 		StopCmd="kill $(cat $PidFile) 2> /dev/null"
 	fi
 	if eval "$StopCmd"; then
+		rm -f "$PidFile"
 		cc_ok Stopping
 	else
 		cc_fail Stopping
