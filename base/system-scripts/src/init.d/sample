@@ -1,0 +1,31 @@
+#!/bin/sh
+
+# This is a sample service file. Makes for a great template.
+
+# The name of the service
+Name=sample
+# The file that the PID of the service gets stored in (optional; required if
+# StopCmd is not set).
+PidFile=/run/sampled.pid
+# The command to start the service
+StartCmd=/usr/sbin/sampled
+# The command to stop the service (optional)
+StopCmd=/usr/sbin/samplectl stop
+# The command to restart the service (optional)
+RestartCmd=/usr/sbin/samplectl restart
+# The command to reload the service (optional)
+ReloadCmd=/usr/sbin/samplectl reload
+# The command to get the status of the service (optional)
+StatusCmd=/usr/sbin/samplectl status
+
+# A friendly, human readable description of the service
+Description="Sample Service"
+# Whether or not this service should be started by default
+DefaultStart=no
+# The priority to use when starting this service. Any enabled services with a
+# lower priority will be started first.
+StartPriority=20
+
+# Do NOT delete this line; it is required for the script to be usable.
+source /etc/init.d/common-core
+

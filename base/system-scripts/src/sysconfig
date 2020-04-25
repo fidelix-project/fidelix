@@ -1,0 +1,80 @@
+#!/bin/sh
+
+# Copyright 2020 Scott Court
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# 
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+usage () {
+cat << EOF
+Usage: sysconfig [subsystem]
+
+An interactive tool for configuring the system. Subsystems are listed in
+/etc/sysconfig.d. If no subsystem is specified, sysconfig will display a menu
+of subsystems for selection.
+EOF
+}
+
+die () {
+	echo $@ >&2
+	exit 1
+}
+
+# Display a menu
+do_menu () {
+while [ true ]; do
+	local i=1
+	clear
+	echo -e "System Configuration Menu\n"
+	for line in $(ls /etc/sysconfig.d); do
+		local desc=$(grep "^# DESCRIPTION" /etc/sysconfig.d/$line \
+			| cut -d ' ' -f 3-)
+		echo "  $i. $line ($desc)"
+		i=$(expr $i + 1)
+	done
+	echo -e "  $i. exit\n"
+	read -p "Select an option from the list above [1-$i]: " prompt
+	if [ "$prompt" == "q" ] || [ $prompt -eq $i ]; then
+		exit
+	elif [ $prompt -ge 1 ] && [ $prompt -lt $i ]; then
+		local script=$(ls /etc/sysconfig.d | tail -n+$prompt | head -n1)
+		/etc/sysconfig.d/$script
+	fi
+done
+}
+
+# Attempts to run the sysconfig script for subsystem $1
+do_sysconfig () {
+	[ -x /etc/sysconfig.d/$1 ] || \
+		die "Error: subsystem $1 does not exist in /etc/sysconfig.d"
+	/etc/sysconfig.d/$1
+}
+
+if [ "$1" == help ] || [ "$1" == "--help" ] || [ "$1" == "-h" ]; then
+	usage
+	exit
+fi
+
+[ -d /etc/sysconfig.d ] || die "Error: /etc/sysconfig.d does not exist"
+
+if [ $# -eq 0 ]; then
+	do_menu
+else
+	do_sysconfig $1
+fi
+

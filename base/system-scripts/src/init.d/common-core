@@ -1,0 +1,162 @@
+# The common core for managing services. It handles parsing the command line
+# arguments and the bulk of the work for managing a service. Writing a service
+# init script is as simple as setting the following variable and sourcing this
+# file:
+#
+# Name: The name of this service (i.e. crond).
+# PidFile: The path of the file containing the PID of the service (optional).
+# StartCmd: The command to run to start this service.
+# StopCmd: The command to run to stop this service (optional; if omitted will
+#          kill the process from PidFile. If PidFile is not set, will fail).
+# RestartCmd: The command to restart this service (optional; if omitted the
+#             StopCmd will be run followed by the StartCmd).
+# ReloadCmd: The command to reload this service (optional).
+# StatusCmd: The command to check the status of the service. Should exit with
+#            status 0 if the service is running or status 1 if it is not
+#            (optional; if omitted will check the status of the process in
+#            PidFile. If PidFile is not set exit with unknown status)
+#
+# The following fields are optional and influence the behavior of the service
+# command:
+#
+# DefaultStart: Set to "yes" if this service should be started by default.
+# StartPriority: The priority to start this service for (00-99).
+# Description: A friendly, human readable description of the service.
+
+die () {
+	echo $@ >&2
+	exit 1
+}
+
+cc_ok () {
+	if [ $# -eq 1 ]; then
+		echo -e "\r[ OK ] $1 $Name"
+	else
+		echo -e "\r[ OK ] $1 $Name: $2"
+	fi
+	exit 0
+}
+
+cc_warn () {
+	if [ $# -eq 1 ]; then
+		echo -e "\r[WARN] $1 $Name"
+	else
+		echo -e "\r[WARN] $1 $Name: $2"
+	fi
+	exit 0
+}
+
+cc_fail () {
+	if [ $# -eq 1 ]; then
+		echo -e "\r[FAIL] $1 $Name"
+	else
+		echo -e "\r[FAIL] $1 $Name: $2"
+	fi
+	exit 1
+}
+
+cc_start () {
+	echo -n "[    ] Starting $Name"
+	if [ ! -z "$PidFile" ] && [ -r "$PidFile" ] && \
+		kill -0 $(cat "$PidFile") 2> /dev/null;
+	then
+		cc_warn Starting "Already Running"
+		exit 0
+	fi
+	if eval "$StartCmd"; then
+		cc_ok Starting
+	else
+		cc_fail Starting
+	fi
+}
+
+cc_stop () {
+	echo -n "[    ] Stopping $Name"
+	[ -z "$StopCmd" ] && [ -z "$PidFile" ] && \
+		cc_fail Stopping "Not Implemented"
+	if [ -z "$StopCmd" ]; then
+		[ -r "$PidFile" ] || cc_warn Stopping "Not Running"
+		StopCmd="kill $(cat $PidFile) 2> /dev/null"
+	fi
+	if eval "$StopCmd"; then
+		cc_ok Stopping
+	else
+		cc_fail Stopping
+	fi
+}
+
+cc_restart () {
+	if [ ! -z "$RestartCmd" ]; then
+		echo -n "[    ] Restarting $Name"
+		if eval "$RestartCmd"; then
+			cc_ok Restarting
+		else
+			cc_fail Restarting
+		fi
+	else
+		eval "$0 stop" || exit 1
+		eval "$0 start" || exit 1
+	fi
+}
+
+cc_reload () {
+	echo -n "[    ] Reloading $Name"
+	[ -z "$ReloadCmd" ] && cc_fail Stopping "Not Implemented"
+	if eval "$ReloadCmd"; then
+		cc_ok Reloading
+	else
+		cc_fail Reloading
+	fi
+}
+
+cc_status () {
+	[ -z "$StatusCmd" ] && [ -z "$PidFile" ] && \
+		die "Not Implemented"
+	if [ -z "$StatusCmd" ]; then
+		if [ ! -r "$PidFile" ]; then
+			echo "Not Running"
+			exit 1
+		elif kill -0 $(cat "$PidFile") 2> /dev/null; then
+			echo "Running"
+			exit 0
+		else
+			echo "Not Running"
+			exit 1
+		fi
+	elif eval "$StatusCmd"; then
+		echo "Running"
+		exit 0
+	else
+		echo "Not Running"
+		exit 1
+	fi
+}
+
+# Echos the parameter $1
+cc_get () {
+	case $1 in
+		pid)	[ -n "$PidFile" ] && [ -r "$PidFile" ] && cat "$PidFile" ;;
+		description)	echo "$Description" ;;
+		name)	echo "$Name" ;;
+		default-start)	echo "$DefaultStart" ;;	
+		start-priority)	echo "$StartPriority" ;;	
+	esac
+}
+
+[ -z "$Name" ] && die "Error: service has no Name"
+[ -z "$StartCmd" ] && die "Error: $Name has no StartCmd"
+
+DefaultStart=${DefaultStart:-no}
+StartPriority=${StartPriority:-50}
+Description=${Description:-$Name Service}
+
+case $1 in
+	start)		cc_start	;;
+	stop)		cc_stop		;;
+	restart)	cc_restart	;;
+	reload)		cc_reload	;;
+	status)		cc_status	;;
+	get)		cc_get $2	;;
+	*)		die "Usage: $0 <start|stop|restart|reload|status>" ;;
+esac
+

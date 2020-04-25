@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# DESCRIPTION Set the system hostname
+
+hostname=${HOSTNAME:-noname}
+if [ -r /etc/hostname ]; then
+	hostname=$(cat /etc/hostname)
+fi
+echo The current hostname is $hostname
+
+read -p "Enter a new hostname, or leave blank to keep $hostname: " hostname
+if [ -n "$hostname" ]; then
+	echo $hostname > /etc/hostname
+	hostname -F /etc/hostname
+fi
+

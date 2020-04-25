@@ -16,6 +16,7 @@ PACKAGES=\
 	libstdcxx \
 	gcc \
 	libressl \
+	system-scripts \
 	busybox \
 	make \
 	perl \

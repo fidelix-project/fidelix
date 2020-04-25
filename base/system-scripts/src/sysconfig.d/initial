@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# DESCRIPTION Perform the initial system configuration
+
+basedir=$(realpath $(dirname $0))
+
+# Set the hostname
+eval $basedir/hostname
+
+# Set a root password
+eval $basedir/root-password
+
+# Set the timezone
+eval $basedir/timezone
+
+# Enable the default services
+echo Enabling default services
+service all default
+

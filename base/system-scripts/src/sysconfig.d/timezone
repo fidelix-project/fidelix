@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# DESCRIPTION Set the system timezone
+
+TZ=$(tzselect)
+ln -sf "../usr/share/zoneinfo/$TZ" /etc/localtime-source
+cp /etc/localtime-source /etc/localtime
+

@@ -1,0 +1,177 @@
+#!/bin/sh
+
+# Copyright 2020 Scott Court
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# 
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+bullet='\xe2\x9a\xab'
+SVCDIR=${SVCDIR:-/etc/init.d}
+ENABLEDIR="$SVCDIR/../rc.d/enabled/"
+
+usage () {
+cat << EOF
+Usage: service <service-name> <command> 
+
+Utility for managing system services in /etc/init.d.
+
+Commands:
+
+	start		Start the service
+	stop		Stop the service
+	restart		Restart the service
+	reload		Reload the service data (not supported by all services)
+	status		Show the status of a service along with other status
+			related data
+	shortstatus	Show the short status of a service (only whether it is
+			running or not)
+	enable		Enable the service to start on boot
+	disable		Disable the service from starting on boot
+	default		Set the service to its default enabled/disabled status
+
+If service-name is all, then the specified command will be run for all services
+in /etc/init.d.
+EOF
+}
+
+die () {
+	echo $@ >&2
+	exit 1
+}
+
+# Starts the service $1
+svc_start () {
+	eval "$SVCDIR/$1 start"
+	exit $?
+}
+
+# Stops the service $1
+svc_stop () {
+	eval "$SVCDIR/$1 stop"
+	exit $?
+}
+
+# Restarts the service $1
+svc_restart () {
+	eval "$SVCDIR/$1 restart"
+	exit $?
+}
+
+# Reload the service $1
+svc_reload () {
+	eval "$SVCDIR/$1 reload"
+	exit $?
+}
+
+# Display the shortstatus for the service $1
+svc_shortstatus () {
+	eval "$SVCDIR/$1 status"
+	exit $?
+}
+
+# Display the full status for the service $1
+svc_status () {
+	local statusmsg=$(eval "$SVCDIR/$1 status 2> /dev/null")
+	eval "$SVCDIR/$1 status 2> /dev/null 1>&2"
+	local status=$?
+	local name=$(eval "$SVCDIR/$1 get name 2> /dev/null")
+	local description=$(eval "$SVCDIR/$1 get description 2> /dev/null")
+	local pid=$(eval "$SVCDIR/$1 get pid 2> /dev/null")
+	local enabled=No
+	stat $ENABLEDIR/*$name >/dev/null 2>&1 && enabled=Yes
+
+	if [ $status -eq 0 ]; then
+		echo -en "\e[92m$bullet\e[39m "
+		statusmsg="\e[1m\e[92m$statusmsg\e[0m"
+	else
+		echo -en "\e[91m$bullet\e[39m "
+		statusmsg="\e[1m\e[91m$statusmsg\e[0m"
+	fi
+	echo -e "$name - $description"
+	echo -e "   Status: $statusmsg"
+	echo -e "  On Boot: $enabled"
+	if [ $status -eq 0 ]; then
+		tabs 11
+		echo -e  " Main PID: $pid"
+		echo -en "     Tree: \r"
+		pstree -p $pid | sed -e 's/^/\t/'
+		tabs -8
+	fi
+	echo
+	grep -i "$name" "/var/log/messages" | tail
+
+}
+
+# Enable the service $1 to start on boot
+svc_enable () {
+	local name=$(eval "$SVCDIR/$1 get name 2> /dev/null")
+	local priority=$(eval "$SVCDIR/$1 get start-priority 2> /dev/null")
+	ln -sf ../../init.d/$1 "$ENABLEDIR/$priority$name" || \
+		die Failed to create symlink
+	echo "Service $name enabled on boot with priority $priority"
+}
+
+# Disable the service $1 from starting on boot
+svc_disable () {
+	local name=$(eval "$SVCDIR/$1 get name 2> /dev/null")
+	rm -f $ENABLEDIR/*$name || \
+		die Failed to create symlink
+	echo "Service $name disabled on boot"
+}
+
+# Set the service $1 to it's default on boot
+svc_default () {
+	local default=$(eval "$SVCDIR/$1 get default-start 2> /dev/null")
+	if [ "$default" == "yes" ]; then
+		svc_enable $1
+	else
+		svc_disable $1
+	fi
+}
+
+
+
+if [ "$1" == "help" ] || [ "$1" == "--help" ] || [ "$1" == "-h" ]; then
+	usage
+	exit
+fi
+
+if [ "$1" == "all" ]; then
+	for svc in $(ls "$SVCDIR"); do
+		if [ -x "$SVCDIR/$svc" ]; then
+			eval "$0 $svc $2"
+		fi
+	done
+	exit
+fi
+
+[ -x "$SVCDIR/$1" ] || die Error: Service $1 not found in $SVCDIR.
+case $2 in
+	help)		usage;			exit;;
+	start)		svc_start $1;		exit;;
+	stop)		svc_stop $1;		exit;;
+	restart)	svc_restart $1;		exit;;
+	reload)		svc_reload $1;		exit;;
+	status)		svc_status $1;		exit;;
+	shortstatus)	svc_shortstatus $1;	exit;;
+	enable)		svc_enable $1;		exit;;
+	disable)	svc_disable $1;		exit;;
+	default)	svc_default $1;		exit;;
+	*)	die "Usage: service <service-name> <command>"
+esac
+
