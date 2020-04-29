@@ -1,0 +1,8 @@
+libgcc shared objects from gcc
+
+If gcc is installed, then this package is not necessary. It exists solely to
+provide the libgcc_s.so library independent of the gcc package. This is
+necessary in order to run C++ applications without installing the entire gcc
+package, which is something many systems may need (especially for space
+conservation since the whole GCC package is 600MB+).
+
