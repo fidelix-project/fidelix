@@ -11,7 +11,7 @@ include package.mk
 
 # Add any additional source files that may be modified as dependencies of this
 # target.
-stamp_build: Makefile
+.stamp_build: Makefile
 	# Put any custom commands here. The package should be installed to the
 	# $(PKG_ROOT) directory. You need only install the files to this
 	# director; the /usr/src system will take care of creating the package.
