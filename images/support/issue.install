@@ -5,5 +5,13 @@ To install Fidelix, go to /usr/src and follow the instructions in the
 INSTALL.md document. This image can also be used as a live Fidelix
 installation. Any changes to the root filesystem will be persistant.
 
+If you are planning to use this image as a persistant Fidelix installation, it
+is recommended you configure the system. To perform the initial system
+configuration, run:
+
+    sysconfig initial
+
+To remove or customize this message, remove or modify /etc/issue.
+
 You may now log in as root.
 
