@@ -9,11 +9,14 @@ towards servers and embedded systems.
 
 ## Functionality Features
 
-Includes these packages in the standard installation:
+Includes these packages in the standard installation (this list is not
+exhaustive):
 
-* musl C library
+* The Linux Kernel
+* musl C Library
 * GNU Binutils
 * GCC
+* GNU Make
 * BusyBox (which provides the bulk of the userspace)
 * Mandoc
 * Perl
