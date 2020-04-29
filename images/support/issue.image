@@ -1,0 +1,10 @@
+
+Welcome to Fidelix!
+
+It is recommended you configure the system. To perform the initial system
+configuration, run:
+
+    sysconfig initial
+
+To remove or customize this message, remove or modify /etc/issue.
+
