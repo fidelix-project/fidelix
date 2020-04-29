@@ -57,6 +57,11 @@ The following additional partitions may be desirable for certain systems:
 * /usr: User programs. Traditionally, this is sometimes put on a separate
   partition.
 
+**Note:** if you are installing to a GPT formatted disk and plan to use legacy
+boot (currently the default on all systems), make sure you also create a BIOS
+Boot Partition with partition type `EF02`. Otherwise, the bootloader
+installation will fail.
+
 ## Installing the System Software
 
 ### Setting the SYSTEM Variable

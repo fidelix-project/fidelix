@@ -18,7 +18,7 @@ OS_PKG_TAG:=arthur
 PKG_EXTENSION:=tgz
 
 # Set the system architecture
-OS_ARCH:=x86_64
+OS_ARCH?=$(shell arch)
 OS_TARGET_TRIPLET:=$(OS_ARCH)-$(OS_NAME_LOWERCASE)-linux-musl
 
 # Set the system type

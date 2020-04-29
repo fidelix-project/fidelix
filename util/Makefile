@@ -4,7 +4,8 @@ DIR:=util
 PACKAGES=\
 	libuuid \
 	gptfdisk \
-	xorriso
+	xorriso \
+	libgcc
 
 DEFAULT_PACKAGES=\
 	libuuid \
