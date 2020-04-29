@@ -16,8 +16,10 @@ _MAKE_HELPER_TARGETS=\
 		-j $(MAKE_MAXJOBS) \
 		-l $(MAKE_MAXLOAD)
 	make make-preinstall
+ifneq ($(MAKE_SKIP_MAKE_INSTALL), y)
 	cd pkg_src/$(PKG_SRC_DIR); \
 		make $(MAKE_INSTALL_ARGS) install DESTDIR=$(PKG_ROOT)
+endif
 	make make-prepackage
 	touch $@
 
