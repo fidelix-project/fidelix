@@ -3,6 +3,11 @@ DIR:=util
 # Packages contained in this directory
 PACKAGES=\
 	libuuid \
+	gptfdisk \
+	xorriso
+
+DEFAULT_PACKAGES=\
+	libuuid \
 	gptfdisk
 
 # Non-package subdirectories contained in this directory that should be
