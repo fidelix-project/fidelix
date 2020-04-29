@@ -69,8 +69,8 @@ $(OUTDIR)/$(IMG_BASENAME).iso: $(OUTDIR) $(WORKDIR) \
 # Make the GRUB bootdisk
 	install -m 644 support/iso-grub.cfg \
 		$(WORKDIR)/iso/root/boot/grub/grub.cfg
-	grub-mkrescue -o $@ $(WORKDIR)/iso/root -- -volid "FIDELIXLIVE"
-#	grub-mkrescue -o $@ --modules=$(GRUB_MODULES) $(WORKDIR)/iso
+	grub-mkrescue -o $@ "--modules=$(GRUB_MODULES)" \
+		$(WORKDIR)/iso/root -- -volid "FIDELIXLIVE"
 
 $(OUTDIR)/$(IMG_BASENAME)-src+pkgs.tar.$(COMP_EXT): $(OUTDIR) $(WORKDIR)
 	-rm -rf $(WORKDIR)/src+pkgs
