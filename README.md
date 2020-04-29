@@ -6,8 +6,8 @@ installing, and maintaining the Fidelix system software. It functions very
 similarly to the BSD /usr/src and /usr/ports heirarchies.
 
 Fidelix is a light weight Linux distribution that focuses on proactive
-security. It aims to eliminate unnecessary code and is target primarily towards
-servers and embedded systems.
+security. It aims to eliminate unnecessary code and is targeted primarily
+towards servers and embedded systems.
 
 More information about Fidelix can be found in `doc/about.md`.
 
