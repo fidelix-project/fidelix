@@ -59,7 +59,8 @@ $(OUTDIR)/$(IMG_BASENAME).iso: $(OUTDIR) $(WORKDIR) \
 		$(WORKDIR)/iso/root/boot/initrd
 
 # Install the system
-	make -C $(OS_SRC_DIR) SYSROOT=$(WORKDIR)/iso/root install
+	make -C $(OS_SRC_DIR) SYSROOT=$(WORKDIR)/iso/root SELECTION=basic \
+		install-selection
 	make -C $(OS_SRC_DIR) SYSROOT=$(WORKDIR)/iso/root tidy
 	make -C $(OS_SRC_DIR) SYSROOT=$(WORKDIR)/iso/root copy-src
 	install -m 644 support/issue.iso $(WORKDIR)/iso/root/etc/issue
