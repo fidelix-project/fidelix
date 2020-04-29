@@ -29,9 +29,10 @@ USB_FULL_IMG_SIZE=7800000
 ISO_IMG_NAME=$(IMG_BASENAME).iso
 
 .PHONY: all usb iso
-all: usb iso
+all: usb iso src
 usb: $(OUTDIR)/$(USB_IMG_NAME).$(COMP_EXT) 
 iso: $(OUTDIR)/$(IMG_BASENAME).iso
+src: $(OUTDIR)/$(IMG_BASENAME)-src+pkgs.tar.$(COMP_EXT)
 
 .PHONY: clean
 clean:
@@ -71,8 +72,15 @@ $(OUTDIR)/$(IMG_BASENAME).iso: $(OUTDIR) $(WORKDIR) \
 	grub-mkrescue -o $@ $(WORKDIR)/iso/root -- -volid "FIDELIXLIVE"
 #	grub-mkrescue -o $@ --modules=$(GRUB_MODULES) $(WORKDIR)/iso
 
+$(OUTDIR)/$(IMG_BASENAME)-src+pkgs.tar.$(COMP_EXT): $(OUTDIR) $(WORKDIR)
+	-rm -rf $(WORKDIR)/src+pkgs
+	mkdir -p $(WORKDIR)/src+pkgs/usr/src
+	make -C $(OS_SRC_DIR) tidy
+	make -C $(OS_SRC_DIR) SYSROOT=$(WORKDIR)/src+pkgs copy-src
+	tar cf $@ -C "$(WORKDIR)/src+pkgs/usr" src
+
 $(OUTDIR) $(WORKDIR):
-	mkdir $@
+	mkdir -p $@
 
 %:
 
