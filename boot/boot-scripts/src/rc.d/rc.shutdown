@@ -11,6 +11,9 @@
 # performing any necessary shutdown tasks and stopping user processes/daemons
 # not in /etc/inittab.
 
+# Sometimes there's stuff littering the current line
+echo
+
 # Run the local shutdown script (if any)
 if [ -x /etc/rc.d/rc.local.shutdown ]; then
 	echo Running rc.local.shutdown
