@@ -1,0 +1,5 @@
+libuuid
+
+This package provides the libuuid library from util-linux. It is needed by
+some disk partitioning utilities that manipulate disk UUIDs (such as gptfdisk).
+

@@ -1,0 +1,5 @@
+gptfdisk - fdisk like utilities for GPT disks
+
+This package provides the gdisk (similar to fdisk for GPT disks) and cgdisk
+(similar to cfdisk for GPT disks) utilities. 
+

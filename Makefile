@@ -1,7 +1,8 @@
 DIR:=
 SUBDIRS:=\
 	base \
-	boot
+	boot \
+	util
 
 .PHONY: default
 default: install
