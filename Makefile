@@ -20,6 +20,17 @@ from-bootstrap:
 copy-src:
 	cp -au $(OS_SRC_DIR)/* $(SYSROOT)/usr/src/
 
+# Handle package selections
+ifdef SELECTION
+ifneq ($(wildcard include/selection/$(SELECTION).local.mk), )
+include include/selection/$(SELECTION).local.mk
+else ifneq ($(wildcard include /selection/$(SELECTION).mk), )
+include include/selection/$(SELECTION).mk
+endif
+endif
+.PHONY: install-selection
+install-selection: $(addprefix install-,$(SELECTED_PACKAGES))
+
 include sysconfig.mk
 include dir.mk
 
