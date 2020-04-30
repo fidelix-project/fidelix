@@ -35,7 +35,7 @@ Add support bcrypt to BusyBox chpasswd & passwd.
  	return salt_ptr;
 --- busybox/loginutils/Config.src
 +++ busybox-bcrypt/loginutils/Config.src
-@@ -93,4 +93,16 @@
+@@ -93,4 +93,14 @@
  
  INSERT
  
@@ -48,7 +48,5 @@ Add support bcrypt to BusyBox chpasswd & passwd.
 +	/etc/passwd or /etc/shadow files. These passwords are hashed
 +	using the bcrypt algorithm. Requires the use of a C library
 +	that supports bcrypt.
-+	With this option off, login will fail password check for any
-+	user which has password encrypted with this algorithms.
 +
  endmenu
