@@ -5,6 +5,7 @@ include sysconfig.mk
 
 DEFAULT_PACKAGES?=$(PACKAGES)
 DIR_TARGETS:=$(DEFAULT_PACKAGES) $(SUBDIRS)
+CLEANING_TARGETS:=$(PACKAGES) $(SUBDIRS)
 
 .PHONY: build
 build: $(addprefix build-,$(DIR_TARGETS))
@@ -20,7 +21,7 @@ tidy-%:
 	make -C $(DIR_PKG_$*) tidy
 
 .PHONY: tidy
-tidy: $(addprefix tidy-,$(DIR_TARGETS))
+tidy: $(addprefix tidy-,$(CLEANING_TARGETS))
 
 .PHONY: neat-%
 neat-%:
@@ -28,7 +29,7 @@ neat-%:
 	make -C $(DIR_PKG_$*) neat
 
 .PHONY: neat
-neat: $(addprefix neat-,$(DIR_TARGETS))
+neat: $(addprefix neat-,$(CLEANING_TARGETS))
 
 .PHONY: scrub-%
 scrub-%:
@@ -36,7 +37,7 @@ scrub-%:
 	make -C $(DIR_PKG_$*) scrub
 
 .PHONY: scrub
-scrub: $(addprefix scrub-,$(DIR_TARGETS))
+scrub: $(addprefix scrub-,$(CLEANING_TARGETS))
 
 .PHONY: clean-%
 clean-%:
@@ -44,7 +45,7 @@ clean-%:
 	make -C $(DIR_PKG_$*) clean
 
 .PHONY: clean
-clean: $(addprefix clean-,$(DIR_TARGETS))
+clean: $(addprefix clean-,$(CLEANING_TARGETS))
 
 .PHONY: download-%
 download-%:
