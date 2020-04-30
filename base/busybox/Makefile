@@ -1,10 +1,10 @@
 PKG_NAME=busybox
 PKG_VERSION=1.31.1
-PKG_BUILD=15
+PKG_BUILD=16
 PKG_BUILDSYSTEM=custom-common
 
 # Build time dependencies for this package
-PKG_BUILD_DEPENDS=musl
+PKG_BUILD_DEPENDS=musl libcap
 
 PKG_WGET_URLS=https://busybox.net/downloads/busybox-$(PKG_VERSION).tar.bz2
 PKG_SRC_ARCHIVES=busybox-$(PKG_VERSION).tar.bz2
