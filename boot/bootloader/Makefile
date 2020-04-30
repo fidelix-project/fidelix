@@ -14,3 +14,8 @@ install:
 which:
 	@echo Your bootloader target is: $(BOOT_LOADER)
 
+# Don't error on make clean, etc
+.PHONY: download verify build clean scrub neat tidy
+download verify build clean scrub neat tidy:
+	exit 0
+
