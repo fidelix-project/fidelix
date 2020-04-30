@@ -1,6 +1,6 @@
 PKG_NAME=busybox
 PKG_VERSION=1.31.1
-PKG_BUILD=16
+PKG_BUILD=17
 PKG_BUILDSYSTEM=custom-common
 
 # Build time dependencies for this package
@@ -40,7 +40,9 @@ endif
 	mv $(PKG_ROOT)/usr/bin/xargs $(PKG_ROOT)/bin/
 	mv $(PKG_ROOT)/usr/bin/sort $(PKG_ROOT)/bin/
 
+# Install the manual pages
 	mkdir -p $(PKG_ROOT)/usr/share/man/man1
 	install pkg_src/$(PKG_SRC_DIR)/docs/busybox.1 $(PKG_ROOT)/usr/share/man/man1
+	cp man1/*.1 $(PKG_ROOT)/usr/share/man/man1
 	touch $@
 
