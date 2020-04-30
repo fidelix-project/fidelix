@@ -18,8 +18,8 @@ echo Mounting /sys
 mount -t sysfs -o nosuid,noexec,nodev sys /sys
 
 # Remount root filesystem as writeable
-echo Remounting / as rw,nosuid,nodev
-mount -o remount,rw,nosuid,nodev /
+echo Remounting / as rw,nodev
+mount -o remount,rw,nodev /
 
 # Populate /dev and start the mdev daemon
 echo Starting mdev
@@ -40,6 +40,7 @@ find /sys/ -name modalias -print0 | \
 # Mount any other filesystems in /etc/fstab
 echo Mounting filesystems in /etc/fstab
 mount -a
+mount -o remount,hidepid=2 /proc
 
 # Set the hostname
 echo Setting hostname

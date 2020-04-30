@@ -39,7 +39,7 @@ Options:
 	-p	Operate in permissive mode. Negates the effects of -s.
 	-s	Operate in secure mode. Additional security hardening options
 		will be enabled, such as disallowing SUID root executables on
-		the root partition. This is the default.
+		some partitions. This is the default.
 	-u	Use UUIDs instead of device node paths when generating fstab.
 		This is the default.
 EOF
@@ -64,10 +64,15 @@ get_options () {
 
 	# If we're in secure mode, disable SUID root on every partition except
 	# /usr/local and /opt (some third party applications may require this).
+	#
+	# EDIT: mounting with suid on / and /usr is necessary so setcap
+	# binaries work properly.
 	if [ "$secmode" = "secure" ]; then
 		case "$1" in
 		/usr/local*)	;;
 		/opt*)		;;
+		/)		lopts="$lopts,nodev"	;;
+		/usr*)		lopts="$lopts,nodev"	;;
 		/srv*)		lopts="$lopts,nosuid,noexec,nodev"	;;
 		*)		lopts="$lopts,nosuid,nodev"	;;
 		esac
@@ -122,6 +127,7 @@ echo -e '# DEVICE	MOUNTPOINT	TYPE	OPTIONS	DUMP	PASS'
 
 mount | grep " on $SYSROOT" | while read mount; do
 	dev=$(echo $mount | awk '{print $1}')
+	[ "$dev" = "/dev/root" ] && dev=/dev/$(readlink /dev/root)
 	mountpoint=$(echo $mount | awk '{print $3}' | sed -e "s@^$SYSROOT@@g")
 	[ -z "$mountpoint" ] && mountpoint=/
 	type=$(echo $mount | awk '{print $5}')

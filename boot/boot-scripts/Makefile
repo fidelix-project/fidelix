@@ -1,6 +1,6 @@
 PKG_NAME=boot-scripts
 PKG_VERSION=$(OS_VERSION)
-PKG_BUILD=10
+PKG_BUILD=11
 PKG_BUILDSYSTEM=custom
 
 # Build time dependencies for this package
