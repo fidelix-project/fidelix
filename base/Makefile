@@ -28,7 +28,8 @@ PACKAGES=\
 	bison \
 	flex \
 	libelf \
-	kmod
+	kmod \
+	release-files
 
 # Non-package subdirectories contained in this directory that should be
 # included when searching for packages
