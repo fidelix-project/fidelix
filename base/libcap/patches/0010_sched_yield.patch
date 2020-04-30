@@ -1,0 +1,11 @@
+--- a/libcap/psx.c
++++ b/libcap/psx.c
+@@ -533,7 +533,7 @@
+ 	if (!waiting) {
+ 	    break;
+ 	}
+-	pthread_yield();
++	sched_yield();
+     }
+ 
+     errno = restore_errno;

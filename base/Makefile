@@ -17,6 +17,7 @@ PACKAGES=\
 	gcc \
 	libressl \
 	system-scripts \
+	libcap \
 	busybox \
 	make \
 	perl \
