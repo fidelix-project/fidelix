@@ -13,6 +13,10 @@ OS_VERSION:=$(OS_MAJOR).$(OS_MINOR)
 OS_RELEASE_NAME:=Arthur
 OS_SRC_DIR:=/usr/src
 
+# Patch and prerelease versioning
+OS_PATCH:=0
+OS_PRERELEASE:=alpha.1
+
 # Package file configuration
 OS_PKG_TAG:=arthur
 PKG_EXTENSION:=tgz
@@ -27,6 +31,13 @@ OS_SYSTEM:=$(SYSTEM)
 SYSROOT?=/
 
 -include config.local.mk
+
+ifdef OS_PRERELEASE
+OS_FULL_VERSION:=$(OS_MAJOR).$(OS_MINOR).$(OS_PATCH)-$(OS_PRERELEASE)
+else
+OS_FULL_VERSION:=$(OS_MAJOR).$(OS_MINOR).$(OS_PATCH)
+endif
+
 include arch/$(OS_ARCH).mk
 include system/$(OS_SYSTEM).mk
 endif

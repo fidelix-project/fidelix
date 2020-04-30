@@ -40,6 +40,10 @@ ifdef _INC_SYSCONFIG
 #OS_RELEASE_NAME:=Arthur
 #OS_SRC_DIR:=/usr/src
 
+# Patch and prerelease versioning
+#OS_PATCH:=0
+#OS_PRERELEASE:=
+
 # Package file configuration
 #OS_PKG_TAG:=arthur
 #PKG_EXTENSION:=tgz
