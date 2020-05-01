@@ -11,6 +11,9 @@ boot.
 **Package Selection**: A list of packages to install when using
 `make install-selection`. Set by the `SELECTION` variable.
 
+**Sysroot**: The directory to treat as the root of the system. It defaults to
+`/` and can be changed by setting the `SYSROOT` variable.
+
 **System Target**: The physical system type that you are installing to, such as
 `chroot` for a chroot environment or `live-usb-x86_64` for a live USB flash
 drive. Set by the `SYSTEM` variable.
