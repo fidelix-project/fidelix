@@ -2,7 +2,8 @@ DIR:=
 SUBDIRS:=\
 	base \
 	boot \
-	util
+	util \
+	daemon
 
 .PHONY: default
 default: install
