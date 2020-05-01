@@ -1,6 +1,6 @@
 PKG_NAME=busybox
 PKG_VERSION=1.31.1
-PKG_BUILD=17
+PKG_BUILD=18
 PKG_BUILDSYSTEM=custom-common
 
 # Build time dependencies for this package
@@ -27,22 +27,37 @@ endif
 
 	ln -sf mdev $(PKG_ROOT)/sbin/hotplug
 	chmod 755 $(PKG_ROOT)/lib*/libbusybox.so.*
-	install -d $(PKG_ROOT)/usr/share/udhcpc
-	install -m 755 udhcpc.script $(PKG_ROOT)/usr/share/udhcpc/default.script
 	install -dm 755 $(PKG_ROOT)/etc/init.d
 	install -m 644 ashrc $(PKG_ROOT)/etc/
+	install -m 755 init.d/network $(PKG_ROOT)/etc/init.d/
 	install -m 755 init.d/syslogd $(PKG_ROOT)/etc/init.d/
 	install -m 755 init.d/klogd $(PKG_ROOT)/etc/init.d/
 	install -m 755 init.d/crond $(PKG_ROOT)/etc/init.d/
+
+# Install networking config files
+	install -d $(PKG_ROOT)/usr/share/udhcpc
+	install -m 755 udhcpc.script $(PKG_ROOT)/usr/share/udhcpc/default.script
+	install -dm 755 $(PKG_ROOT)/etc/network/if-down.d
+	install -dm 755 $(PKG_ROOT)/etc/network/if-post-down.d
+	install -dm 755 $(PKG_ROOT)/etc/network/if-pre-up.d
+	install -dm 755 $(PKG_ROOT)/etc/network/if-up.d
+	install -m 644 interfaces $(PKG_ROOT)/etc/network/
+	pkgtool preserve-file $(PKG_ROOT)/etc/network/interfaces
 
 # Move some binaries that are required early on in the boot process to /bin
 	mv $(PKG_ROOT)/usr/bin/find $(PKG_ROOT)/bin/
 	mv $(PKG_ROOT)/usr/bin/xargs $(PKG_ROOT)/bin/
 	mv $(PKG_ROOT)/usr/bin/sort $(PKG_ROOT)/bin/
 
-# Install the manual pages
-	mkdir -p $(PKG_ROOT)/usr/share/man/man1
+# Install the manual pages and documentation
+	install -dm 755 $(PKG_ROOT)/usr/share/man/man1
 	install pkg_src/$(PKG_SRC_DIR)/docs/busybox.1 $(PKG_ROOT)/usr/share/man/man1
 	cp man1/*.1 $(PKG_ROOT)/usr/share/man/man1
+	install -dm 755 $(PKG_ROOT)/usr/share/man/man5
+	cp man5/*.5 $(PKG_ROOT)/usr/share/man/man5
+	install -dm 755 $(PKG_ROOT)/usr/share/doc/busybox
+	cp $(PKG_SRC)/docs/mdev.txt $(PKG_ROOT)/usr/share/doc/busybox/
+
+# Do not delete
 	touch $@
 

@@ -1,0 +1,14 @@
+#!/bin/sh
+
+Name=network
+StartCmd="/sbin/ifup -a"
+StopCmd="/sbin/ifdown -a"
+StatusCmd="/sbin/ifconfig | grep '^lo ' > /dev/null 2>&1"
+
+Description="Networking Configuration"
+DefaultStart=yes
+StartPriority=25
+
+# Do NOT delete this line; it is required for the script to be usable.
+source /etc/init.d/common-core
+

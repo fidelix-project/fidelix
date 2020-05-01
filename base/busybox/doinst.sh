@@ -11,3 +11,6 @@ setcap CAP_SYS_ADMIN=ep bin/mount
 setcap CAP_SYS_ADMIN=ep bin/umount
 setcap "CAP_SETGID=ep CAP_DAC_OVERRIDE=ep" usr/bin/crontab
 
+# Install updated config files
+pkgtool install-new-file etc/network/interfaces
+
