@@ -105,7 +105,7 @@ svc_status () {
 	echo -e "$name - $description"
 	echo -e "   Status: $statusmsg"
 	echo -e "  On Boot: $enabled"
-	if [ $status -eq 0 ]; then
+	if [ $status -eq 0 ] && [ -n "$pid" ]; then
 		tabs 11
 		echo -e  " Main PID: $pid"
 		echo -en "     Tree: \r"
