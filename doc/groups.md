@@ -4,7 +4,8 @@ Fidelix Groups
 The following users are used by packages in the base system. By convention,
 users that are used by a particular service start with an underscore.
 
-^ Group		^ GID	^ Description				^ Package	^
+| Group		| GID	| Description				| Package	|
+| ------------- | ----- | ------------------------------------- | ------------- |
 | root		| 0	|					| aaa-file-skel	|
 | bin		| 1	|					| aaa-file-skel	|
 | sys		| 2	|					| aaa-file-skel	|
