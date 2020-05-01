@@ -1,0 +1,13 @@
+#!/bin/sh
+
+Name=sshd
+PidFile=/run/sshd.pid
+StartCmd="/usr/bin/ssh-keygen -A && /usr/sbin/sshd"
+
+Description="OpenSSH Daemon"
+DefaultStart=no
+StartPriority=50
+
+# Do NOT delete this line; it is required for the script to be usable.
+source /etc/init.d/common-core
+
