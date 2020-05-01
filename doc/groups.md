@@ -1,8 +1,8 @@
 Fidelix Groups
 ==============
 
-The following users are used by packages in the base system. By convention,
-users that are used by a particular service start with an underscore.
+The following groups are used by packages in the base system. By convention,
+groups that are used by a particular service start with an underscore.
 
 | Group		| GID	| Description				| Package	|
 | ------------- | ----- | ------------------------------------- | ------------- |
