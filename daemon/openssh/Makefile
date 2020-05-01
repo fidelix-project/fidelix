@@ -1,6 +1,6 @@
 PKG_NAME=openssh
 PKG_VERSION=8.2p1
-PKG_BUILD=1
+PKG_BUILD=2
 PKG_BUILDSYSTEM=autoconf
 
 # Build time dependencies for this package
