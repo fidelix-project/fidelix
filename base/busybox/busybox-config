@@ -1,7 +1,7 @@
 #
 # Automatically generated make config: don't edit
 # Busybox version: 1.31.1
-# Fri Apr 24 04:10:05 2020
+# Sat May  2 14:31:21 2020
 #
 CONFIG_HAVE_DOT_CONFIG=y
 
@@ -1097,9 +1097,9 @@ CONFIG_SVLOGD=y
 CONFIG_SH_IS_ASH=y
 # CONFIG_SH_IS_HUSH is not set
 # CONFIG_SH_IS_NONE is not set
-# CONFIG_BASH_IS_ASH is not set
+CONFIG_BASH_IS_ASH=y
 # CONFIG_BASH_IS_HUSH is not set
-CONFIG_BASH_IS_NONE=y
+# CONFIG_BASH_IS_NONE is not set
 CONFIG_ASH=y
 CONFIG_ASH_OPTIMIZE_FOR_SIZE=y
 CONFIG_ASH_INTERNAL_GLOB=y
