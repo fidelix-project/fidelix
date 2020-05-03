@@ -1,6 +1,6 @@
 PKG_NAME=libcap
 PKG_VERSION=2.33
-PKG_BUILD=1
+PKG_BUILD=2
 PKG_BUILDSYSTEM=make
 
 # Build time dependencies for this package
@@ -10,8 +10,8 @@ PKG_WGET_URLS=https://mirrors.edge.kernel.org/pub/linux/libs/security/linux-priv
 PKG_SRC_ARCHIVES=libcap-$(PKG_VERSION).tar.xz
 PKG_SRC_DIR=libcap-$(PKG_VERSION)
 
-MAKE_ARGS= lib=usr/lib
-MAKE_INSTALL_ARGS= lib=usr/lib
+MAKE_ARGS= lib=lib prefix=/usr
+MAKE_INSTALL_ARGS= lib=lib prefix=/usr
 
 include package.mk
 
