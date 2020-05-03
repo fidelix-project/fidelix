@@ -1,6 +1,6 @@
 PKG_NAME=openssh
 PKG_VERSION=8.2p1
-PKG_BUILD=2
+PKG_BUILD=3
 PKG_BUILDSYSTEM=autoconf
 
 # Build time dependencies for this package
@@ -27,6 +27,8 @@ autoconf-prepackage:
 	install -v -m644 $(PKG_SRC)/contrib/ssh-copy-id.1 \
 		$(PKG_ROOT)/usr/share/man/man1
 	install -dm 755 $(PKG_ROOT)/var/empty
+# Get rid of SUID on one binary
+	chmod -s $(PKG_ROOT)/usr/libexec/ssh-keysign
 # Install the Init Script
 	install -dm 755 $(PKG_ROOT)/etc/init.d
 	install -m 755 sshd $(PKG_ROOT)/etc/init.d/

@@ -9,3 +9,6 @@
 [ -z "$(grep '^_sshd:' etc/group)" ] && \
 	echo '_sshd:x:22:' >> etc/group
 
+# Setcap the key signing binary
+setcap CAP_DAC_READ_SEARCH=ep usr/libexec/ssh-keysign
+
