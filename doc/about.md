@@ -33,7 +33,8 @@ base system for users who require or would like additional functionality.
 
 * Uses [bcrypt](https://en.wikipedia.org/wiki/Bcrypt) for /etc/shadow by
   default.
-* SUID executables are disabled by default.
+* No SUID or SGID executables in the default installation; binaries that need
+  additional privileges use capabilities instead.
 * Uses [LibreSSL](https://www.libressl.org/).
 
 # History
