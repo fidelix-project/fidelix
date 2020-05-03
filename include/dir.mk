@@ -79,6 +79,15 @@ reinstall-%:
 .PHONY: reinstall
 reinstall: $(addprefix reinstall-,$(DIR_TARGETS))
 
+.PHONY: uninstall-%
+uninstall-%:
+	@[ ! -z "$(DIR_PKG_$*)" ] || (echo $*: package not found && exit 1)
+	make -C $(DIR_PKG_$*) uninstall
+
+.PHONY: uninstall
+uninstall: $(addprefix uninstall-,$(DIR_TARGETS))
+
+
 #undefine PACKAGES
 
 endif

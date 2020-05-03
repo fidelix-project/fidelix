@@ -35,6 +35,14 @@ endif
 .PHONY: reinstall
 reinstall: $(_PKG_DB_DIR)/$(_PKG_FULL_NAME)
 
+.PHONY: uninstall
+INSTALLED_PKG_NAME=$(shell ls $(SYSROOT)/var/pkgdb/ | \
+	egrep '^$(PKG_NAME)-[^-]+-[^-]+-[^-]+-[^-]+$$')
+uninstall:
+ifneq "$(INSTALLED_PKG_NAME)" ""
+	removepkg -d $(SYSROOT) $(INSTALLED_PKG_NAME)
+endif
+
 .stamp_dependencies: 
 	cd $(OS_SRC_DIR); make $(addprefix install-,$(PKG_BUILD_DEPENDS)) 
 	touch $@
