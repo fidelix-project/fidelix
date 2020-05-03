@@ -1,0 +1,53 @@
+#!/bin/sh
+
+# DESCRIPTION Enable and/or disable system services on starting boot
+
+svc_list () {
+	i=1
+	rm -f /tmp/$$list
+	tabs 8,24
+	for svc in $(ls /etc/init.d); do
+		[ -x "/etc/init.d/$svc" ] || continue
+		description=$(/etc/init.d/$svc get description)
+		if [ -z "$(ls /etc/rc.d/enabled/ | grep ^..$svc$)" ]; then
+			prompt='[_]'
+		else
+			prompt='[X]'
+		fi 
+			echo -e "     $i\t$prompt $svc\t$description" | \
+				tee -a /tmp/$$list
+		i=$(expr $i + 1)
+	done
+	tabs -0
+}
+
+svc_exit () {
+	rm /tmp/$$*
+	exit 0
+}
+
+trap 'svc_exit' SIGINT
+choice=
+
+while [ "$choice" != "q" ]; do
+	clear
+	echo -e "Available Services for Starting on Boot\n"
+	svc_list
+	i=$(expr $i - 1)
+	echo -e "\nServices marked with an X are enable on boot, those with an _ are not."
+	echo      "Enter a number to toggle that service's status. When you are done, enter q."
+	read -p "[1-$i,q] " choice
+	if [ "$choice" = "q" ]; then
+		svc_exit
+	elif [ $choice -gt 0 ] && [ $choice -le $i ]; then
+		svc=$(head -n $choice /tmp/$$list | tail -n 1)
+		name=$(echo "$svc" | awk '{ print $3 }')
+		status=$(echo "$svc" | awk '{ print $2 }')
+		[ "$status" = "[X]" ] && action=disable
+		[ "$status" = "[_]" ] && action=enable
+		service $name $action 
+	fi
+done
+
+rm /tmp/$$*
+

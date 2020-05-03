@@ -1,6 +1,6 @@
 PKG_NAME=system-scripts
 PKG_VERSION=$(OS_VERSION)
-PKG_BUILD=4
+PKG_BUILD=5
 PKG_BUILDSYSTEM=custom
 
 # Build time dependencies for this package
@@ -9,12 +9,13 @@ PKG_BUILD_DEPENDS=
 include sysconfig.mk
 include package.mk
 
+SYSCONFD_SCRIPTS=hostname initial root-password network services timezone
 TARGETS=\
 	/sbin/service /usr/share/man/man8/service.8 \
 	/etc/init.d/common-core \
 	/etc/init.d/sample \
 	/sbin/sysconfig /usr/share/man/man8/sysconfig.8 \
-	$(addprefix /etc/sysconfig.d/,hostname initial root-password timezone)
+	$(addprefix /etc/sysconfig.d/,$(SYSCONFD_SCRIPTS))
 
 # Add any additional source files that may be modified as dependencies of this
 # target.

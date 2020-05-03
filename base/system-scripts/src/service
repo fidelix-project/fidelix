@@ -40,6 +40,8 @@ Commands:
 			related data
 	shortstatus	Show the short status of a service (only whether it is
 			running or not)
+	terse		Show the terse (one line) status of a service along
+			with other status data
 	enable		Enable the service to start on boot
 	disable		Disable the service from starting on boot
 	default		Set the service to its default enabled/disabled status
@@ -117,6 +119,31 @@ svc_status () {
 
 }
 
+# Display the terse status for the service $1
+svc_terse () {
+	local statusmsg=$(eval "$SVCDIR/$1 status 2> /dev/null")
+	eval "$SVCDIR/$1 status 2> /dev/null 1>&2"
+	local status=$?
+	local name=$(eval "$SVCDIR/$1 get name 2> /dev/null")
+	local description=$(eval "$SVCDIR/$1 get description 2> /dev/null")
+	local pid=$(eval "$SVCDIR/$1 get pid 2> /dev/null")
+	local enabled=No
+	stat $ENABLEDIR/*$name >/dev/null 2>&1 && enabled=Yes
+
+	if [ $status -eq 0 ]; then
+		statusmsg="\e[1m\e[92m$statusmsg\e[0m"
+	else
+		statusmsg="\e[1m\e[91m$statusmsg\e[0m"
+	fi
+
+	tabs 12,28,38
+	if [ $svcidx -le 1 ]; then
+		echo -e "Service\tStatus\tOn Boot\tDescription"
+	fi
+	echo -e "$name\t$statusmsg\t$enabled\t$description"
+	tabs -8
+}
+
 # Enable the service $1 to start on boot
 svc_enable () {
 	local name=$(eval "$SVCDIR/$1 get name 2> /dev/null")
@@ -152,13 +179,16 @@ if [ "$1" == "help" ] || [ "$1" == "--help" ] || [ "$1" == "-h" ]; then
 fi
 
 if [ "$1" == "all" ]; then
+	export svcidx=1
 	for svc in $(ls "$SVCDIR"); do
 		if [ -x "$SVCDIR/$svc" ]; then
 			eval "$0 $svc $2"
+			export svcidx=$(expr $svcidx + 1)
 		fi
 	done
 	exit
 fi
+export svcidx=${svcidx:-0}
 
 [ -x "$SVCDIR/$1" ] || die Error: Service $1 not found in $SVCDIR.
 case $2 in
@@ -168,6 +198,7 @@ case $2 in
 	restart)	svc_restart $1;		exit;;
 	reload)		svc_reload $1;		exit;;
 	status)		svc_status $1;		exit;;
+	terse)		svc_terse $1;		exit;;
 	shortstatus)	svc_shortstatus $1;	exit;;
 	enable)		svc_enable $1;		exit;;
 	disable)	svc_disable $1;		exit;;

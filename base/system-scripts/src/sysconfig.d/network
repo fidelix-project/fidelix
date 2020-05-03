@@ -1,0 +1,87 @@
+#!/bin/sh
+
+# DESCRIPTION Configure network interfaces
+
+net_exit () {
+	rm -f /tmp/$$*
+	exit
+}
+
+# Configures $1 to use dhcp
+net_dhcp () {
+	echo "iface $1 inet dhcp" > /tmp/$$addrcfg
+	read -p "Enable IPv6 support? [y/N] " do_ipv6
+	if [ "$do_ipv6" = "y" ]; then
+		echo "iface $1 inet6 dhcp" >> /tmp/$$addrcfg
+	fi
+	echo >> /tmp/$$addrcfg
+}
+
+# Configures $1 to use a static IPv4 address
+net_static () {
+	echo "iface $1 inet static" > /tmp/$$addrcfg
+	read -p "Address: " addr
+	echo "     address $addr" >> /tmp/$$addrcfg
+	read -p "Subnet Mask: " netmask
+	echo "     netmask $netmask" >> /tmp/$$addrcfg
+	read -p "Default Gateway: " gw
+	echo "     gateway $gw" >> /tmp/$$addrcfg
+	read -p "Enable IPv6 support? [y/N] " do_ipv6
+
+	if [ "$do_ipv6" = "y" ]; then
+		echo "iface $1 inet6 static" >> /tmp/$$addrcfg
+		read -p "IPv6 Address (without prefix length): " addr
+		echo "     address $addr" >> /tmp/$$addrcfg
+		read -p "Prefix Legth: " netmask
+		echo "     netmask $netmask" >> /tmp/$$addrcfg
+		read -p "Default Gateway: " gw
+		echo "     gateway $gw" >> /tmp/$$addrcfg
+	fi
+	echo >> /tmp/$$addrcfg
+}
+
+# Configures the interface $1
+net_cfg () {
+	methods="dhcp static"
+	read -p "How to configure $1 [$methods] " choice
+
+	case $choice in
+		dhcp)	net_dhcp $1 ;;
+		static)	net_static $1 ;;
+		*)	net_cfg $1; return ;;
+	esac
+}
+
+trap 'net_exit' SIGINT
+
+interfaces=$(ls /sys/class/net | grep -v '^lo$' | tr '\n' ' ')
+interfaces=${interfaces}done
+
+while [ true ]; do
+	echo "Enter a network interface to configure, or done if you have no more."
+	read -p "[$interfaces] " ichoice
+	
+	[ "$ichoice" = "done" ] && exit
+	[ -z "$(ls /sys/class/net | grep ^$ichoice$)" ] && continue
+
+	net_cfg $ichoice
+	read -p "Should $ichoice be brought up on boot? [Y/n]: " onboot
+	if [ "$onboot" = "n" ]; then
+		mv /tmp/$$addrcfg /tmp/$$cfg
+	else
+		echo "auto $ichoice" > /tmp/$$cfg
+		cat /tmp/$$addrcfg >> /tmp/$$cfg
+	fi
+
+	echo "The following is about to be added to /etc/network/interfaces:"
+	cat /tmp/$$cfg
+	read -p "Does this look ok? [y/n] " confirm
+	while [ "$confirm" != "y" ] && [ "$confirm" != "n" ]; do
+		read -p "[y/n] " confirm
+	done
+
+	if [ "$confirm" == "y" ]; then
+		cat /tmp/$$cfg >> /etc/network/interfaces
+	fi
+done
+

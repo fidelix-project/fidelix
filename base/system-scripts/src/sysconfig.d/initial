@@ -13,7 +13,11 @@ eval $basedir/root-password
 # Set the timezone
 eval $basedir/timezone
 
-# Enable the default services
+# Network interfaces
+eval $basedir/network
+
+# Enable the default services and bring up the service menu
 echo Enabling default services
 service all default
+eval $basedir/services
 
