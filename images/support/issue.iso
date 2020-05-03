@@ -1,0 +1,10 @@
+
+Welcome to Fidelix!
+
+To install Fidelix, go to /usr/src and follow the instructions in the
+INSTALL.md document. This image can also be used as a live Fidelix
+installation. Changes made to the root filesystem are not persistent across
+reboots.
+
+You may now log in as root.
+
