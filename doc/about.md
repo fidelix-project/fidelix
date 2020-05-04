@@ -35,6 +35,8 @@ base system for users who require or would like additional functionality.
   default.
 * No SUID or SGID executables in the default installation; binaries that need
   additional privileges use capabilities instead.
+* /proc mounted with hidepid=2: Other users' processes are hidden for all users
+  except root.
 * Uses [LibreSSL](https://www.libressl.org/).
 
 # History
