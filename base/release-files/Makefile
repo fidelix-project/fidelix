@@ -1,9 +1,17 @@
 include sysconfig.mk
 
-LSB_RELEASE=$(SYSROOT)/etc/lsb-release
-OS_RELEASE=$(SYSROOT)/etc/os-release
+PKG_NAME=release-files
+PKG_VERSION=$(OS_FULL_VERSION)
+PKG_BUILD=1
+PKG_BUILDSYSTEM=custom
 
-install:
+include package.mk
+
+LSB_RELEASE=$(PKG_ROOT)/etc/lsb-release
+OS_RELEASE=$(PKG_ROOT)/etc/os-release
+
+.stamp_build:
+	mkdir -p $(PKG_ROOT)/etc
 	echo 'DISTRIB_ID="$(OS_NAME)"' > $(LSB_RELEASE)
 	echo 'DISTRIB_RELEASE="$(OS_FULL_VERSION)"' >> $(LSB_RELEASE)
 	echo 'DISTRIB_CODENAME="$(OS_RELEASE_NAME)"' >> $(LSB_RELEASE)
@@ -16,9 +24,5 @@ install:
 	echo 'VERSION_ID=$(OS_FULL_VERSION)' >> $(OS_RELEASE)
 	echo 'PRETTY_NAME="$(OS_NAME) $(OS_FULL_VERSION) ($(OS_RELEASE_NAME))"' \
 		>> $(OS_RELEASE)
-
-# Don't error on make clean, etc
-.PHONY: download verify build clean scrub neat tidy
-download verify build clean scrub neat tidy:
-	exit 0
+	touch $@
 
