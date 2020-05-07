@@ -23,6 +23,5 @@ SELECTED_PACKAGES=\
         kmod \
 	boot \
 	blkid \
-	util \
-	libgcc
+	util
 

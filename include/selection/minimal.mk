@@ -19,6 +19,5 @@ SELECTED_PACKAGES=\
         make \
         zoneinfo \
         ncurses \
-	boot \
-	libgcc
+	boot
 
