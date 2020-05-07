@@ -5,7 +5,7 @@ PACKAGES=\
 	libuuid \
 	gptfdisk \
 	xorriso \
-	libgcc
+	libstdcxx
 
 DEFAULT_PACKAGES=\
 	libuuid \
