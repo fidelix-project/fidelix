@@ -1,5 +1,5 @@
 PKG_NAME=gcc
-PKG_VERSION=9.2.0
+PKG_VERSION=9.3.0
 PKG_BUILD=1
 PKG_BUILDSYSTEM=autoconf-dedicated-builddir
 
@@ -26,9 +26,10 @@ AUTOCONF_CONFIGURE_ARGS=\
 	--with-system-zlib \
 	--enable-shared \
 	--enable-threads=posix \
-	--disable-libstdcxx \
+	--enable-libstdcxx \
 	--disable-werror \
 	--disable-bootstrap \
+	--disable-libsanitizer \
 	--enable-checking=release \
 	--build=$(OS_TARGET_TRIPLET)
 
@@ -38,11 +39,11 @@ AUTOCONF_CONFIGURE_ARGS+=\
 	--enable-default-ssp
 endif
 
+include package.mk
+
 autoconf-prepackage:
 	install -dm 755 $(PKG_ROOT)/lib
 	install -m 755 cpp-shim $(PKG_ROOT)/lib/cpp
 	install -dm 755 $(PKG_ROOT)/usr/bin
 	ln -s gcc $(PKG_ROOT)/usr/bin/cc
-
-include package.mk
 
