@@ -1,3 +1,5 @@
+include depends.mk
+
 PKG_PATCH_DIR?=$(PKG_SRC_DIR)
 PKG_PATCH_BINARY?=patch
 
@@ -39,7 +41,7 @@ endif
 apply-patches:
 
 .PHONY: apply-patch-%
-apply-patch-%: $(PKG_SRC_ARCHIVES)
+apply-patch-%: $(PKG_SRC_ARCHIVES) package-patch
 	cd pkg_src/$(PKG_PATCH_DIR) && \
 		$(PKG_PATCH_BINARY) -p1 < $(CURDIR)/patches/$*
 
