@@ -13,7 +13,7 @@ PACKAGES=\
 	gmp \
 	mpfr \
 	mpc \
-	libstdcxx \
+	patch \
 	gcc \
 	libressl \
 	system-scripts \
