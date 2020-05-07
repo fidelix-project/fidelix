@@ -1,3 +1,6 @@
+PKG_PATCH_DIR?=$(PKG_SRC_DIR)
+PKG_PATCH_BINARY?=patch
+
 .PHONY: download
 download: .stamp_download_$(PKG_NAME)-$(PKG_VERSION)
 
@@ -37,7 +40,8 @@ apply-patches:
 
 .PHONY: apply-patch-%
 apply-patch-%: $(PKG_SRC_ARCHIVES)
-	cd pkg_src/$(PKG_SRC_DIR) && patch -p1 < $(CURDIR)/patches/$*
+	cd pkg_src/$(PKG_PATCH_DIR) && \
+		$(PKG_PATCH_BINARY) -p1 < $(CURDIR)/patches/$*
 
 .SECONDARY: pkg_root_prepare
 pkg_root_prepare: .stamp_verify_$(PKG_NAME)-$(PKG_VERSION)
