@@ -1,0 +1,7 @@
+editors/vim
+shells/bash
+shells/bash-completion
+lang/gawk
+devel/git
+sysutils/htop
+meta-pkgs/modular-xorg

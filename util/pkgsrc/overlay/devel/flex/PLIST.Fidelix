@@ -1,0 +1,16 @@
+@comment $NetBSD$
+bin/flex
+bin/flex++
+include/FlexLexer.h
+info/flex.info
+lib/libfl.a
+lib/libfl.la
+lib/libfl.so
+lib/libfl.so.2
+lib/libfl.so.2.0.0
+man/man1/flex.1
+share/doc/flex/AUTHORS
+share/doc/flex/COPYING
+share/doc/flex/NEWS
+share/doc/flex/ONEWS
+share/doc/flex/README.md

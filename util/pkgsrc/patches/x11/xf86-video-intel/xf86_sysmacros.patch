@@ -1,0 +1,34 @@
+Add a include sys/sysmacros.h. These source files depend on that header but do
+not include it; they assume that another included header will include it
+anyway. Fix this sloppy coding. Thanks Intel!
+---
+--- src/backlight.c.orig
++++ src/backlight.c
+@@ -29,6 +29,7 @@
+ #include "config.h"
+ #endif
+ 
++#include <sys/sysmacros.h>
+ #include <sys/types.h>
+ #include <sys/wait.h>
+ #include <sys/stat.h>
+--- src/intel_device.c.orig
++++ src/intel_device.c
+@@ -28,6 +28,7 @@
+ #include "config.h"
+ #endif
+ 
++#include <sys/sysmacros.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
+ #include <assert.h>
+--- tools/backlight_helper.c.orig
++++ tools/backlight_helper.c
+@@ -6,6 +6,7 @@
+ #include <unistd.h>
+ #include <errno.h>
+ 
++#include <sys/sysmacros.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
+ 
