@@ -5,7 +5,7 @@ if [ ! -e etc/passwd ]; then
 	root::0:0:root:/root:/bin/sh
 	bin:x:1:1:bin:/dev/null:/bin/false
 	daemon:x:6:6:Daemon User:/dev/null:/bin/false
-	messagebus:x:18:18:D-Bus Message Daemon User:/var/run/dbus:/bin/false
+	dbus:x:18:18:D-Bus Message Daemon User:/var/run/dbus:/bin/false
 	nobody:x:99:99:Unprivileged User:/dev/null:/bin/false
 	EOF
 	chmod 644 etc/passwd
@@ -31,6 +31,7 @@ if [ ! -e etc/group ]; then
 	usb:x:14:
 	cdrom:x:15:
 	shadow:x:16:
+	dbus:x:17:
 	EOF
 	chmod 644 etc/group
 	chown 0:0 etc/group

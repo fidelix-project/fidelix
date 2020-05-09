@@ -23,5 +23,6 @@ groups that are used by a particular service start with an underscore.
 | usb		| 14	|					| aaa-file-skel	|
 | cdrom		| 15	|					| aaa-file-skel	|
 | shadow	| 16	| Users who can read /etc/shadow 	| aaa-file-skel	|
+| dbus		| 17	| Dbus message daemon			| aaa-file-skel	|
 | _sshd		| 22	| OpenSSH Privsep Group			| openssh	|
 
