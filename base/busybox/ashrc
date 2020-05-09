@@ -17,6 +17,15 @@ fi
 # Alias make to add /usr/src/include to the include path
 alias make='make -I /usr/src/include'
 
+# Include /usr/pkg in the appropriate paths if pkgsrc is installed
+if [ -d /usr/pkg ]; then
+	PATH=$PATH:/usr/pkg/bin
+	export MANPATH=/usr/local/share/man:/usr/share/man:/usr/pkg/man
+	if [ $(id -u) -eq 0 ]; then
+		PATH=$PATH:/usr/pkg/sbin
+	fi
+fi
+
 # Source the local ashrc (if any)
 if [ -r /etc/ashrc.local ]; then
 	source /etc/ashrc.local
