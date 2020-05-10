@@ -1,0 +1,17 @@
+--- buildtools/wafsamba/wscript.orig
++++ buildtools/wafsamba/wscript
+@@ -29,6 +29,14 @@
+ 
+     gr = opt.option_group('library handling options')
+ 
++    gr.add_option('--with-gmp-include',
++                   help=("Dummy option to avoid a fatal configure error"),
++                   action="store", dest='IGNORE_THIS_OPTION', default='')
++
++    gr.add_option('--with-gmp-lib',
++                   help=("Dummy option to avoid a fatal configure error"),
++                   action="store", dest='IGNORE_THIS_OPTION', default='')
++
+     gr.add_option('--bundled-libraries',
+                    help=("comma separated list of bundled libraries. May include !LIBNAME to disable bundling a library. Can be 'NONE' or 'ALL' [auto]"),
+                    action="store", dest='BUNDLED_LIBS', default='')

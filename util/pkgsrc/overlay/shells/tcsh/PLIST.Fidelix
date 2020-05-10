@@ -1,0 +1,5 @@
+@comment $NetBSD$
+bin/tcsh
+man/man1/tcsh.1
+share/examples/tcsh/complete.tcsh
+share/examples/tcsh/csh-mode.el

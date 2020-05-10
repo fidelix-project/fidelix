@@ -50,5 +50,6 @@ pkgsrc/%:
 	cd $(PREFIX_BASE)/pkgsrc/$* && \
 		bmake install && \
 		bmake package && \
-		bmake clean-depends
+		echo
+#		bmake clean-depends
 

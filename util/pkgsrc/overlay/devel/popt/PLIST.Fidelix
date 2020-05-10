@@ -1,0 +1,9 @@
+@comment $NetBSD$
+include/popt.h
+lib/libpopt.a
+lib/libpopt.la
+lib/libpopt.so
+lib/libpopt.so.0
+lib/libpopt.so.0.0.0
+lib/pkgconfig/popt.pc
+man/man3/popt.3

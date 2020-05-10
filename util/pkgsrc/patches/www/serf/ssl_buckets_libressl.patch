@@ -1,25 +1,12 @@
-From 54f7fa6ece0c455b49495ccca3cc412a583ccb43 Mon Sep 17 00:00:00 2001
-From: Sora Lee <saih792@outlook.com>
-Date: Mon, 14 May 2018 00:07:53 +1200
-Subject: [PATCH] Add support for libressl.
-
----
- buckets/ssl_buckets.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/buckets/ssl_buckets.c b/buckets/ssl_buckets.c
-index b01e535..eeae556 100644
---- buckets/ssl_buckets.c
+--- buckets/ssl_buckets.c.orig	2016-06-30 15:45:07 UTC
 +++ buckets/ssl_buckets.c
-@@ -52,7 +52,7 @@
- #define APR_ARRAY_PUSH(ary,type) (*((type *)apr_array_push(ary)))
+@@ -1156,7 +1156,7 @@ static void init_ssl_libraries(void)
+         }
  #endif
  
--#if defined(OPENSSL_VERSION_NUMBER) && OPENSSL_VERSION_NUMBER >= 0x10100000L
-+#if defined(OPENSSL_VERSION_NUMBER) && OPENSSL_VERSION_NUMBER >= 0x10100000L && !defined(LIBRESSL_VERSION_NUMBER)
- #define USE_OPENSSL_1_1_API
- #endif
- 
--- 
-2.16.1
+-#ifdef USE_OPENSSL_1_1_API
++#if defined(USE_OPENSSL_1_1_API) && !defined(LIBRESSL_VERSION_NUMBER)
+         OPENSSL_malloc_init();
+ #else
+         CRYPTO_malloc_init();
 

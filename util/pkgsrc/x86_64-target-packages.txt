@@ -1,7 +1,15 @@
 editors/vim
 shells/bash
 shells/bash-completion
-lang/gawk
 devel/git
 sysutils/htop
 meta-pkgs/modular-xorg
+sysutils/file
+shells/zsh
+editors/nano
+devel/subversion-base
+devel/mercurial
+misc/screen
+misc/tmux
+meta-pkgs/xfce4
+meta-pkgs/xfce4-extras
