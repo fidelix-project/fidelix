@@ -26,3 +26,6 @@ groups that are used by a particular service start with an underscore.
 | dbus		| 17	| Dbus message daemon			| aaa-file-skel	|
 | _sshd		| 22	| OpenSSH Privsep Group			| openssh	|
 
+Note that UIDs and GIDs in the range 200-400 are used by pkgsrc. They are
+documented in the `util/pkgsrc/create-user-groups.sh` shell script.
+
