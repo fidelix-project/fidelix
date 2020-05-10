@@ -14,7 +14,7 @@ OS_RELEASE_NAME:=Arthur
 OS_SRC_DIR:=/usr/src
 
 # Patch and prerelease versioning
-OS_PATCH:=0
+OS_PATCH:=1
 OS_PRERELEASE:=
 
 # Package file configuration
