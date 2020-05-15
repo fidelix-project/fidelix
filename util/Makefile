@@ -10,7 +10,8 @@ PACKAGES=\
 
 DEFAULT_PACKAGES=\
 	libuuid \
-	gptfdisk
+	gptfdisk \
+	xorriso
 
 # Non-package subdirectories contained in this directory that should be
 # included when searching for packages
