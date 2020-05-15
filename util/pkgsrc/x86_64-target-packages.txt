@@ -12,4 +12,5 @@ devel/mercurial
 misc/screen
 misc/tmux
 meta-pkgs/xfce4
+lang/llvm
 meta-pkgs/xfce4-extras
