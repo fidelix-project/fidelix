@@ -4,7 +4,7 @@ PKG_BUILD=1
 PKG_BUILDSYSTEM=autoconf-dedicated-builddir
 
 # Build time dependencies for this gcc
-PKG_BUILD_DEPENDS=musl zlib gmp mpfr mpc libstdcxx
+PKG_BUILD_DEPENDS=musl zlib gmp mpfr mpc
 
 PKG_WGET_URLS=\
 	http://ftp.gnu.org/gnu/gcc/gcc-$(PKG_VERSION)/gcc-$(PKG_VERSION).tar.xz
