@@ -39,7 +39,7 @@ exist:
 * /tmp: Temporary files. Since any user/application can write here, this should
   be separate to keep the system from crashing if /tmp becomes full. This can
   be either a tmpfs or a real partition.
-* /home: User home directories. Recommended to be separatae to keep the system
+* /home: User home directories. Recommended to be separate to keep the system
   from crashing in the event that a user writes too much data to his home
   directory.
 
