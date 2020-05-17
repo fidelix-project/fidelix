@@ -1,0 +1,19 @@
+--- fileio.c.orig
++++ fileio.c
+@@ -567,13 +567,11 @@
+ 
+ 	while ((dent = readdir(dirp)) != NULL) {
+ 		int isdir;
+-#if defined (__CYGWIN__)	/* Cygwin lacks reclen/namlen. */
+-		if (strlen(dent->d_name) < len
+-		    || memcmp(cp, dent->d_name, len) != 0)
+-#elif defined (__GLIBC__) || defined(__sun) /* Linux uses reclen instead. */
++#if defined (__GLIBC__) || defined(__sun) /* Linux uses reclen instead. */
+ 		if (dent->d_reclen < len || memcmp(cp, dent->d_name, len) != 0)
+ #else
+-		if (dent->d_namlen < len || memcmp(cp, dent->d_name, len) != 0)
++		if (strlen(dent->d_name) < len
++		    || memcmp(cp, dent->d_name, len) != 0)
+ #endif
+ 			continue;
+ 

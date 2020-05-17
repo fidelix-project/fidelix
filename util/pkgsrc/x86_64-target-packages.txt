@@ -11,6 +11,7 @@ devel/subversion-base
 devel/mercurial
 misc/screen
 misc/tmux
+editors/mg
 meta-pkgs/xfce4
 lang/llvm
 meta-pkgs/xfce4-extras

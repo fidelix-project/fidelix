@@ -229,6 +229,7 @@ mate-polkit
 mcookie
 mercurial
 meson
+mg
 mit-krb5
 mkcomposecache
 mkfontscale
