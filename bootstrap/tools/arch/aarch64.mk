@@ -1,4 +1,4 @@
-# x86_64 Architecture Specific Settings
+# aarch64 Architecture Specific Settings
 
 # The number of bits in a native word.
 ARCH_BITS=64
