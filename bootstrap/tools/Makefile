@@ -38,7 +38,7 @@ MAXJOBS=3
 
 # The architecture to target. Note that the host system **must** be able to run
 # binaries produced for this architecture.
-ARCH=x86_64
+ARCH=$(shell arch)
 
 # The ID for the distribution in the host triplet.
 DISTID=bootstrap
@@ -192,13 +192,12 @@ extract-pkg-%:
 	cd build/gcc_pass1; \
 	for file in \
 		gcc/config/linux.h \
-		gcc/config/i386/linux.h \
-		gcc/config/i386/linux64.h; \
+		$(ARCH_GCC_HEADERS); \
 	do \
 		cp -uv $$file $$file.orig; \
 		sed -e 's@/lib\(64\)\?\(32\)\?/ld@/$(PREFIX)&@g' \
 		    -e 's@/usr@$(PREFIX)@g' $$file.orig > $$file; \
-		echo '\n#undef STANDARD_STARTFILE_PREFIX_1\n#undef STANDARD_STARTFILE_PREFIX_2\n#define STANDARD_STARTFILE_PREFIX_1 "$(PREFIX)/lib/"\n#define STANDARD_STARTFILE_PREFIX_2 ""' >> $$file; \
+		echo -e '\n#undef STANDARD_STARTFILE_PREFIX_1\n#undef STANDARD_STARTFILE_PREFIX_2\n#define STANDARD_STARTFILE_PREFIX_1 "$(PREFIX)/lib/"\n#define STANDARD_STARTFILE_PREFIX_2 ""' >> $$file; \
 		touch $$file.orig; \
 	done
 	mkdir -p build/gcc_pass1/build
@@ -332,13 +331,12 @@ extract-pkg-%:
 	cd build/gcc_pass2; \
 	for file in \
 		gcc/config/linux.h \
-		gcc/config/i386/linux.h \
-		gcc/config/i386/linux64.h; \
+		$(ARCH_GCC_HEADERS); \
 	do \
 		cp -uv $$file $$file.orig; \
 		sed -e 's@/lib\(64\)\?\(32\)\?/ld@/$(PREFIX)&@g' \
 		    -e 's@/usr@$(PREFIX)@g' $$file.orig > $$file; \
-		echo '\n#undef STANDARD_STARTFILE_PREFIX_1\n#undef STANDARD_STARTFILE_PREFIX_2\n#define STANDARD_STARTFILE_PREFIX_1 "$(PREFIX)/lib/"\n#define STANDARD_STARTFILE_PREFIX_2 ""' >> $$file; \
+		echo -e '\n#undef STANDARD_STARTFILE_PREFIX_1\n#undef STANDARD_STARTFILE_PREFIX_2\n#define STANDARD_STARTFILE_PREFIX_1 "$(PREFIX)/lib/"\n#define STANDARD_STARTFILE_PREFIX_2 ""' >> $$file; \
 		touch $$file.orig; \
 	done
 	mkdir -p build/gcc_pass2/build
