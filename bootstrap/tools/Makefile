@@ -87,12 +87,19 @@ export PATH:=$(PREFIX)/bin:$(PATH)
 
 export LC_ALL=POSIX
 
+# Do not pass manually set variables to the submakes, and ensure ARCH is not
+# passed to the environment (failure to do either of these is known to break
+# packages).
+MAKEOVERRIDES=
+export MAKEOVERRIDES
+unexport ARCH
+
 GCC_VERSION=9.2.0
 
 include arch/$(ARCH).mk
 
 $(OUTPUT_FILE): build
-	tar cf $@ $(PREFIX)
+	tar cf $@ $(PREFIX)/
 
 # Download all of the sources, verify their integrity, and extract them.
 .SECONDARY: src
@@ -231,8 +238,8 @@ extract-pkg-%:
 	rm -rf build/linux
 	mkdir -p build/linux
 	cp -r src/linux-*/* build/linux/
-	cd build/linux; make mrproper
-	cd build/linux; make headers
+	cd build/linux && make mrproper
+	cd build/linux && make headers
 	cp -rv build/linux/usr/include/* $(PREFIX)/include
 	touch $@
 
@@ -284,17 +291,32 @@ extract-pkg-%:
 			--disable-werror
 	cd build/binutils_pass2; make -j $(MAXJOBS)
 	cd build/binutils_pass2; make install
-	# Build an adjusted linker (for use later)
-	cd build/binutils_pass2; make -C ld clean
-	cd build/binutils_pass2; make -C ld LIB_PATH=/usr/lib:/lib
-	cd build/binutils_pass2; cp -v ld/ld-new $(PREFIX)/bin
+	touch $@
+
+# Build an adjusted linker (for use later)
+.stamp_pkg_ld_new: export CC=$(TARGET)-gcc
+.stamp_pkg_ld_new: export AR=$(TARGET)-ar
+.stamp_pkg_ld_new: export RANLIB=$(TARGET)-ranlib
+.stamp_pkg_ld_new: .stamp_pkg_binutils_pass2
+	rm -rf build/ld_new
+	mkdir -p build/ld_new
+	cd build/ld_new; \
+		../../src/binutils-*/configure \
+			--prefix=$(PREFIX) \
+			--host=$(TARGET) \
+			--with-sysroot \
+			--with-lib-path=$(PREFIX)/lib \
+			--disable-nls \
+			--disable-werror
+	cd build/ld_new; make -C ld LIB_PATH=/usr/lib:/lib
+	cd build/ld_new; cp -v ld/ld-new $(PREFIX)/bin
 	touch $@
 
 .stamp_pkg_libstdcxx: export CC=$(TARGET)-gcc
 .stamp_pkg_libstdcxx: export CXX=$(TARGET)-g++
 .stamp_pkg_libstdcxx: export AR=$(TARGET)-ar
 .stamp_pkg_libstdcxx: export RANLIB=$(TARGET)-ranlib
-.stamp_pkg_libstdcxx: .stamp_pkg_binutils_pass2
+.stamp_pkg_libstdcxx: .stamp_pkg_ld_new
 	rm -rf build/libstdcxx
 	mkdir -p build/libstdcxx/build
 	cp -r src/gcc-*/* build/libstdcxx/

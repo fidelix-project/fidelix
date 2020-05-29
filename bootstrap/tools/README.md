@@ -37,6 +37,10 @@ these programs in different packages than the development versions. If you
 experience issues building related to missing programs, make sure you have both
 the runtime and development versions of the packages installed.
 
+If you are building on a recent Debian derived distribution, ensure /bin/sh
+points to some shell with a GNU/BSD/BusyBox compliant echo; the default of
+/bin/dash does not. Changing it to point to /bin/bash is known to work.
+
 ## Building
 
 Once you have the prereqs installed, build the bootstrap tools by issuing the
