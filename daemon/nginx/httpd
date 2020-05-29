@@ -1,0 +1,13 @@
+#!/bin/sh
+
+Name=httpd
+PidFile=/run/httpd.pid
+StartCmd="/usr/sbin/nginx"
+
+Description="nginx HTTP Daemon"
+DefaultStart=no
+StartPriority=60
+
+# Do NOT delete this line; it is required for the script to be usable.
+source /etc/init.d/common-core
+

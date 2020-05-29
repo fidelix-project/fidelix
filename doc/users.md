@@ -11,6 +11,7 @@ users that are used by a particular service start with an underscore.
 | daemon     | 6   | 6   | Daemon User               | aaa-file-skel      | /dev/null     |
 | dbus       | 18  | 18  | D-Bus Message Daemon User | aaa-file-skel      | /var/run/dbus |
 | _sshd      | 22  | 22  | OpenSSH Privsep User      | openssh            | /var/empty    |
+| _httpd     | 80  | 80  | nginx Privsep User        | nginx              | /dev/null     |
 | nobody     | 99  | 99  | Unprivileged User         | aaa-file-skel      | /dev/null     |
 
 Note that UIDs and GIDs in the range 200-400 are used by pkgsrc. They are
