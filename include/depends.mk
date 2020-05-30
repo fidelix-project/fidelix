@@ -6,6 +6,9 @@ include sysconfig.mk
 ifndef _INC_DEPENDS
 _INC_DEPENDS=y
 
+.PHONY: package-%.mk
+package-%.mk:
+
 package-%:
 	make -C $(OS_SRC_DIR) install-$*
 
