@@ -31,6 +31,10 @@ packages installed on your host system:
 * m4
 * GNU make
 * texinfo
+* bison
+* flex
+* autoconf
+* perl
 
 Some distributions (such as Debian and RedHat) place the runtime versions of
 these programs in different packages than the development versions. If you
