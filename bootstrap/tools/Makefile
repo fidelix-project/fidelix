@@ -300,7 +300,7 @@ extract-pkg-%:
 .stamp_pkg_ld_new: .stamp_pkg_binutils_pass2
 	rm -rf build/ld_new
 	mkdir -p build/ld_new
-	cd build/ld_new; \
+	cd build/ld_new && \
 		../../src/binutils-*/configure \
 			--prefix=$(PREFIX) \
 			--host=$(TARGET) \
@@ -308,8 +308,8 @@ extract-pkg-%:
 			--with-lib-path=$(PREFIX)/lib \
 			--disable-nls \
 			--disable-werror
-	cd build/ld_new; make -C ld LIB_PATH=/usr/lib:/lib
-	cd build/ld_new; cp -v ld/ld-new $(PREFIX)/bin
+	cd build/ld_new && make LIB_PATH=/usr/lib:/lib
+	cd build/ld_new && cp -v ld/ld-new $(PREFIX)/bin
 	touch $@
 
 .stamp_pkg_libstdcxx: export CC=$(TARGET)-gcc
@@ -402,8 +402,8 @@ extract-pkg-%:
 	mkdir -p build/busybox
 	cp -r src/busybox-*/* build/busybox/
 	cp meta/busybox-config build/busybox/.config
-	cd build/busybox; make -j$(MAXJOBS) CROSS_COMPILE=$(PREFIX)/bin/
-	cd build/busybox; make CONFIG_PREFIX=$(PREFIX) install
+	cd build/busybox && make -j$(MAXJOBS) CROSS_COMPILE=$(PREFIX)/bin/
+	cd build/busybox && make CONFIG_PREFIX=$(PREFIX) install
 	touch $@
 
 .stamp_pkg_make: .stamp_pkg_busybox
