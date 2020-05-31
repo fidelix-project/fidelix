@@ -293,6 +293,7 @@ pciids
 pcre
 pcre2
 perl
+php
 pixman
 pkgconf
 png
