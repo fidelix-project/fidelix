@@ -22,7 +22,7 @@ package and all of its dependencies:
     cd /usr/src
     make install-musl
 
-To force the reinstallation of a package that is already build, use the
+To force the reinstallation of a package that is already built, use the
 `reinstall-package` target.
 
 ## Building a package
