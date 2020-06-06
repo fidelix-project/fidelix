@@ -1,3 +1,4 @@
+OS_SRC_DIR?=$(CURDIR)
 DIR:=
 SUBDIRS:=\
 	base \
