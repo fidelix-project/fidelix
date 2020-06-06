@@ -78,7 +78,7 @@ It is recommended to download the source code for the system packages now.
 Downloading the source code does not work in the bootstrap environment without
 additional setup. Use the following command:
 
-    make -C ossrc -I ossrc/include download
+    make -C ossrc -I $PWD/ossrc/include download
 
 ## Setup
 
