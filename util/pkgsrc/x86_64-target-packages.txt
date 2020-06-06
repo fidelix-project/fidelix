@@ -15,3 +15,4 @@ editors/mg
 meta-pkgs/xfce4
 lang/llvm
 meta-pkgs/xfce4-extras
+lang/php74

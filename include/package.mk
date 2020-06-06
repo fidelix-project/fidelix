@@ -44,7 +44,7 @@ ifneq "$(INSTALLED_PKG_NAME)" ""
 endif
 
 .stamp_dependencies: 
-	cd $(OS_SRC_DIR); make $(addprefix install-,$(PKG_BUILD_DEPENDS)) 
+	cd $(OS_SRC_DIR) && make $(addprefix install-,$(PKG_BUILD_DEPENDS)) 
 	touch $@
 
 $(_PKG_DB_DIR)/$(_PKG_FULL_NAME): $(_PKG_FILE)

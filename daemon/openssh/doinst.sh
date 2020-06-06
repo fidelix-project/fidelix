@@ -12,3 +12,7 @@
 # Setcap the key signing binary
 setcap CAP_DAC_READ_SEARCH=ep usr/libexec/ssh-keysign
 
+# Install new config files
+pkgtool install-new-file etc/ssh/ssh_config
+pkgtool install-new-file etc/ssh/sshd_config
+

@@ -6,12 +6,16 @@ PACKAGES=\
 	gptfdisk \
 	xorriso \
 	libstdcxx \
+	libedit \
+	pcre \
 	pkgsrc
 
 DEFAULT_PACKAGES=\
 	libuuid \
 	gptfdisk \
-	xorriso
+	xorriso \
+	libedit \
+	pcre
 
 # Non-package subdirectories contained in this directory that should be
 # included when searching for packages

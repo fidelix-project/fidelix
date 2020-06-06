@@ -1,9 +1,7 @@
 PKG_NAME=zoneinfo
-PKG_VERSION=2019c
-PKG_BUILD=2
+PKG_VERSION=2020a
+PKG_BUILD=1
 PKG_BUILDSYSTEM=make
-
-PKG_BUILD_DEPENDS=
 
 PKG_WGET_URLS=\
 	https://www.iana.org/time-zones/repository/releases/tzdata$(PKG_VERSION).tar.gz \
@@ -12,9 +10,6 @@ PKG_SRC_ARCHIVES=\
 	tzdata$(PKG_VERSION).tar.gz \
 	tzcode$(PKG_VERSION).tar.gz
 PKG_SRC_DIR=
-
-MAKE_ARGS=
-MAKE_INSTALL_ARGS=
 
 include package.mk
 
