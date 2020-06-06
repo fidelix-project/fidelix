@@ -41,6 +41,7 @@ packages installed on your host system:
 * gettext
 * help2man
 * patch
+* gawk
 
 Some distributions (such as Debian and RedHat) place the runtime versions of
 these programs in different packages than the development versions. If you
