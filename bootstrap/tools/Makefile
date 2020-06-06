@@ -207,6 +207,7 @@ extract-pkg-%:
 		echo -e '\n#undef STANDARD_STARTFILE_PREFIX_1\n#undef STANDARD_STARTFILE_PREFIX_2\n#define STANDARD_STARTFILE_PREFIX_1 "$(PREFIX)/lib/"\n#define STANDARD_STARTFILE_PREFIX_2 ""' >> $$file; \
 		touch $$file.orig; \
 	done
+	cd build/gcc_pass1/mpfr && autoreconf -f 
 	mkdir -p build/gcc_pass1/build
 	cd build/gcc_pass1/build; \
 		../configure \
@@ -350,6 +351,7 @@ extract-pkg-%:
 	cp -r src/mpfr-* build/gcc_pass2/mpfr
 	cp -r src/gmp-* build/gcc_pass2/gmp
 	cp -r src/mpc-* build/gcc_pass2/mpc
+	cd build/gcc_pass2/mpfr && autoreconf -f 
 	cd build/gcc_pass2; \
 	for file in \
 		gcc/config/linux.h \
