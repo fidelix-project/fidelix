@@ -18,7 +18,7 @@ MAXJOBS=3
 
 # The architecture to target. Note that the host system **must** be able to run
 # binaries produced for this architecture.
-ARCH=x86_64
+ARCH?=$(shell arch)
 
 # The ID for the distribution in the host triplet.
 DISTID=bootstrap
