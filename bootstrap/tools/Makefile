@@ -404,6 +404,14 @@ extract-pkg-%:
 	mkdir -p build/busybox
 	cp -r src/busybox-*/* build/busybox/
 	cp meta/busybox-config build/busybox/.config
+	cd build/busybox && \
+		patch -p1 < ../../patches/busybox/date-use-64.patch
+	cd build/busybox && \
+		patch -p1 < ../../patches/busybox/time-use-64.patch
+	cd build/busybox && \
+		patch -p1 < ../../patches/busybox/runsv-use-64.patch
+	cd build/busybox && \
+		patch -p1 < ../../patches/busybox/remove-syscall-wrappers.patch
 	cd build/busybox && make -j$(MAXJOBS) CROSS_COMPILE=$(PREFIX)/bin/
 	cd build/busybox && make CONFIG_PREFIX=$(PREFIX) install
 	touch $@
