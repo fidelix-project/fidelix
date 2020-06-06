@@ -1,4 +1,5 @@
 OS_SRC_DIR?=$(CURDIR)
+export OS_SRC_DIR
 DIR:=
 SUBDIRS:=\
 	base \
