@@ -34,7 +34,12 @@ packages installed on your host system:
 * bison
 * flex
 * autoconf
+* automake
+* autoconf-archive
 * perl
+* pkg-config or pkgconf
+* gettext
+* help2man
 
 Some distributions (such as Debian and RedHat) place the runtime versions of
 these programs in different packages than the development versions. If you
