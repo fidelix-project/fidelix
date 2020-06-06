@@ -430,12 +430,18 @@ extract-pkg-%:
 .stamp_pkg_perl: .stamp_pkg_make
 	rm -rf build/perl
 	cp -r src/perl-*/ build/perl
+ifeq ($(ARCH), i686)
+	cd build/perl && \
+		patch -p1 < ../../patches/perl/disable-stack-protector.patch
+endif
 	cd build/perl; sh Configure \
 		-des \
 		-Dprefix=$(PREFIX) \
 		-Dlibs=-lm \
+		-Dcc=$(PREFIX)/bin/cc \
 		-Uloclibpth \
-		-Ulocincpth
+		-Ulocincpth \
+		-Accflags="-fno-stack-protector"
 	cd build/perl; make -j $(MAXJOBS)
 	cd build/perl; make install
 	touch $@
