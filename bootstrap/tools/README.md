@@ -40,6 +40,7 @@ packages installed on your host system:
 * pkg-config or pkgconf
 * gettext
 * help2man
+* patch
 
 Some distributions (such as Debian and RedHat) place the runtime versions of
 these programs in different packages than the development versions. If you
