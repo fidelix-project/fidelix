@@ -23,6 +23,9 @@ ARCH?=$(shell arch)
 # The ID for the distribution in the host triplet.
 DISTID=bootstrap
 
+# The version of GCC to used in the bootstrap tools.
+BS_GCC_VERSION=9.2.0
+
 TARGET=$(ARCH)-$(DISTID)-linux-musl
 
 -include config.local.mk

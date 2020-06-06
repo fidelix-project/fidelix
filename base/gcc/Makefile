@@ -13,7 +13,11 @@ PKG_SRC_DIR=gcc-$(PKG_VERSION)
 
 # The bootstrap g++ doesn't find the c++ headers on its own
 ifeq ($(OS_PKG_TAG), bs)
-export CXXFLAGS=-I /usr/include/c++/$(PKG_VERSION)
+include bsconfig.mk
+BS_GCC_VERSION?=$(PKG_VERSION)
+export CXXFLAGS:=\
+	-I $(PREFIX)/$(TARGET)/include/c++/$(BS_GCC_VERSION) \
+	-I $(PREFIX)/$(TARGET)/include/c++/$(BS_GCC_VERSION)/$(TARGET)
 endif
 
 # Avoid a hard coded sed path
