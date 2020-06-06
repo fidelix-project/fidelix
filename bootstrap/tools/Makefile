@@ -471,6 +471,8 @@ prepare-chroot: .stamp_chroot_prepare .stamp_chroot_ossrc
 	mkdir -p "$(CHROOT)/etc"
 	install -m 644 /etc/resolv.conf "$(CHROOT)/etc/"
 	mkdir -p "$(CHROOT)/dev"
+	mkdir -p "$(CHROOT)/proc"
+	mkdir -p "$(CHROOT)/sys"
 	touch $@
 
 .stamp_chroot_ossrc: .stamp_chroot_prepare
@@ -490,6 +492,8 @@ chroot: prepare-chroot
 		"$(CHROOT)/dev" \
 		"$(CHROOT)/etc" \
 		"$(CHROOT)/etc/resolv.conf" \
+		"$(CHROOT)/proc" \
+		"$(CHROOT)/sys" \
 		"$(CHROOT)/usr/src" 
 	chroot "$(CHROOT)" /bin/sh -c \
 		'export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$(PREFIX)/sbin:$(PREFIX)/bin; \
