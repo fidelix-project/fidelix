@@ -11,3 +11,6 @@ ARCH_LIBDIR_SUFFIX=32
 # The directory for this architecture in the Linux kernel source
 ARCH_KERNEL=x86
 
+# The architecture tag that appears in the dynamic linker: /lib/ld-musl-*.so.1
+DYNLD_ARCH=i386
+
