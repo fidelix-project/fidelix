@@ -5,6 +5,9 @@
 
 %:
 
+download verify:
+	@exit
+
 .stamp_build_%: .stamp_build
 	touch $@
 
