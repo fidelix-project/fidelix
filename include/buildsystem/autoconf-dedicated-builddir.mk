@@ -20,7 +20,7 @@ _AUTOCONF_HELPER_TARGETS=\
 		-j $(MAKE_MAXJOBS) \
 		-l $(MAKE_MAXLOAD)
 	make autoconf-preinstall
-	cd pkg_src/build && ; \
+	cd pkg_src/build && \
 		make $(AUTOCONF_MAKE_INSTALL_ARGS) install DESTDIR=$(PKG_ROOT)
 	make autoconf-prepackage
 	touch $@
