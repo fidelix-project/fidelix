@@ -292,32 +292,17 @@ extract-pkg-%:
 			--disable-werror
 	cd build/binutils_pass2; make -j $(MAXJOBS)
 	cd build/binutils_pass2; make install
-	touch $@
-
-# Build an adjusted linker (for use later)
-.stamp_pkg_ld_new: export CC=$(TARGET)-gcc
-.stamp_pkg_ld_new: export AR=$(TARGET)-ar
-.stamp_pkg_ld_new: export RANLIB=$(TARGET)-ranlib
-.stamp_pkg_ld_new: .stamp_pkg_binutils_pass2
-	rm -rf build/ld_new
-	mkdir -p build/ld_new
-	cd build/ld_new && \
-		../../src/binutils-*/configure \
-			--prefix=$(PREFIX) \
-			--host=$(TARGET) \
-			--with-sysroot \
-			--with-lib-path=$(PREFIX)/lib \
-			--disable-nls \
-			--disable-werror
-	cd build/ld_new && make LIB_PATH=/usr/lib:/lib
-	cd build/ld_new && cp -v ld/ld-new $(PREFIX)/bin
+# Build an adjusted linker for use later
+	cd build/binutils_pass2 && make -C ld clean
+	cd build/binutils_pass2 && make -C ld LIB_PATH=/usr/lib:/lib
+	cd build/binutils_pass2 && cp -v ld/ld-new $(PREFIX)/bin/
 	touch $@
 
 .stamp_pkg_libstdcxx: export CC=$(TARGET)-gcc
 .stamp_pkg_libstdcxx: export CXX=$(TARGET)-g++
 .stamp_pkg_libstdcxx: export AR=$(TARGET)-ar
 .stamp_pkg_libstdcxx: export RANLIB=$(TARGET)-ranlib
-.stamp_pkg_libstdcxx: .stamp_pkg_ld_new
+.stamp_pkg_libstdcxx: .stamp_pkg_binutils_pass2
 	rm -rf build/libstdcxx
 	mkdir -p build/libstdcxx/build
 	cp -r src/gcc-*/* build/libstdcxx/
