@@ -1,12 +1,12 @@
 PKG_NAME=perl
-PKG_VERSION=5.30.1
+PKG_VERSION=5.30.3
 PKG_BUILD=1
 PKG_BUILDSYSTEM=custom-common
 
 # Build time dependencies for this package
 PKG_BUILD_DEPENDS=musl
 
-PKG_WGET_URLS=https://www.cpan.org/src/5.0/perl-5.30.1.tar.xz
+PKG_WGET_URLS=https://www.cpan.org/src/5.0/perl-$(PKG_VERSION).tar.xz
 PKG_SRC_ARCHIVES=perl-$(PKG_VERSION).tar.xz
 PKG_SRC_DIR=perl-$(PKG_VERSION)
 
