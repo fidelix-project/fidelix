@@ -116,6 +116,7 @@ build: .stamp_prepare $(PACKAGES)
 .PHONY: clean
 clean:
 	rm -rf build download src .stamp_* $(OUTPUT_FILE)
+	rm -rf $(PREFIX)/*
 
 .PHONY: tidy
 tidy:
@@ -306,6 +307,41 @@ extract-pkg-%:
 	rm -rf build/libstdcxx
 	mkdir -p build/libstdcxx/build
 	cp -r src/gcc-*/* build/libstdcxx/
+	cd build/libstdcxx && patch -p1 < ../../patches/gcc/0010_all_default-relro.patch
+	cd build/libstdcxx && patch -p1 < ../../patches/gcc/0016-invalid_tls_model.patch
+	cd build/libstdcxx && patch -p1 < ../../patches/gcc/0020_all_default-fortify-source.patch
+	cd build/libstdcxx && patch -p1 < ../../patches/gcc/0030_all_default-as-needed.patch
+	cd build/libstdcxx && patch -p1 < ../../patches/gcc/0040_gcc-as-needed-gold.patch
+	cd build/libstdcxx && patch -p1 < ../../patches/gcc/0050_all_default-warn-format-security.patch
+	cd build/libstdcxx && patch -p1 < ../../patches/gcc/0060_all_default-warn-trampolines.patch
+	cd build/libstdcxx && patch -p1 < ../../patches/gcc/0070_all_default-ssp-fix.patch
+	cd build/libstdcxx && patch -p1 < ../../patches/gcc/0080_all_msgfmt-libstdc++-link.patch
+	cd build/libstdcxx && patch -p1 < ../../patches/gcc/0090_all_libiberty-asprintf.patch
+	cd build/libstdcxx && patch -p1 < ../../patches/gcc/0100_all_libiberty-pic.patch
+	cd build/libstdcxx && patch -p1 < ../../patches/gcc/0110_all_libitm-no-fortify-source.patch
+	cd build/libstdcxx && patch -p1 < ../../patches/gcc/0120_all_pr55930-dependency-tracking.patch
+	cd build/libstdcxx && patch -p1 < ../../patches/gcc/0130_gcc-poison-system-directories.patch
+	cd build/libstdcxx && patch -p1 < ../../patches/gcc/0140_libgcc_s.patch
+	cd build/libstdcxx && patch -p1 < ../../patches/gcc/0150_nopie.patch
+	cd build/libstdcxx && patch -p1 < ../../patches/gcc/0160_posix_memalign.patch
+	cd build/libstdcxx && patch -p1 < ../../patches/gcc/0170_s390x-muslldso.patch
+	cd build/libstdcxx && patch -p1 < ../../patches/gcc/0180_ldbl128-config.patch
+	cd build/libstdcxx && patch -p1 < ../../patches/gcc/0190_static-pie.patch
+	cd build/libstdcxx && patch -p1 < ../../patches/gcc/320-libffi-gnulinux.patch
+	cd build/libstdcxx && patch -p1 < ../../patches/gcc/400-dlang-phobos.patch
+	cd build/libstdcxx && patch -p1 < ../../patches/gcc/401-dlang-32bits.patch
+	cd build/libstdcxx && patch -p1 < ../../patches/gcc/402-dlang-stat.patch
+	cd build/libstdcxx && patch -p1 < ../../patches/gcc/403-dlang-ibmz.patch
+	cd build/libstdcxx && patch -p1 < ../../patches/gcc/404-dlang-zlib.patch
+	cd build/libstdcxx && patch -p1 < ../../patches/gcc/405-dlang-mips.patch
+	cd build/libstdcxx && patch -p1 < ../../patches/gcc/ada-musl.patch
+	cd build/libstdcxx && patch -p1 < ../../patches/gcc/ada-shared.patch
+	cd build/libstdcxx && patch -p1 < ../../patches/gcc/fix-cxxflags-passing.patch
+	cd build/libstdcxx && patch -p1 < ../../patches/gcc/gcc-4.9-musl-fortify.patch
+	cd build/libstdcxx && patch -p1 < ../../patches/gcc/gcc-pure64-mips.patch
+	cd build/libstdcxx && patch -p1 < ../../patches/gcc/gcc-pure64.patch
+	cd build/libstdcxx && patch -p1 < ../../patches/gcc/libgcc-always-build-gcceh.a.patch
+	cd build/libstdcxx && patch -p1 < ../../patches/gcc/libgnarl-musl.patch
 	cd build/libstdcxx/build; ../libstdc++-v3/configure \
 		--prefix=$(PREFIX) \
 		--host=$(TARGET) \
@@ -323,12 +359,47 @@ extract-pkg-%:
 .stamp_pkg_gcc_pass2: export AR=$(TARGET)-ar 
 .stamp_pkg_gcc_pass2: export RANLIB=$(TARGET)-ranlib
 .stamp_pkg_gcc_pass2: .stamp_pkg_libstdcxx
-	echo CC=$$CC
-	echo CXX=$$CXX
 	# GCC documenation recommends building in a dedicated build directory.
 	rm -rf build/gcc_pass2
 	mkdir -p build/gcc_pass2
 	cp -r src/gcc-*/* build/gcc_pass2/
+	# Apply some needed patches
+	cd build/gcc_pass2 && patch -p1 < ../../patches/gcc/0010_all_default-relro.patch
+	cd build/gcc_pass2 && patch -p1 < ../../patches/gcc/0016-invalid_tls_model.patch
+	cd build/gcc_pass2 && patch -p1 < ../../patches/gcc/0020_all_default-fortify-source.patch
+	cd build/gcc_pass2 && patch -p1 < ../../patches/gcc/0030_all_default-as-needed.patch
+	cd build/gcc_pass2 && patch -p1 < ../../patches/gcc/0040_gcc-as-needed-gold.patch
+	cd build/gcc_pass2 && patch -p1 < ../../patches/gcc/0050_all_default-warn-format-security.patch
+	cd build/gcc_pass2 && patch -p1 < ../../patches/gcc/0060_all_default-warn-trampolines.patch
+	cd build/gcc_pass2 && patch -p1 < ../../patches/gcc/0070_all_default-ssp-fix.patch
+	cd build/gcc_pass2 && patch -p1 < ../../patches/gcc/0080_all_msgfmt-libstdc++-link.patch
+	cd build/gcc_pass2 && patch -p1 < ../../patches/gcc/0090_all_libiberty-asprintf.patch
+	cd build/gcc_pass2 && patch -p1 < ../../patches/gcc/0100_all_libiberty-pic.patch
+	cd build/gcc_pass2 && patch -p1 < ../../patches/gcc/0110_all_libitm-no-fortify-source.patch
+	cd build/gcc_pass2 && patch -p1 < ../../patches/gcc/0120_all_pr55930-dependency-tracking.patch
+	cd build/gcc_pass2 && patch -p1 < ../../patches/gcc/0130_gcc-poison-system-directories.patch
+	cd build/gcc_pass2 && patch -p1 < ../../patches/gcc/0140_libgcc_s.patch
+	cd build/gcc_pass2 && patch -p1 < ../../patches/gcc/0150_nopie.patch
+	cd build/gcc_pass2 && patch -p1 < ../../patches/gcc/0160_posix_memalign.patch
+	cd build/gcc_pass2 && patch -p1 < ../../patches/gcc/0170_s390x-muslldso.patch
+	cd build/gcc_pass2 && patch -p1 < ../../patches/gcc/0180_ldbl128-config.patch
+	cd build/gcc_pass2 && patch -p1 < ../../patches/gcc/0190_static-pie.patch
+	cd build/gcc_pass2 && patch -p1 < ../../patches/gcc/320-libffi-gnulinux.patch
+	cd build/gcc_pass2 && patch -p1 < ../../patches/gcc/400-dlang-phobos.patch
+	cd build/gcc_pass2 && patch -p1 < ../../patches/gcc/401-dlang-32bits.patch
+	cd build/gcc_pass2 && patch -p1 < ../../patches/gcc/402-dlang-stat.patch
+	cd build/gcc_pass2 && patch -p1 < ../../patches/gcc/403-dlang-ibmz.patch
+	cd build/gcc_pass2 && patch -p1 < ../../patches/gcc/404-dlang-zlib.patch
+	cd build/gcc_pass2 && patch -p1 < ../../patches/gcc/405-dlang-mips.patch
+	cd build/gcc_pass2 && patch -p1 < ../../patches/gcc/ada-musl.patch
+	cd build/gcc_pass2 && patch -p1 < ../../patches/gcc/ada-shared.patch
+	cd build/gcc_pass2 && patch -p1 < ../../patches/gcc/fix-cxxflags-passing.patch
+	cd build/gcc_pass2 && patch -p1 < ../../patches/gcc/gcc-4.9-musl-fortify.patch
+	cd build/gcc_pass2 && patch -p1 < ../../patches/gcc/gcc-pure64-mips.patch
+	cd build/gcc_pass2 && patch -p1 < ../../patches/gcc/gcc-pure64.patch
+	cd build/gcc_pass2 && patch -p1 < ../../patches/gcc/libgcc-always-build-gcceh.a.patch
+	cd build/gcc_pass2 && patch -p1 < ../../patches/gcc/libgnarl-musl.patch
+	
 	# Replace the temporary limits.h header with the permanent one.
 	cd build/gcc_pass2; cat gcc/limitx.h gcc/glimits.h gcc/limity.h > \
 		$(PREFIX)/lib/gcc/$(TARGET)/$(GCC_VERSION)/include-fixed/limits.h
@@ -359,6 +430,7 @@ extract-pkg-%:
 			--disable-shared \
 			--disable-bootstrap \
 			--disable-libgomp \
+			--disable-libssp \
 			--disable-libstdcxx \
 			--disable-libstdcxx-pch \
 			--enable-languages=c,c++

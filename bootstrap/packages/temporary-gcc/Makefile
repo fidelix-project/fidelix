@@ -1,6 +1,6 @@
 PKG_NAME=gcc
 PKG_VERSION=9.3.0
-PKG_BUILD=1
+PKG_BUILD=temporary
 PKG_BUILDSYSTEM=autoconf-dedicated-builddir
 
 # Build time dependencies for this gcc
@@ -10,6 +10,9 @@ PKG_WGET_URLS=\
 	http://ftp.gnu.org/gnu/gcc/gcc-$(PKG_VERSION)/gcc-$(PKG_VERSION).tar.xz
 PKG_SRC_ARCHIVES=gcc-$(PKG_VERSION).tar.xz
 PKG_SRC_DIR=gcc-$(PKG_VERSION)
+
+# The bootstrap g++ doesn't find the c++ headers on its own
+export CXXFLAGS:=-I /usr/include/c++/$(PKG_VERSION)
 
 # Avoid a hard coded sed path
 export SED=sed
@@ -21,18 +24,12 @@ AUTOCONF_CONFIGURE_ARGS=\
 	--with-system-zlib \
 	--enable-shared \
 	--enable-threads=posix \
-	--enable-libstdcxx \
+	--disable-libstdcxx \
 	--disable-werror \
 	--disable-bootstrap \
 	--disable-libsanitizer \
 	--enable-checking=release \
 	--build=$(OS_TARGET_TRIPLET)
-
-ifneq ($(CONFIG_ENABLE_HARDENING), n)
-AUTOCONF_CONFIGURE_ARGS+=\
-	--enable-default-pie \
-	--enable-default-ssp
-endif
 
 include package.mk
 

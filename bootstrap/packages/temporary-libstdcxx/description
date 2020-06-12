@@ -1,0 +1,10 @@
+Temporary libstdcxx
+
+When bootstraping, gcc won't build unless libstdcxx is present. This presents a
+problem as libstdcxx is provided as part of the gcc package. To solve this, we
+build a temporary, separate libstdcxx that is used only for compiling gcc. Once
+the gcc-*-bs-*.tgz package is installed, this package can (and should be)
+removed. It should never be used outside of the boostrapping process. If you
+would like a libstdcxx package that is separate from the gcc package, use
+/usr/src/util/libstdcxx instead.
+
