@@ -13,7 +13,7 @@ OS_NAME-OS_VERSION-OS_RELEASE_NAME.img
 --------------------------------------
 
 The standard image. Contains the live system and a /usr/src directory
-containting prebuilt binary packages. Useful as in installation image and/or a
+containting prebuilt binary packages. Useful as an installation image and/or a
 live USB image. Can also be dd-ed directly to a destination drive.
 
 OS_NAME-OS_VERSION-OS_RELEASE_NAME.iso
