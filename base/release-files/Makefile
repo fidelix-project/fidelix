@@ -11,6 +11,7 @@ LSB_RELEASE=$(PKG_ROOT)/etc/lsb-release
 OS_RELEASE=$(PKG_ROOT)/etc/os-release
 
 .stamp_build:
+	rm -rf $(PKG_ROOT)
 	mkdir -p $(PKG_ROOT)/etc
 	echo 'DISTRIB_ID="$(OS_NAME)"' > $(LSB_RELEASE)
 	echo 'DISTRIB_RELEASE="$(OS_FULL_VERSION)"' >> $(LSB_RELEASE)
