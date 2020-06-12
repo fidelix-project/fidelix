@@ -1,6 +1,6 @@
 PKG_NAME=busybox
 PKG_VERSION=1.31.1
-PKG_BUILD=21
+PKG_BUILD=22
 PKG_BUILDSYSTEM=custom-common
 
 # Build time dependencies for this package
