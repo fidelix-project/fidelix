@@ -11,15 +11,17 @@ BSPACKAGES=\
 	linux-headers \
 	musl \
 	.stamp_adjust_toolchain \
-	check_toolchain \
+	.stamp_check_toolchain \
 	zlib \
 	binutils \
 	m4 \
 	gmp \
 	mpfr \
 	mpc \
-	libstdcxx \
+	.stamp-temporary-libstdcxx \
+	.stamp-temporary-gcc \
 	gcc \
+	.stamp-remove-temporary-libstdcxx \
 	busybox \
 	make \
 	perl \
@@ -87,8 +89,10 @@ $(PREFIX)/stamp_adjust_toolchain_gcc:
 		> `dirname $$(gcc --print-libgcc-file-name)`/specs
 	touch $@
 
-.PHONY: check_toolchain
-check_toolchain:
+.SECONDARY: check_toolchain
+check_toolchain: .stamp_check_toolchain
+
+.stamp_check_toolchain:
 	@echo Checking that the C compiler and linker work
 	cc check_toolchain.c -v -Wl,--verbose &> check_toolchain.log
 	@echo Checking for the correct dynamic linker in ELF header
@@ -122,12 +126,23 @@ check_toolchain:
 		grep -v "$(PREFIX)"
 	@echo Checking that GCC is finding the correct dynamic linker
 	grep 'dynamic-linker /lib/ld-musl-' check_toolchain.log
+	touch $@
 
 .PHONY: clean
 clean:
 	rm -rf check_toolchain.log
 	rm -rf .stamp_
 	rm -rf a.out
+	make -C temporary-libstdcxx clean
+	make -C temporary-gcc clean
+
+.stamp-temporary-%:
+	make -C temporary-$* OS_PKG_TAG=bs install
+	touch $@
+
+.stamp-remove-temporary-%:
+	make -C temporary-$* OS_PKG_TAG=bs uninstall
+	touch $@
 
 %:
 	make -C "$(OS_SRC_DIR)" OS_PKG_TAG=bs install-$*

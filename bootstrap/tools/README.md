@@ -31,11 +31,26 @@ packages installed on your host system:
 * m4
 * GNU make
 * texinfo
+* bison
+* flex
+* autoconf
+* automake
+* autoconf-archive
+* perl
+* pkg-config or pkgconf
+* gettext
+* help2man
+* patch
+* gawk
 
 Some distributions (such as Debian and RedHat) place the runtime versions of
 these programs in different packages than the development versions. If you
 experience issues building related to missing programs, make sure you have both
 the runtime and development versions of the packages installed.
+
+If you are building on a recent Debian derived distribution, ensure /bin/sh
+points to some shell with a GNU/BSD/BusyBox compliant echo; the default of
+/bin/dash does not. Changing it to point to /bin/bash is known to work.
 
 ## Building
 
@@ -63,7 +78,7 @@ It is recommended to download the source code for the system packages now.
 Downloading the source code does not work in the bootstrap environment without
 additional setup. Use the following command:
 
-    make -C ossrc -I ossrc/include download
+    make -C ossrc -I $PWD/ossrc/include download
 
 ## Setup
 

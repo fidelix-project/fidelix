@@ -11,11 +11,6 @@ PKG_WGET_URLS=\
 PKG_SRC_ARCHIVES=gcc-$(PKG_VERSION).tar.xz
 PKG_SRC_DIR=gcc-$(PKG_VERSION)
 
-# The bootstrap g++ doesn't find the c++ headers on its own
-ifeq ($(OS_PKG_TAG), bs)
-export CXXFLAGS=-I /usr/include/c++/$(PKG_VERSION)
-endif
-
 # Avoid a hard coded sed path
 export SED=sed
 

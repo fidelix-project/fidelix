@@ -30,9 +30,11 @@ download: $(ARCHIVE_FILE)
 $(ARCHIVE_FILE):
 	wget $(URL)
 
-.PHONY: clean tidy
+.PHONY: clean tidy neat scrub
 clean tidy:
 	rm -f "$(ARCHIVE_FILE)"
+
+neat scrub:
 
 .SECONDARY: lists
 lists: $(OS_ARCH)-supported-packages.txt

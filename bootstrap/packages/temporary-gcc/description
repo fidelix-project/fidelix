@@ -1,0 +1,6 @@
+Temporary GNU Compiler Collection
+
+This package contains a temproary version of the GNU C and C++ compilers (gcc
+and g++). It is necessary for the bootstrapping process and should not be used
+outside of the bootstrapping process; /usr/src/base/gcc should be used instead.
+
