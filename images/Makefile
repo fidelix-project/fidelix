@@ -28,7 +28,7 @@ USB_FULL_IMG_SIZE=7800000
 
 ISO_IMG_NAME=$(IMG_BASENAME).iso
 
-.PHONY: all usb iso
+.PHONY: all usb iso src
 all: usb iso src
 usb: $(OUTDIR)/$(USB_IMG_NAME).$(COMP_EXT) 
 iso: $(OUTDIR)/$(IMG_BASENAME).iso
@@ -38,11 +38,15 @@ src: $(OUTDIR)/$(IMG_BASENAME)-src+pkgs.tar.$(COMP_EXT)
 clean:
 	rm -f *.iso *.img *.img.*
 
-$(OUTDIR)/$(USB_IMG_NAME).$(COMP_EXT): $(OUTDIR) package-grub
+.PHONY: world
+world:
+	$(MAKE) -C $(OS_SRC_DIR) world
+
+$(OUTDIR)/$(USB_IMG_NAME).$(COMP_EXT): $(OUTDIR) package-grub world
 	cd support && ./makeusbimage.sh
 
-$(OUTDIR)/$(IMG_BASENAME).iso: $(OUTDIR) $(WORKDIR) \
-	package-xorriso package-grub
+$(OUTDIR)/$(IMG_BASENAME).iso: $(OUTDIR) $(WORKDIR) world \
+	package-xorriso package-grub package-blkid
 # Setup
 	-rm -rf $(WORKDIR)/iso
 	mkdir -p $(WORKDIR)/iso/root
@@ -72,7 +76,7 @@ $(OUTDIR)/$(IMG_BASENAME).iso: $(OUTDIR) $(WORKDIR) \
 	grub-mkrescue -o $@ "--modules=$(GRUB_MODULES)" \
 		$(WORKDIR)/iso/root -- -volid "FIDELIXLIVE"
 
-$(OUTDIR)/$(IMG_BASENAME)-src+pkgs.tar.$(COMP_EXT): $(OUTDIR) $(WORKDIR)
+$(OUTDIR)/$(IMG_BASENAME)-src+pkgs.tar.$(COMP_EXT): $(OUTDIR) $(WORKDIR) world
 	-rm -rf $(WORKDIR)/src+pkgs
 	mkdir -p $(WORKDIR)/src+pkgs/usr/src
 	make -C $(OS_SRC_DIR) tidy
