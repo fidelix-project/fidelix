@@ -7,8 +7,7 @@ PACKAGES=\
 	xorriso \
 	libstdcxx \
 	libedit \
-	pcre \
-	pkgsrc
+	pcre
 
 DEFAULT_PACKAGES=\
 	libuuid \
