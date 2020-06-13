@@ -13,6 +13,7 @@ SELECTED_PACKAGES=\
         libstdcxx \
         libressl \
         system-scripts \
+	libcap \
         busybox \
         make \
         perl \
