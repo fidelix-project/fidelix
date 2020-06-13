@@ -3,17 +3,28 @@ _INC_DIR:=y
 
 include sysconfig.mk
 
-DEFAULT_PACKAGES?=$(PACKAGES)
+DEFAULT_PACKAGES?=$(PACKAGES) $(TARGETS)
 DIR_TARGETS:=$(DEFAULT_PACKAGES) $(SUBDIRS)
-CLEANING_TARGETS:=$(PACKAGES) $(SUBDIRS)
+CLEANING_TARGETS:=$(PACKAGES) $(SUBDIRS) $(TARGETS)
 
-.PHONY: build
+.PHONY: build 
 build: $(addprefix build-,$(DIR_TARGETS))
+world: $(addprefix world-,$(PACKAGES)) $(addprefix worlddir-,$(SUBDIRS))
 
 .PHONY: build-%
 build-%:
 	@[ ! -z "$(DIR_PKG_$*)" ] || (echo $*: package not found && exit 1)
 	make -C $(DIR_PKG_$*)
+
+.PHONY: world-%
+world-%:
+	@[ ! -z "$(DIR_PKG_$*)" ] || (echo $*: package not found && exit 1)
+	make -C $(DIR_PKG_$*)
+
+.PHONY: worlddir-%
+worlddir-%:
+	@[ ! -z "$(DIR_PKG_$*)" ] || (echo $*: package not found && exit 1)
+	make -C $(DIR_PKG_$*) world
 
 .PHONY: tidy-%
 tidy-%:
@@ -87,9 +98,6 @@ uninstall-%:
 .PHONY: uninstall
 uninstall: $(addprefix uninstall-,$(DIR_TARGETS))
 
-
-#undefine PACKAGES
-
 endif
 
 ifndef DIR_INC_$(DIR)
@@ -97,6 +105,12 @@ DIR_INC_$(DIR)=included
 
 ifdef PACKAGES
 $(foreach pkg,$(PACKAGES),$(eval DIR_PKG_$(pkg):=$(OS_SRC_DIR)/$(DIR)/$(pkg)))
+PACKAGES:=
+endif
+
+ifdef TARGETS
+$(foreach pkg,$(TARGETS),$(eval DIR_PKG_$(pkg):=$(OS_SRC_DIR)/$(DIR)/$(pkg)))
+TARGETS:=
 endif
 
 ifdef SUBDIRS

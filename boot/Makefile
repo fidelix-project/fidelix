@@ -5,7 +5,9 @@ PACKAGES=\
 	linux-firmware \
 	grub \
 	blkid \
-	boot-scripts \
+	boot-scripts
+
+TARGETS=\
 	fstab \
 	bootloader
 
