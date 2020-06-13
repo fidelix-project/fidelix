@@ -9,6 +9,7 @@ download verify:
 	@exit
 
 .PHONY: .stamp_build
-.stamp_build_%: .stamp_build
+.stamp_build_%:
+	$(MAKE) .stamp_build
 	touch $@
 
