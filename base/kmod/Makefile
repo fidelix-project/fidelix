@@ -4,7 +4,7 @@ PKG_BUILD=2
 PKG_BUILDSYSTEM=autoconf
 
 # Build time dependencies for this package
-PKG_BUILD_DEPENDS=bison flex
+PKG_BUILD_DEPENDS=musl bison flex
 
 PKG_WGET_URLS=https://www.kernel.org/pub/linux/utils/kernel/kmod/kmod-$(PKG_VERSION).tar.xz
 PKG_SRC_ARCHIVES=kmod-$(PKG_VERSION).tar.xz

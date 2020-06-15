@@ -4,7 +4,7 @@ PKG_BUILD=2
 PKG_BUILDSYSTEM=make
 
 # Build time dependencies for this package
-PKG_BUILD_DEPENDS=
+PKG_BUILD_DEPENDS=musl
 
 PKG_WGET_URLS=https://mirrors.edge.kernel.org/pub/linux/libs/security/linux-privs/libcap2/libcap-$(PKG_VERSION).tar.xz
 PKG_SRC_ARCHIVES=libcap-$(PKG_VERSION).tar.xz
