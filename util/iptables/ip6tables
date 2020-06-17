@@ -1,0 +1,36 @@
+#!/bin/sh
+
+# This is a sample service file. Makes for a great template.
+
+iptables_start () {
+	if [ -r /etc/iptables/rules6 ]; then
+		/usr/sbin/ip6tables-restore < /etc/iptables/rules6 || return 1
+		echo "Successfully loaded /etc/iptables/rules6" > \
+			/run/ip6tables.status
+	else
+		/usr/sbin/ip6tables-restore < /etc/iptables/rules6.default \
+			|| return 1
+		echo "Successfully loaded /etc/iptables/rules6.default" > \
+			/run/ip6tables.status
+	fi
+}
+
+iptables_stop () {
+	/usr/sbin/ip6tables-restore < /etc/iptables/rules6.disabled || return 1
+	rm -f /run/ip6tables.status
+}
+
+Name=ip6tables
+StartCmd="iptables_start"
+StopCmd="iptables_stop"
+RestartCmd="$StartCmd"
+ReloadCmd="$StartCmd"
+StatusCmd="test -r /run/ip6tables.status"
+
+Description="Iptables Firewall Rules (IPv6)"
+DefaultStart=yes
+StartPriority=30
+
+# Do NOT delete this line; it is required for the script to be usable.
+source /etc/init.d/common-core
+

@@ -1,0 +1,36 @@
+#!/bin/sh
+
+# This is a sample service file. Makes for a great template.
+
+iptables_start () {
+	if [ -r /etc/iptables/rules4 ]; then
+		/usr/sbin/iptables-restore < /etc/iptables/rules4 || return 1
+		echo "Successfully loaded /etc/iptables/rules4" > \
+			/run/iptables.status
+	else
+		/usr/sbin/iptables-restore < /etc/iptables/rules4.default \
+			|| return 1
+		echo "Successfully loaded /etc/iptables/rules4.default" > \
+			/run/iptables.status
+	fi
+}
+
+iptables_stop () {
+	/usr/sbin/iptables-restore < /etc/iptables/rules4.disabled || return 1
+	rm -f /run/iptables.status
+}
+
+Name=iptables
+StartCmd="iptables_start"
+StopCmd="iptables_stop"
+RestartCmd="$StartCmd"
+ReloadCmd="$StartCmd"
+StatusCmd="test -r /run/iptables.status"
+
+Description="Iptables Firewall Rules (IPv4)"
+DefaultStart=yes
+StartPriority=30
+
+# Do NOT delete this line; it is required for the script to be usable.
+source /etc/init.d/common-core
+

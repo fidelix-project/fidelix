@@ -7,7 +7,8 @@ PACKAGES=\
 	xorriso \
 	libstdcxx \
 	libedit \
-	pcre
+	pcre \
+	iptables
 
 DEFAULT_PACKAGES=\
 	libuuid \
