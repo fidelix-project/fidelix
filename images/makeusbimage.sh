@@ -60,6 +60,7 @@ echo Installing the operating system source code
 # Avoid copying the source files; we want only the binary packages.
 make -I ${OS_SRC_DIR}/include -C ${OS_SRC_DIR} tidy || die make tidy failed
 make -I ${OS_SRC_DIR}/include -C ${OS_SRC_DIR} SYSTEM=liveusb-${OS_ARCH} SYSROOT=/mnt copy-src || die "Failed to install source code (make copy-src failed)"
+make -I ${OS_SRC_DIR}/include -C ${OS_SRC_DIR} SYSTEM=liveusb-${OS_ARCH} SYSROOT=/mnt copy-pkgs || die "Failed to install packages (make copy-pkgs failed)"
 # Copy the issue file
 cp "$ISSUE_FILE" /mnt/etc/issue || die "Failed to copy issue file ($ISSUE_FILE)"
 echo Unmounting
