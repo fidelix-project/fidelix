@@ -1,8 +1,8 @@
 include sysconfig.mk
 
 QUIET_MAKE=$(MAKE) --no-print-directory
-REPO_CONTENTS=$(OS_PKG_DIR)/$(OS_VERSION)/$(OS_ARCH)/contents
-REPO_DEPENDS=$(OS_PKG_DIR)/$(OS_VERSION)/$(OS_ARCH)/depends
+REPO_CONTENTS=$(OS_RELEASE_PKG_DIR)/contents
+REPO_DEPENDS=$(OS_RELEASE_PKG_DIR)/depends
 
 .PHONY: update-repo-metadata $(REPO_CONTENTS) $(REPO_DEPENDS)
 update-repo-metadata: $(REPO_CONTENTS) $(REPO_DEPENDS)

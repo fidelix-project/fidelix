@@ -8,18 +8,19 @@ OS_NAME:=Fidelix
 OS_NAME_LOWERCASE:=fidelix
 OS_DESCRIPTION:=Fidelix Linux
 OS_MAJOR:=0
-OS_MINOR:=1
+OS_MINOR:=2
 OS_VERSION:=$(OS_MAJOR).$(OS_MINOR)
-OS_RELEASE_NAME:=Arthur
+OS_RELEASE_NAME:=Build20b
 OS_SRC_DIR?=/usr/src
 OS_PKG_DIR?=/var/packages
+OS_RELEASE_PKG_DIR?=$(OS_PKG_DIR)/$(OS_VERSION)-$(OS_PKG_TAG)/$(OS_ARCH)
 
 # Patch and prerelease versioning
 OS_PATCH:=3
 OS_PRERELEASE:=
 
 # Package file configuration
-OS_PKG_TAG:=arthur
+OS_PKG_TAG:=build20b
 PKG_EXTENSION:=tgz
 
 # Set the system architecture
