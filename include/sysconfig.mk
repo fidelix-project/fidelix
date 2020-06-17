@@ -12,6 +12,7 @@ OS_MINOR:=1
 OS_VERSION:=$(OS_MAJOR).$(OS_MINOR)
 OS_RELEASE_NAME:=Arthur
 OS_SRC_DIR?=/usr/src
+OS_PKG_DIR?=/var/packages
 
 # Patch and prerelease versioning
 OS_PATCH:=3

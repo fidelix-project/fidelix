@@ -36,4 +36,5 @@ install-selection: $(addprefix install-,$(SELECTED_PACKAGES))
 
 include sysconfig.mk
 include dir.mk
+include common-rules.mk
 
