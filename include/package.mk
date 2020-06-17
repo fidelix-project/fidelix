@@ -1,22 +1,31 @@
 include sysconfig.mk
 include buildconfig.mk
 
+_PKG_DIR:=$(OS_RELEASE_PKG_DIR)/All
 _PKG_DB_DIR:=$(SYSROOT)/var/pkgdb
 _PKG_FULL_NAME=$(PKG_NAME)-$(PKG_VERSION)-$(OS_ARCH)-$(OS_PKG_TAG)-$(PKG_BUILD)
-_PKG_FILE=$(_PKG_FULL_NAME).$(PKG_EXTENSION)
+_PKG_FILE_BASENAME:=$(_PKG_FULL_NAME).$(PKG_EXTENSION)
+_PKG_FILE:=$(_PKG_DIR)/$(_PKG_FILE_BASENAME)
 PKG_ROOT=$(CURDIR)/pkg_root
 PKG_SRC=$(CURDIR)/pkg_src/$(PKG_SRC_DIR)
 
+CMD_UPGRADEPKG=$(OS_SRC_DIR)/scripts/upgradepkg 
+CMD_MAKEPKG=$(OS_SRC_DIR)/scripts/makepkg 
+CMD_REMOVEPKG=$(OS_SRC_DIR)/scripts/removepkg
+
 ifdef PKG_BUILD_DEPENDS
 $(_PKG_FILE): .stamp_dependencies
-	make .stamp_build_$(_PKG_FULL_NAME)
-	makepkg -d $(PKG_ROOT) -m $(CURDIR) -o $(_PKG_FILE)
 else
 $(_PKG_FILE):
-	make .stamp_build_$(_PKG_FULL_NAME)
-	makepkg -d $(PKG_ROOT) -m $(CURDIR) -o $(_PKG_FILE)
 endif
+	make .stamp_build_$(_PKG_FULL_NAME)
+	install -dm 755 -o root -g root $(_PKG_DIR)
+# Make sure the OS_PKG_DIR is created if need be
+	$(CMD_MAKEPKG) -d $(PKG_ROOT) -m $(CURDIR) -o $(_PKG_FILE)
+# Update the repository metadata
+	$(MAKE) update-repo-metadata
 
+include common-rules.mk
 include buildsystem/$(PKG_BUILDSYSTEM).mk
 
 .PHONY: package
@@ -40,15 +49,23 @@ INSTALLED_PKG_NAME=$(shell ls $(SYSROOT)/var/pkgdb/ | \
 	egrep '^$(PKG_NAME)-[^-]+-[^-]+-[^-]+-[^-]+$$')
 uninstall:
 ifneq "$(INSTALLED_PKG_NAME)" ""
-	removepkg -d $(SYSROOT) $(INSTALLED_PKG_NAME)
+	$(CMD_REMOVEPKG) -d $(SYSROOT) $(INSTALLED_PKG_NAME)
 endif
+
+.PHONY: print-pkgs
+print-pkgs:
+	@echo $(_PKG_FILE_BASENAME)
+
+.PHONY: print-depends
+print-depends:
+	@echo $(PKG_NAME): $(PKG_BUILD_DEPENDS)
 
 .stamp_dependencies: 
 	cd $(OS_SRC_DIR) && make $(addprefix install-,$(PKG_BUILD_DEPENDS)) 
 	touch $@
 
 $(_PKG_DB_DIR)/$(_PKG_FULL_NAME): $(_PKG_FILE)
-	upgradepkg -d $(SYSROOT) -ri $(CURDIR)/$(_PKG_FILE)
+	$(CMD_UPGRADEPKG) -d $(SYSROOT) -ri $(_PKG_FILE)
 
 .PHONY: clean
 clean:
@@ -61,9 +78,7 @@ clean:
 	rm -rf *.tar.gz
 	rm -rf *.tar.xz
 	rm -rf *.tar.bz2
-ifdef PKG_FILES
-	rm -rf $(PKG_FILE)
-endif
+	rm -rf $(_PKG_DIR)/$(PKG_NAME)-*.$(PKG_EXTENSION)
 
 .PHONY: tidy
 tidy:
@@ -87,11 +102,10 @@ neat:
 
 .PHONY: scrub
 scrub:
-	touch .stamp_verify*
 	rm -rf .stamp_*build
 	rm -rf .stamp_dependencies
 	rm -rf pkg_root
 	rm -rf pkg_src
 	rm -rf build
-	rm -rf *.$(PKG_EXTENSION)
+	rm -rf $(_PKG_DIR)/$(PKG_NAME)-*.$(PKG_EXTENSION)
 

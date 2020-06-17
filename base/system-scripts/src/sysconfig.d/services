@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# DESCRIPTION Enable and/or disable system services on starting boot
+# DESCRIPTION Enable and/or disable system services from starting on boot
 
 svc_list () {
 	i=1

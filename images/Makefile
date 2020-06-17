@@ -28,11 +28,18 @@ USB_FULL_IMG_SIZE=7800000
 
 ISO_IMG_NAME=$(IMG_BASENAME).iso
 
-.PHONY: all usb iso src
-all: usb iso src
-usb: $(OUTDIR)/$(USB_IMG_NAME).$(COMP_EXT) 
-iso: $(OUTDIR)/$(IMG_BASENAME).iso
-src: $(OUTDIR)/$(IMG_BASENAME)-src+pkgs.tar.$(COMP_EXT)
+# Image file names
+IMG_USB=$(OUTDIR)/$(USB_IMG_NAME).$(COMP_EXT) 
+IMG_ISO=$(OUTDIR)/$(IMG_BASENAME).iso
+IMG_SRC=$(OUTDIR)/$(IMG_BASENAME)-src.tar.$(COMP_EXT)
+IMG_PKGS=$(OUTDIR)/$(IMG_BASENAME)-pkgs.tar.$(COMP_EXT)
+
+.PHONY: all usb iso src pkgs
+all: usb iso src pkgs
+usb: $(IMG_USB)
+iso: $(IMG_ISO)
+src: $(IMG_SRC)
+pkgs: $(IMG_PKGS)
 
 .PHONY: clean
 clean:
@@ -42,10 +49,10 @@ clean:
 world:
 	$(MAKE) -C $(OS_SRC_DIR) world
 
-$(OUTDIR)/$(USB_IMG_NAME).$(COMP_EXT): $(OUTDIR) package-grub world
+$(IMG_USB): $(OUTDIR) package-grub world
 	cd support && ./makeusbimage.sh
 
-$(OUTDIR)/$(IMG_BASENAME).iso: $(OUTDIR) $(WORKDIR) world \
+$(IMG_ISO): $(OUTDIR) $(WORKDIR) world \
 	package-xorriso package-grub package-blkid
 # Setup
 	-rm -rf $(WORKDIR)/iso
@@ -68,6 +75,7 @@ $(OUTDIR)/$(IMG_BASENAME).iso: $(OUTDIR) $(WORKDIR) world \
 		install-selection
 	make -C $(OS_SRC_DIR) SYSROOT=$(WORKDIR)/iso/root tidy
 	make -C $(OS_SRC_DIR) SYSROOT=$(WORKDIR)/iso/root copy-src
+	make -C $(OS_SRC_DIR) SYSROOT=$(WORKDIR)/iso/root copy-pkgs
 	install -m 644 support/issue.iso $(WORKDIR)/iso/root/etc/issue
 
 # Make the GRUB bootdisk
@@ -76,12 +84,19 @@ $(OUTDIR)/$(IMG_BASENAME).iso: $(OUTDIR) $(WORKDIR) world \
 	grub-mkrescue -o $@ "--modules=$(GRUB_MODULES)" \
 		$(WORKDIR)/iso/root -- -volid "FIDELIXLIVE"
 
-$(OUTDIR)/$(IMG_BASENAME)-src+pkgs.tar.$(COMP_EXT): $(OUTDIR) $(WORKDIR) world
-	-rm -rf $(WORKDIR)/src+pkgs
-	mkdir -p $(WORKDIR)/src+pkgs/usr/src
+$(IMG_SRC): $(OUTDIR) $(WORKDIR)
+	-rm -rf $(WORKDIR)/src
+	mkdir -p $(WORKDIR)/src/usr/src
 	make -C $(OS_SRC_DIR) tidy
-	make -C $(OS_SRC_DIR) SYSROOT=$(WORKDIR)/src+pkgs copy-src
-	tar cf $@ -C "$(WORKDIR)/src+pkgs/usr" src
+	make -C $(OS_SRC_DIR) SYSROOT=$(WORKDIR)/src copy-src
+	tar cf $@ -C "$(WORKDIR)/src/usr" src
+
+$(IMG_PKGS): $(OUTDIR) $(WORKDIR) world
+	-rm -rf $(WORKDIR)/pkgs
+	mkdir -p $(WORKDIR)/pkgs/var/packages
+	make -C $(OS_SRC_DIR) tidy
+	make -C $(OS_SRC_DIR) SYSROOT=$(WORKDIR)/pkgs copy-pkgs
+	tar cf $@ -C "$(WORKDIR)/pkgs/var" packages
 
 $(OUTDIR) $(WORKDIR):
 	mkdir -p $@

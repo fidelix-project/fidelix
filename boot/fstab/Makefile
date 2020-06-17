@@ -6,7 +6,7 @@ $(SYSROOT)/etc/fstab reinstall:
 
 # Don't error on make clean, etc
 download verify build clean scrub neat tidy:
-	exit 0
+	@exit 0
 
 include sysconfig.mk
 

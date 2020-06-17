@@ -54,15 +54,19 @@ $(PKG_SRC_ARCHIVES): pkg_src_prepare
 
 ifneq "$(PKG_VERSION)" "$(SRC_VERSION)"
 
+ifdef PRINT_KERNEL_INFO
 $(info Rebuilding kernel source tree: current tree version ($(SRC_VERSION)) \
 does not match the package version ($(PKG_VERSION)).)
+endif
 
 .SECONDARY: pkg_build_prepare
 pkg_build_prepare: pkg_src_prepare pkg_root_prepare $(PKG_SRC_ARCHIVES)
 
 else
 
+ifdef PRINT_KERNEL_INFO
 $(info Using in place kernel source tree)
+endif
 
 .SECONDARY: pkg_build_prepare
 pkg_build_prepare: pkg_root_prepare

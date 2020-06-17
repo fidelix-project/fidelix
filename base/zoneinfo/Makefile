@@ -3,6 +3,8 @@ PKG_VERSION=2020a
 PKG_BUILD=1
 PKG_BUILDSYSTEM=make
 
+PKG_BUILD_DEPENDS=musl
+
 PKG_WGET_URLS=\
 	https://www.iana.org/time-zones/repository/releases/tzdata$(PKG_VERSION).tar.gz \
 	https://www.iana.org/time-zones/repository/releases/tzcode$(PKG_VERSION).tar.gz

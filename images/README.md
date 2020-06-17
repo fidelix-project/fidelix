@@ -7,19 +7,40 @@ installation images. Images are placed in the ~/images directory.
 Image Formats
 =============
 
-By default, the following images are built:
+By default, the following images are built (the corresponding Make targets are
+in parenthesis):
 
-OS_NAME-OS_VERSION-OS_RELEASE_NAME.img
---------------------------------------
+Full Disk Image (img)
+---------------------
+
+File name: OS_NAME-OS_VERSION-OS_RELEASE_NAME.img.gz
 
 The standard image. Contains the live system and a /usr/src directory
-containting prebuilt binary packages. Useful as an installation image and/or a
+containing prebuilt binary packages. Useful as an installation image and/or a
 live USB image. Can also be dd-ed directly to a destination drive.
 
-OS_NAME-OS_VERSION-OS_RELEASE_NAME.iso
---------------------------------------
+CD Image (iso)
+--------------
 
-The CD ISO image.
+File name: OS_NAME-OS_VERSION-OS_RELEASE_NAME.iso
+
+The bootable ISO9660 CD-ROM image containing a minimal system image, the source
+tree, and the binary packages. They can be written to a DVD and used as both a
+live CD and an installer.
+
+Source Archive (src)
+--------------------
+
+File name: OS_NAME-OS_VERSION-OS_RELEASE_NAME-src.tar.gz
+
+A tar archive containing the system source tree.
+
+Packages Archive (pkgs)
+-----------------------
+
+File name: OS_NAME-OS_VERSION-OS_RELEASE_NAME-pkgs.tar.gz
+
+A tar archive containing the binary packages.
 
 Influential Variables
 =====================

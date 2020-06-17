@@ -98,6 +98,22 @@ uninstall-%:
 .PHONY: uninstall
 uninstall: $(addprefix uninstall-,$(DIR_TARGETS))
 
+.PHONY: print-pkgs-%
+print-pkgs-%:
+	@[ ! -z "$(DIR_PKG_$*)" ] || (echo $*: package not found && exit 1)
+	@make -C $(DIR_PKG_$*) print-pkgs
+
+.PHONY: print-pkgs
+print-pkgs: $(addprefix print-pkgs-,$(PACKAGES) $(SUBDIRS))
+
+.PHONY: print-depends-%
+print-depends-%:
+	@[ ! -z "$(DIR_PKG_$*)" ] || (echo $*: package not found && exit 1)
+	@make -C $(DIR_PKG_$*) print-depends
+
+.PHONY: print-depends
+print-depends: $(addprefix print-depends-,$(PACKAGES) $(SUBDIRS))
+
 endif
 
 ifndef DIR_INC_$(DIR)

@@ -84,7 +84,7 @@ if [ -z "$output_file" ]; then
 	echo "Must specify an output file. See makepkg -h" >&2
 	exit 1
 fi
-pkgname=$(echo $output_file | rev | cut -d . -f 2- | rev)
+pkgname=$(echo $output_file | rev | cut -d . -f 2- | cut -d / -f 1 | rev)
 root_dir=${root_dir:-$PWD}
 meta_dir=${meta_dir:-$root_dir/var/pkgdb/$pkgname}
 meta_destdir=$root_dir/var/pkgdb/$pkgname

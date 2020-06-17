@@ -23,6 +23,12 @@ from-bootstrap:
 copy-src:
 	cp -au $(OS_SRC_DIR)/* $(SYSROOT)/usr/src/
 
+# Handle /var/packages copying
+copy-pkgs:
+	mkdir -p $(SYSROOT)/var/packages/$(OS_VERSION)-$(OS_PKG_TAG)/$(OS_ARCH)
+	cp -au $(OS_PKG_DIR)/$(OS_VERSION)/$(OS_ARCH)/* \
+		$(SYSROOT)/var/packages/$(OS_VERSION)-$(OS_PKG_TAG)/$(OS_ARCH)
+
 # Handle package selections
 ifdef SELECTION
 ifneq ($(wildcard include/selection/$(SELECTION).local.mk), )
@@ -36,4 +42,5 @@ install-selection: $(addprefix install-,$(SELECTED_PACKAGES))
 
 include sysconfig.mk
 include dir.mk
+include common-rules.mk
 
