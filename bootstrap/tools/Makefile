@@ -429,6 +429,7 @@ extract-pkg-%:
 			--disable-multilib \
 			--disable-shared \
 			--disable-bootstrap \
+			--disable-nls \
 			--disable-libgomp \
 			--disable-libssp \
 			--disable-libstdcxx \
