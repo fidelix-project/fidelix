@@ -19,7 +19,7 @@ else
 $(_PKG_FILE):
 endif
 	make .stamp_build_$(_PKG_FULL_NAME)
-	install -dm 755 -o root -g root $(_PKG_DIR)
+	install -dm 755 -o 0 -g 0 $(_PKG_DIR)
 # Make sure the OS_PKG_DIR is created if need be
 	$(CMD_MAKEPKG) -d $(PKG_ROOT) -m $(CURDIR) -o $(_PKG_FILE)
 # Update the repository metadata
