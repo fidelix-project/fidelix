@@ -1,6 +1,6 @@
 PKG_NAME=aaa-directory-skel
 PKG_VERSION=$(OS_VERSION)
-PKG_BUILD=3
+PKG_BUILD=1
 PKG_BUILDSYSTEM=custom
 
 include sysconfig.mk

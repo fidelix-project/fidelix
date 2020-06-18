@@ -1,6 +1,6 @@
 PKG_NAME=kmod
 PKG_VERSION=26
-PKG_BUILD=2
+PKG_BUILD=1
 PKG_BUILDSYSTEM=autoconf
 
 # Build time dependencies for this package
