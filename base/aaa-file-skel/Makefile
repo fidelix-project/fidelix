@@ -1,6 +1,6 @@
 PKG_NAME=aaa-file-skel
 PKG_VERSION=$(OS_VERSION)
-PKG_BUILD=4
+PKG_BUILD=1
 PKG_BUILDSYSTEM=custom
 
 include sysconfig.mk

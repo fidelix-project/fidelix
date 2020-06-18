@@ -1,6 +1,6 @@
 PKG_NAME=libcap
 PKG_VERSION=2.33
-PKG_BUILD=2
+PKG_BUILD=1
 PKG_BUILDSYSTEM=make
 
 # Build time dependencies for this package

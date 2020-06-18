@@ -1,6 +1,6 @@
 PKG_NAME=musl
 PKG_VERSION=1.2.0
-PKG_BUILD=2
+PKG_BUILD=1
 PKG_BUILDSYSTEM=autoconf
 
 # Build time dependencies for this package
