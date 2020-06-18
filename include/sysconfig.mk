@@ -16,7 +16,7 @@ OS_PKG_DIR?=/var/packages
 OS_RELEASE_PKG_DIR?=$(OS_PKG_DIR)/$(OS_VERSION)-$(OS_PKG_TAG)/$(OS_ARCH)
 
 # Patch and prerelease versioning
-OS_PATCH:=3
+OS_PATCH:=0
 OS_PRERELEASE:=
 
 # Package file configuration
