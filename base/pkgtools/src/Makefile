@@ -3,7 +3,7 @@ MANDIR=$(DESTDIR)/share/man
 INSTALL=install
 SED=sed
 
-VERSION:='0.1.0'
+VERSION:='0.1.1'
 
 .PHONY: install
 install: install-bin install-man

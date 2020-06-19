@@ -60,6 +60,8 @@ die () {
 
 # Prints the SHA256 fingerprint of the public key specified by $1
 print_fingerprint () {
+	openssl pkey -pubin -in "$1" -outform DER > /dev/null || \
+		die "Failed to load public key $1"
 	echo -n "SHA256:"
 	openssl pkey -pubin -in "$1" -outform DER | openssl sha256 -c | cut -d ' ' -f 2-
 }
@@ -67,7 +69,7 @@ print_fingerprint () {
 fingerprint () {
 	[ -n "$PUBKEY" ] || die \
 	"Please specify the file containing the public key with -p PUBKEYFILE."
-	print_fingerprint "$PUBKEY"
+	print_fingerprint "$PUBKEY" || die
 }
 
 generate () {
@@ -76,6 +78,11 @@ generate () {
 	[ -n "$PUBKEY" ] || die \
 	"Please specify the file to save the public key to with -p PUBKEYFILE."
 	echo Generating Private Key
+	# Create the key file first and ensure it is not world or group
+	# readable. This must be done before running openssl genrsa, otherwise
+	# the key could be unintentionally readable momentarily.
+	touch "$KEY" || die "Failed to create private key file"
+	chmod 600 "$KEY" || die "Failed to set permissions on private key file"
 	openssl genrsa -out "$KEY" "$BITS" || die \
 		"Failed to generate private key"
 	echo Exporting Public Key
@@ -107,7 +114,7 @@ verify () {
 	"Please specify at least one signature to verify."
 
 	echo -n "Key fingerprint "
-	print_fingerprint "$PUBKEY"
+	print_fingerprint "$PUBKEY" || die
 	for sigfile in $@; do
 		local file=$(echo $sigfile | rev | cut -d . -f 2- | rev)
 		echo -n "$file: "
