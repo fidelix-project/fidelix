@@ -3,13 +3,15 @@ MANDIR=$(DESTDIR)/share/man
 INSTALL=install
 SED=sed
 
-VERSION:='0.0.12'
+VERSION:='0.1.0'
 
 .PHONY: install
 install: install-bin install-man
 
 .PHONY: install-bin
 install-bin:
+	$(INSTALL) -dm 755 $(DESTDIR)/bin
+	$(INSTALL) -m 755 bin/insignia $(DESTDIR)/bin/
 	$(INSTALL) -dm 755 $(DESTDIR)/sbin
 	$(INSTALL) -m 755 sbin/pkgtool $(DESTDIR)/sbin/
 	$(SED)	-i $(DESTDIR)/sbin/pkgtool \
@@ -23,6 +25,8 @@ install-bin:
 
 .PHONY: install-man
 install-man:
+	$(INSTALL) -dm 755 $(MANDIR)/man1
+	$(INSTALL) -m 644 man/insignia.1 $(MANDIR)/man1/
 	$(INSTALL) -dm 755 $(MANDIR)/man8
 	$(INSTALL) -m 644 man/pkgtool.8 $(MANDIR)/man8/
 	$(INSTALL) -m 644 man/installpkg.8 $(MANDIR)/man8/
