@@ -1,0 +1,188 @@
+#!/bin/sh
+
+# Copyright 2020 Scott Court
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# 
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+usage () {
+	cat << EOF
+Usage: insignia <-ghsv> [-b BITS] [-k KEY] [-p PUBKEY] <FILE>...
+
+Signs and verifies cryptographic signatures on files and generates
+cryptographic keys.
+
+Options:
+	-b bits	Causes the RSA keys to be generated with the specified number
+		of bits instead of the default of $BITS.
+	-f	Print the SHA256 fingerprint of the specified public key.
+	-g	Generate an RSA keypair for signing and verification.
+	-h	Displays this help message.
+	-k file	Specifies the file containing the private key for signing files.
+	-p file	Specified the file containing the public key for verifying
+		signatures.
+	-s	Operate in sign mode, signing any files
+	-v	Operate in verify mode and verify the signatures in the
+		specified files.
+
+Example Usage:
+	Sign the file bar.txt using the private key in foo.key:
+		insignia -k foo.key -s bar.txt
+	Verify the signature file bar.txt.sha512sig using the public key in
+	foo.pub:
+		insignia -v -p foo.pub bar.txt.sha512sig
+	Generate a new 8192 bit RSA keypair:
+		insignia -g -b 8192 -k foo.key -p foo.pub
+	Print the fingerprint of the public key foo.pub:
+		insignia -f -p foo.pub
+EOF
+}
+
+die () {
+	echo $@ >&2
+	exit 1
+}
+
+# Prints the SHA256 fingerprint of the public key specified by $1
+print_fingerprint () {
+	echo -n "SHA256:"
+	openssl pkey -pubin -in "$1" -outform DER | openssl sha256 -c | cut -d ' ' -f 2-
+}
+
+fingerprint () {
+	[ -n "$PUBKEY" ] || die \
+	"Please specify the file containing the public key with -p PUBKEYFILE."
+	print_fingerprint "$PUBKEY"
+}
+
+generate () {
+	[ -n "$KEY" ] || die \
+	"Please specify the file to save the private key to with -k KEYFILE."
+	[ -n "$PUBKEY" ] || die \
+	"Please specify the file to save the public key to with -p PUBKEYFILE."
+	echo Generating Private Key
+	openssl genrsa -out "$KEY" "$BITS" || die \
+		"Failed to generate private key"
+	echo Exporting Public Key
+	openssl rsa -in "$KEY" -pubout -out "$PUBKEY" || die \
+		"Failed to export public key"
+	echo Your public key SHA256 fingerprint is:
+	print_fingerprint "$PUBKEY"
+}
+
+sign () {
+	[ -n "$KEY" ] || die \
+	"Please specify the file containing the private key with -k KEYFILE."
+	[ $# -eq 0 ] && die \
+	"Please specify at least one file to sign."
+
+	for file in $@; do
+		openssl dgst -sha512 \
+			-sign "$KEY" \
+			-out "$file.sha512sig" \
+			"$file" || ( rm "$file.sha512sig" && \
+				die "Failed to sign $file" )
+	done
+}
+
+verify () {
+	[ -n "$PUBKEY" ] || die \
+	"Please specify the file containing the public key with -p PUBKEYFILE."
+	[ $# -eq 0 ] && die \
+	"Please specify at least one signature to verify."
+
+	echo -n "Key fingerprint "
+	print_fingerprint "$PUBKEY"
+	for sigfile in $@; do
+		local file=$(echo $sigfile | rev | cut -d . -f 2- | rev)
+		echo -n "$file: "
+		openssl dgst -sha512 \
+			-verify "$PUBKEY" \
+			-signature "$sigfile" \
+			$file || exit 1
+	done
+}
+
+# Default values
+BITS=4096
+
+# Parse the command line arguments
+O=`getopt b:fghk:p:sv $@` || exit 1
+eval set -- "$O"
+while true; do
+	case "$1" in
+	-b)
+		BITS=$2
+		shift 2
+		;;
+	-f)
+		MODE=fingerprint
+		shift 1
+		;;
+	-g)
+		MODE=generate
+		shift 1
+		;;
+	-h)
+		usage
+		exit
+		;;
+	-k)
+		KEY=$2
+		shift 2
+		;;
+	-p)
+		PUBKEY=$2
+		shift 2
+		;;
+	-s)
+		MODE=sign
+		shift 1
+		;;
+	-v)
+		MODE=verify
+		shift 1
+		;;
+	--)
+		break
+		;;
+	*)
+		exit 1
+		;;
+	esac
+done
+
+# Switch to the appropriate main function based off the mode
+shift 1
+case $MODE in
+	fingerprint)
+		fingerprint $@
+		;;
+	generate)
+		generate $@
+		;;
+	sign)
+		sign $@
+		;;
+	verify)
+		verify $@
+		;;
+	*)
+		die "Please specify a mode of operation with <-fgsv>."
+esac
+

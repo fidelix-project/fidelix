@@ -1,0 +1,66 @@
+.TH INSIGNIA "1" "June 2020" "Fidelix" "User Commands"
+.SH NAME
+insignia \- create and verify cryptographic signatures
+.SH SYNOPSIS
+.B insignia
+\fI\,<-ghsv> \/\fR[\fI\,-b BITS\/\fR] [\fI\,-k KEY\/\fR] [\fI\,-p PUBKEY\/\fR] \fI\,<FILE>\/\fR...
+.SH DESCRIPTION
+Insignia signs and verifies cryptographic signatures on files and generates
+cryptographic keys.
+
+.PP
+Options:
+.TP
+\fB\-b bits\fR Causes the RSA keys to be generated with the specified number
+of bits instead of the default of 4096.
+.TP
+\fB\-f\fR
+Print the SHA256 fingerprint of the specified public key.
+.TP
+\fB\-g\fR
+Generate an RSA keypair for signing and verification.
+.TP
+\fB\-h\fR
+Displays this help message.
+.TP
+\fB\-k keyfile\fR
+Specifies the file containing the private key for signing files.
+.TP
+\fB\-p pubkeyfile\fR
+Specified the file containing the public key for verifying
+signatures.
+.TP
+\fB\-s\fR
+Operate in sign mode, signing any files
+.TP
+\fB\-v\fR
+Operate in verify mode and verify the signatures in the
+specified files.
+
+.SH EXAMPLE USAGE
+.TP
+Sign the file bar.txt using the private key in foo.key:
+.IP
+insignia \fB\-k\fR foo.key \fB\-s\fR bar.txt
+.TP
+Verify the signature file bar.txt.sha512sig using the public key in foo.pub:
+.IP
+insignia \fB\-v\fR \fB\-p\fR foo.pub bar.txt.sha512sig
+.TP
+Generate a new 8192 bit RSA keypair:
+.IP
+insignia \fB\-g\fR \fB\-b\fR 8192 \fB\-k\fR foo.key \fB\-p\fR foo.pub
+.TP
+Print the fingerprint of the public key foo.pub:
+.IP
+insignia \fB\-f\fR \fB\-p\fR foo.pub
+
+.SH AUTHOR
+Insignia was written by Scott Court (z5t1@z5t1.com).
+
+.SH SEE ALSO
+.BR openssl(1)
+
+.SH HISTORY
+Insignia first appeared in Fidelix 0.2.
+
