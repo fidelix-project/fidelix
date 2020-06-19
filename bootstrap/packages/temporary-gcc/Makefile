@@ -1,4 +1,4 @@
-PKG_NAME=gcc
+PKG_NAME=temporary-gcc
 PKG_VERSION=9.3.0
 PKG_BUILD=1
 PKG_BUILDSYSTEM=autoconf-dedicated-builddir

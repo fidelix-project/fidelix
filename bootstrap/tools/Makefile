@@ -557,6 +557,6 @@ chroot: prepare-chroot
 		'export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$(PREFIX)/sbin:$(PREFIX)/bin; \
 		[ -e /proc/self ] || mount -t proc proc /proc; \
 		[ -d /sys/kernel ] || mount -t sysfs sys /sys; \
-		mdev -s; mdev -d; \
+		mdev -s; mdev -d; chmod 666 /dev/null; \
 		/bin/sh'
 

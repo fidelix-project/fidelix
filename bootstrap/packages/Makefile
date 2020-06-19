@@ -22,6 +22,7 @@ BSPACKAGES=\
 	.stamp-temporary-gcc \
 	gcc \
 	.stamp-remove-temporary-libstdcxx \
+	.stamp-remove-temporary-gcc \
 	busybox \
 	make \
 	perl \
