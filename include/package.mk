@@ -42,7 +42,8 @@ install:
 endif
 
 .PHONY: reinstall
-reinstall: $(_PKG_DB_DIR)/$(_PKG_FULL_NAME)
+reinstall: $(_PKG_FILE)
+	$(CMD_UPGRADEPKG) -d $(SYSROOT) -ri $(_PKG_FILE)
 
 .PHONY: uninstall
 INSTALLED_PKG_NAME=$(shell ls $(SYSROOT)/var/pkgdb/ | \
