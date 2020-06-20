@@ -29,17 +29,21 @@ USB_FULL_IMG_SIZE=7800000
 ISO_IMG_NAME=$(IMG_BASENAME).iso
 
 # Image file names
-IMG_USB=$(OUTDIR)/$(USB_IMG_NAME).$(COMP_EXT) 
-IMG_ISO=$(OUTDIR)/$(IMG_BASENAME).iso
-IMG_SRC=$(OUTDIR)/$(IMG_BASENAME)-src.tar.$(COMP_EXT)
-IMG_PKGS=$(OUTDIR)/$(IMG_BASENAME)-pkgs.tar.$(COMP_EXT)
+IMG_USB=	$(OUTDIR)/$(USB_IMG_NAME).$(COMP_EXT) 
+IMG_ISO=	$(OUTDIR)/$(IMG_BASENAME).iso
+IMG_SRC=	$(OUTDIR)/$(IMG_BASENAME)-src.tar.$(COMP_EXT)
+IMG_PKGS=	$(OUTDIR)/$(IMG_BASENAME)-pkgs.tar.$(COMP_EXT)
+IMG_ROOTFS=	$(OUTDIR)/$(IMG_BASENAME)-rootfs.tar.$(COMP_EXT)
+IMG_MINIROOTFS=	$(OUTDIR)/$(IMG_BASENAME)-minirootfs.tar.$(COMP_EXT)
 
-.PHONY: all usb iso src pkgs
-all: usb iso src pkgs
+.PHONY: all usb iso src pkgs rootfs minirootfs
+all: $(ARCH_IMGFMTS)
 usb: $(IMG_USB)
 iso: $(IMG_ISO)
 src: $(IMG_SRC)
 pkgs: $(IMG_PKGS)
+rootfs: $(IMG_ROOTFS)
+minirootfs: $(IMG_MINIROOTFS)
 
 .PHONY: clean
 clean:
@@ -97,6 +101,22 @@ $(IMG_PKGS): $(OUTDIR) $(WORKDIR) world
 	make -C $(OS_SRC_DIR) tidy
 	make -C $(OS_SRC_DIR) SYSROOT=$(WORKDIR)/pkgs copy-pkgs
 	tar cf $@ -C "$(WORKDIR)/pkgs/var" packages
+
+$(IMG_ROOTFS): $(OUTDIR) $(WORKDIR) package-bsdtar
+	rm -rf $(WORKDIR)/rootfs
+	mkdir -p $(WORKDIR)/rootfs
+	make -C $(OS_SRC_DIR) SYSROOT=$(WORKDIR)/rootfs SYSTEM=chroot install
+	bsdtar cZf $@ -C "$(WORKDIR)/rootfs" --xattrs .
+
+$(IMG_MINIROOTFS): $(OUTDIR) $(WORKDIR) package-bsdtar
+	rm -rf $(WORKDIR)/minirootfs
+	mkdir -p $(WORKDIR)/minirootfs
+	make -C $(OS_SRC_DIR) \
+		SYSROOT=$(WORKDIR)/minirootfs \
+		SYSTEM=chroot \
+		SELECTION=minimal \
+		install-selection
+	bsdtar cZf $@ -C "$(WORKDIR)/minirootfs" --xattrs .
 
 $(OUTDIR) $(WORKDIR):
 	mkdir -p $@
