@@ -8,14 +8,16 @@ PACKAGES=\
 	libstdcxx \
 	libedit \
 	pcre \
-	iptables
+	iptables \
+	bsdtar
 
 DEFAULT_PACKAGES=\
 	libuuid \
 	gptfdisk \
 	xorriso \
 	libedit \
-	pcre
+	pcre \
+	iptables
 
 # Non-package subdirectories contained in this directory that should be
 # included when searching for packages

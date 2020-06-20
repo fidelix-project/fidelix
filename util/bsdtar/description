@@ -1,0 +1,12 @@
+BSD Tar archiving utility
+
+This package contains bsdtar, a high-efficiency libarchive front-end which
+is [almost] wholly compatible with the ubiquitous GNU tar.  It supports
+advanced features many other implementations do not.
+
+This package is not installed by default, and many systems will have no issues
+using the BusyBox tar; however, BusyBox tar does not support extended file
+system attributes (such as setcap binaries and xattrs). Support for these is
+necessary when creating and extracting root filesystem tarballs so that system
+files have the attributes they need to function properly and securely.
+
