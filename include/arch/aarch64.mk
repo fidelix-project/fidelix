@@ -14,3 +14,6 @@ ARCH_KERNEL=aarch64
 # The architecture tag that appears in the dynamic linker: /lib/ld-musl-*.so.1
 DYNLD_ARCH=aarch64
 
+# The image file formats to build by default
+ARCH_IMGFMTS=src pkgs rootfs minirootfs
+
