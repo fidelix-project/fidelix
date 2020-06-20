@@ -45,7 +45,7 @@ File name: OS_NAME-OS_VERSION-OS_RELEASE_NAME-pkgs.tar.gz
 A tar archive containing the binary packages, suitable for extracting to /var.
 
 Root Filesystem (rootfs)
-========================
+------------------------
 
 File name: OS_NAME-OS_VERSION-OS_RELEASE_NAME-rootfs.tar.gz
 
@@ -59,7 +59,7 @@ tar implementation that supports xattrs and capabilities. BSD tar supports
 these and can be found in /usr/src/util/bsdtar; GNU tar and BusyBox tar do not.
 
 Minimal Root Filesystem (minirootfs)
-====================================
+------------------------------------
 
 File name: OS_NAME-OS_VERSION-OS_RELEASE_NAME-minirootfs.tar.gz
 
