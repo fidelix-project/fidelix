@@ -19,5 +19,6 @@ SELECTED_PACKAGES=\
         make \
         zoneinfo \
         ncurses \
+	release-files \
 	boot
 
