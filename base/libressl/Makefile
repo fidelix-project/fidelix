@@ -1,6 +1,6 @@
 PKG_NAME=libressl
 PKG_VERSION=3.1.3
-PKG_BUILD=1
+PKG_BUILD=2
 PKG_BUILDSYSTEM=autoconf
 
 # Build time dependencies for this package
