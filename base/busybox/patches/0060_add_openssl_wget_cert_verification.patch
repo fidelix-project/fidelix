@@ -1,0 +1,73 @@
+--- busybox-1.31.1-orig/networking/wget.c
++++ busybox-1.31.1/networking/wget.c
+@@ -101,8 +101,10 @@
+ //config:	OpenSSL has a simple SSL client for debug purposes.
+ //config:	If you select this option, wget will effectively run:
+ //config:	"openssl s_client -quiet -connect hostname:443
+-//config:	-servername hostname 2>/dev/null" and pipe its data
+-//config:	through it. -servername is not used if hostname is numeric.
++//config:	-servername hostname -verify 100 -verify_return_error
++//config:	-verify_hostname hostname 2>/dev/null" and pipe its data
++//config:	through it. If hostname is numeric, -servername is not used
++//config:	and -verify_ip is used in place of -verify_hostname.
+ //config:	Note inconvenient API: host resolution is done twice,
+ //config:	and there is no guarantee openssl's idea of IPv6 address
+ //config:	format is the same as ours.
+@@ -124,10 +126,11 @@
+ //usage:	IF_FEATURE_WGET_LONG_OPTIONS(
+ //usage:       "[-c|--continue] [--spider] [-q|--quiet] [-O|--output-document FILE]\n"
+ //usage:       "	[-o|--output-file FILE] [--header 'header: value'] [-Y|--proxy on/off]\n"
++//usage:       "	[--no-check-certificate] [-P DIR] [-S|--server-response]\n"
+ /* Since we ignore these opts, we don't show them in --help */
+-/* //usage:    "	[--no-check-certificate] [--no-cache] [--passive-ftp] [-t TRIES]" */
++/* //usage:    "	[--no-cache] [--passive-ftp] [-t TRIES]" */
+ /* //usage:    "	[-nv] [-nc] [-nH] [-np]" */
+-//usage:       "	[-P DIR] [-S|--server-response] [-U|--user-agent AGENT]" IF_FEATURE_WGET_TIMEOUT(" [-T SEC]") " URL..."
++//usage:       "	[-U|--user-agent AGENT]" IF_FEATURE_WGET_TIMEOUT(" [-T SEC]") " URL..."
+ //usage:	)
+ //usage:	IF_NOT_FEATURE_WGET_LONG_OPTIONS(
+ //usage:       "[-cq] [-O FILE] [-o FILE] [-Y on/off] [-P DIR] [-S] [-U AGENT]"
+@@ -137,7 +140,7 @@
+ //usage:       "Retrieve files via HTTP or FTP\n"
+ //usage:	IF_FEATURE_WGET_LONG_OPTIONS(
+ //usage:     "\n	--spider	Only check URL existence: $? is 0 if exists"
+-///////:     "\n	--no-check-certificate	Don't validate the server's certificate"
++//usage:     "\n	--no-check-certificate	Don't validate the server's certificate"
+ //usage:	)
+ //usage:     "\n	-c		Continue retrieval of aborted transfer"
+ //usage:     "\n	-q		Quiet"
+@@ -662,7 +665,7 @@
+ 	pid = xvfork();
+ 	if (pid == 0) {
+ 		/* Child */
+-		char *argv[8];
++		char *argv[13];
+ 
+ 		close(sp[0]);
+ 		xmove_fd(sp[1], 0);
+@@ -688,6 +691,25 @@
+ 		if (!is_ip_address(servername)) {
+ 			argv[5] = (char*)"-servername";
+ 			argv[6] = (char*)servername;
++		}
++		else {
++			argv[5] = (char*)"";
++			argv[6] = (char*)"";
++		}
++
++		/* Abort on bad server certificate */
++		if (!(option_mask32 & WGET_OPT_NO_CHECK_CERT)) {
++			argv[7] = (char*)"-verify";
++			argv[8] = (char*)"100";
++			argv[9] = (char*)"-verify_return_error";
++			if (!is_ip_address(servername)) {
++				argv[10] = (char*)"-verify_hostname";
++				argv[11] = (char*)servername;
++			}
++			else {
++				argv[10] = (char*)"-verify_ip";
++				argv[11] = (char*)host;
++			}
+ 		}
+ 
+ 		BB_EXECVP(argv[0], argv);
