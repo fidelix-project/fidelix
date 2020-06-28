@@ -22,7 +22,6 @@ bootstrap: package-bsdtar
 
 setup:
 	install -m 644 mk.fidelix.conf $(PREFIX)/etc/mk.fidelix.conf
-	cp -R overlay/* $(PREFIX_BASE)/pkgsrc/
 	cp -R usr-pkg-skel/* $(PREFIX)/
 	
 
