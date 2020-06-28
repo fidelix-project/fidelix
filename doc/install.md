@@ -98,7 +98,9 @@ use, consult the documentation for your system in `./doc/systems/`.
 ### If your Source Tree is not in /usr/src
 
 If your Fidelix source tree is not located at /usr/src, set the `OS_SRC_DIR`
-environment variable to the root directory of your source tree.
+environment variable to the root directory of your source tree. If you are
+using the installation media or a standard Fidelix installation, you do not
+need to set `OS_SRC_DIR`.
 
 ### Installing the Base System
 
