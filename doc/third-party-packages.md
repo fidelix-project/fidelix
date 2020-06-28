@@ -24,7 +24,7 @@ on Fidelix.
 To build a pkgsrc package from source, navigate over to the appropriate package directory under `/usr/pkgsrc`. Then run `bmake install`. Note that you **must**
 use `bmake` instead of `make` when building pkgsrc provided packages.
 
-# Installing Prebuild Binary Packages
+# Installing Prebuilt Binary Packages
 
 This capability will be forecoming in the future for select packages on select
 architectures. In the meantime, it will be necessary to build third party

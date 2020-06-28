@@ -66,7 +66,7 @@ Support for this will be forthcoming in the future.
 
 # Notes
 
-## Updateing a New Installation
+## Updating a New Installation
 
 When updating a new installation, it is a good idea to set the
 `NEW_FILE_ACTION` variable to either `REPLACE` or `OVERWRITE`. This ensures
