@@ -1,0 +1,14 @@
+#!/bin/sh
+
+Name=ntpd
+PidFile=/run/ntpd.pid
+StartCmd="/usr/sbin/ntpd -p $PidFile"
+StatusCmd="/usr/sbin/ntpctl -s status"
+
+Description="OpenNTPD Daemon"
+DefaultStart=no
+StartPriority=40
+
+# Do NOT delete this line; it is required for the script to be usable.
+source /etc/init.d/common-core
+
