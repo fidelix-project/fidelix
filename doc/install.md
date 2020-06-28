@@ -1,23 +1,42 @@
 Fidelix Installation Guide
 ================================================================================
 
-There are several different ways Fidelix can be installed. A few of these are
-documented below.
+There are several different ways Fidelix can be installed. The most common ones
+are documented below.
 
-# Installing from an Existing Fidelix Installation
+* [From the Installation Media or an Existing Fidelix Installation](#installing-from-the-installation-media-or-an-existing-fidelix-installation)
+* [From the Rootfs Tarballs](#from-the-rootfs-tarballs)
+* [Bootstrapping from an Existing Linux Distribution](#bootstrapping-from-an-existing-linux-distribution)
 
-This method can be used to install Fidelix from the installation images or from
-an existing system.
+# Installing from the Installation Media or an Existing Fidelix Installation
 
-## Mounting the Installation Target Devices
+This method can be used to install Fidelix from the installation media images
+(.img or .iso) or from an existing system.
 
-Mount all of the drives and partitions that you are installing Fidelix to
-under `/mnt` using the heirarchy you want for the final system.
+## Formatting and Partitioning
+
+Partition and formatting must be done manually. For partitioning, Fidelix
+provides the following utilties:
+
+* fdisk
+* gdisk
+* cgdisk
+
+For formatting the partitions, Fidelix provides the following options on the
+installer:
+
+* mkfs.ext2
+* mkfs.minix
+* mkfs.reiser
+* mkfs.vfat
+
+Note that Fidelix can be installed to disks formatted using many other
+filesystems if the filesystem is already formatted. 
 
 ### Note on Partitioning
 
-For security purposes, it is recommended that you do not put the entire system
-on a single partition for a couple of reasons:
+For security purposes, it is recommended (but not required) that you do not put
+the entire system on a single partition for a couple of reasons:
 
 * Security: some default security options (such as `nosuid`) are enabled by
   default for most partitions, but may need to be disabled for certain
@@ -61,6 +80,11 @@ The following additional partitions may be desirable for certain systems:
 boot (currently the default on all systems), make sure you also create a BIOS
 Boot Partition with partition type `EF02`. Otherwise, the bootloader
 installation will fail.
+
+## Mounting the Installation Target Devices
+
+Mount all of the drives and partitions that you are installing Fidelix to
+under `/mnt` using the heirarchy you want for the final system.
 
 ## Installing the System Software
 
@@ -123,9 +147,41 @@ by running:
 After performing the configuration it will be necessary to reboot your system
 a final time for the configuration to take full effect.
 
+# From the Rootfs Tarballs
+
+This installation method can be used to create a chroot or a container or
+install to an existing partition (bootloader and kernel will need to be
+configured separately) from the rootfs.tar.gz and minirootfs.tar.gz images.
+
+## Note about Extracting
+
+In order for the root filesystem to be created with proper permissions,
+attributes, and capabilities this archive must be extracted with a tar
+implementation that supports xattrs and capabilities. BSD tar supports these;
+GNU tar and BusyBox tar do not. On Fidelix, BSD tar can be found at
+/usr/src/util/bsdtar. On most other Linux distributions the bsdtar package can
+be installed from the standard repositories.
+
+## Extract the Root Filesystem
+
+Navigate to the directory that you want to be the root of the filesystem. Then
+extract the tarball:
+
+    bsdtar xf fidelix-0.2.0-x86_64-build20b-rootfs.tar.gz
+
+## Entering the new System
+
+At this point, the new system root will be ready for usage; it is safe to boot
+to it/start the container/enter the chroot.
+
+If choosing to chroot, the following command sequence is known to work well:
+
+    chroot .
+    /etc/rc.d/rc
+
 # Bootstrapping from an Existing Linux Distribution
 
-This method of installation is very similar to
+This method of installation far more advanced and is very similar to
 [Automated Linux from Scratch](http://www.linuxfromscratch.org/alfs/). It
 starts by building a bootstrap system and then using that inside a chroot to
 build the system. A big advantage of this method is that it allows for Fidelix
