@@ -26,7 +26,7 @@ copy-src:
 # Handle /var/packages copying
 copy-pkgs:
 	mkdir -p $(SYSROOT)/var/packages/$(OS_VERSION)-$(OS_PKG_TAG)/$(OS_ARCH)
-	cp -au $(OS_PKG_DIR)/$(OS_VERSION)/$(OS_ARCH)/* \
+	cp -au $(OS_PKG_DIR)/$(OS_VERSION)-$(OS_PKG_TAG)/$(OS_ARCH)/* \
 		$(SYSROOT)/var/packages/$(OS_VERSION)-$(OS_PKG_TAG)/$(OS_ARCH)
 
 # Handle package selections
