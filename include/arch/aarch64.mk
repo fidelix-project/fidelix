@@ -17,3 +17,6 @@ DYNLD_ARCH=aarch64
 # The image file formats to build by default
 ARCH_IMGFMTS=src pkgs rootfs minirootfs
 
+# Packages to skip building on this architecture when running `make world`
+ARCH_SKIP_PKGS=linux-generic linux-firmware
+
