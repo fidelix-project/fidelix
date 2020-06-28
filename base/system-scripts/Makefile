@@ -1,6 +1,6 @@
 PKG_NAME=system-scripts
 PKG_VERSION=$(OS_VERSION)
-PKG_BUILD=1
+PKG_BUILD=2
 PKG_BUILDSYSTEM=custom
 
 # Build time dependencies for this package

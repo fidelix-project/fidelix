@@ -127,7 +127,7 @@ cc_status () {
 			echo "Not Running"
 			exit 1
 		fi
-	elif eval "$StatusCmd"; then
+	elif eval "$StatusCmd > /dev/null 2>&1"; then
 		echo "Running"
 		exit 0
 	else
