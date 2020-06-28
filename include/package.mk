@@ -14,7 +14,7 @@ CMD_MAKEPKG=$(OS_SRC_DIR)/scripts/makepkg
 CMD_REMOVEPKG=$(OS_SRC_DIR)/scripts/removepkg
 
 ifdef PKG_BUILD_DEPENDS
-$(_PKG_FILE): .stamp_dependencies
+$(_PKG_FILE): | .stamp_dependencies
 else
 $(_PKG_FILE):
 endif
