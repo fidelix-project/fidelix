@@ -13,6 +13,13 @@ CMD_UPGRADEPKG=$(OS_SRC_DIR)/scripts/upgradepkg
 CMD_MAKEPKG=$(OS_SRC_DIR)/scripts/makepkg 
 CMD_REMOVEPKG=$(OS_SRC_DIR)/scripts/removepkg
 
+ifneq ($(filter $(PKG_NAME), $(ARCH_SKIP_PKGS)), )
+.PHONY: default
+default:
+	@echo $(PKG_NAME) is not supported on $(OS_ARCH). To try to build it anyway,
+	@echo explicitly run make install.
+endif
+
 ifdef PKG_BUILD_DEPENDS
 $(_PKG_FILE): | .stamp_dependencies
 else
