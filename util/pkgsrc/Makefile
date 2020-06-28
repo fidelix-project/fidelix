@@ -1,8 +1,9 @@
 include sysconfig.mk
+include depends.mk
 
 VERSION=stable
-URL=https://cdn.netbsd.org/pub/pkgsrc/$(VERSION)/pkgsrc.tar.xz
-ARCHIVE_FILE=pkgsrc.tar.xz
+URL=https://github.com/fidelix-project/pkgsrc/archive/master.tar.gz
+ARCHIVE_FILE=master.tar.gz
 PREFIX=/usr/pkg
 PREFIX_BASE=/usr
 
@@ -13,8 +14,9 @@ update: | extract setup
 extract: download
 	install -dm 755 $(PREFIX)
 	tar xf $(ARCHIVE_FILE) -C $(PREFIX_BASE)
+	cd $(PREFIX_BASE) && mv pkgsrc-master pkgsrc
 
-bootstrap:
+bootstrap: package-bsdtar
 	cd $(PREFIX_BASE)/pkgsrc/bootstrap && ./bootstrap
 	cat mk.tail.conf >> $(PREFIX)/etc/mk.conf
 
