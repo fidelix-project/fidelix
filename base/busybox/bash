@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# A shim for bash so that if the real Bash is installed it will be used, but if
+# not BusyBox's ash will be used. Many applications (including some in the base
+# system) require the presence of /bin/bash to work, but some applications in
+# pkgsrc work only if /bin/bash is pointing to the real Bash shell. This
+# satisifes both cases. Also check in /usr/local in case Bash is installed
+# there.
+
+for shell in /usr/local/bin/bash /usr/pkg/bin/bash /bin/sh; do
+	[ -x $shell ] && exec $shell $@
+done
+
+echo /bin/sh: file not found or not executable 2>&1
+exit 1
+

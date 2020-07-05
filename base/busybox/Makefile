@@ -1,6 +1,6 @@
 PKG_NAME=busybox
 PKG_VERSION=1.31.1
-PKG_BUILD=2
+PKG_BUILD=3
 PKG_BUILDSYSTEM=custom-common
 
 # Build time dependencies for this package
@@ -57,6 +57,9 @@ endif
 	cp man5/*.5 $(PKG_ROOT)/usr/share/man/man5
 	install -dm 755 $(PKG_ROOT)/usr/share/doc/busybox
 	cp $(PKG_SRC)/docs/mdev.txt $(PKG_ROOT)/usr/share/doc/busybox/
+
+# Install the Bash shim
+	install -m 755 bash $(PKG_ROOT)/bin/
 
 # Do not delete
 	touch $@
