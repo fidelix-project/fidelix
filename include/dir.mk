@@ -14,22 +14,22 @@ world: $(addprefix world-,$(PACKAGES)) $(addprefix worlddir-,$(SUBDIRS))
 .PHONY: build-%
 build-%:
 	@[ ! -z "$(DIR_PKG_$*)" ] || (echo $*: package not found && exit 1)
-	make -C $(DIR_PKG_$*)
+	$(MAKE) -C $(DIR_PKG_$*)
 
 .PHONY: world-%
 world-%:
 	@[ ! -z "$(DIR_PKG_$*)" ] || (echo $*: package not found && exit 1)
-	make -C $(DIR_PKG_$*)
+	$(MAKE) -C $(DIR_PKG_$*)
 
 .PHONY: worlddir-%
 worlddir-%:
 	@[ ! -z "$(DIR_PKG_$*)" ] || (echo $*: package not found && exit 1)
-	make -C $(DIR_PKG_$*) world
+	$(MAKE) -C $(DIR_PKG_$*) world
 
 .PHONY: tidy-%
 tidy-%:
 	@[ ! -z "$(DIR_PKG_$*)" ] || (echo $*: package not found && exit 1)
-	make -C $(DIR_PKG_$*) tidy
+	$(MAKE) -C $(DIR_PKG_$*) tidy
 
 .PHONY: tidy
 tidy: $(addprefix tidy-,$(CLEANING_TARGETS))
@@ -37,7 +37,7 @@ tidy: $(addprefix tidy-,$(CLEANING_TARGETS))
 .PHONY: neat-%
 neat-%:
 	@[ ! -z "$(DIR_PKG_$*)" ] || (echo $*: package not found && exit 1)
-	make -C $(DIR_PKG_$*) neat
+	$(MAKE) -C $(DIR_PKG_$*) neat
 
 .PHONY: neat
 neat: $(addprefix neat-,$(CLEANING_TARGETS))
@@ -45,7 +45,7 @@ neat: $(addprefix neat-,$(CLEANING_TARGETS))
 .PHONY: scrub-%
 scrub-%:
 	@[ ! -z "$(DIR_PKG_$*)" ] || (echo $*: package not found && exit 1)
-	make -C $(DIR_PKG_$*) scrub
+	$(MAKE) -C $(DIR_PKG_$*) scrub
 
 .PHONY: scrub
 scrub: $(addprefix scrub-,$(CLEANING_TARGETS))
@@ -53,7 +53,7 @@ scrub: $(addprefix scrub-,$(CLEANING_TARGETS))
 .PHONY: clean-%
 clean-%:
 	@[ ! -z "$(DIR_PKG_$*)" ] || (echo $*: package not found && exit 1)
-	make -C $(DIR_PKG_$*) clean
+	$(MAKE) -C $(DIR_PKG_$*) clean
 
 .PHONY: clean
 clean: $(addprefix clean-,$(CLEANING_TARGETS))
@@ -61,7 +61,7 @@ clean: $(addprefix clean-,$(CLEANING_TARGETS))
 .PHONY: download-%
 download-%:
 	@[ ! -z "$(DIR_PKG_$*)" ] || (echo $*: package not found && exit 1)
-	make -C $(DIR_PKG_$*) download
+	$(MAKE) -C $(DIR_PKG_$*) download
 
 .PHONY: download
 download: $(addprefix download-,$(DIR_TARGETS))
@@ -69,7 +69,7 @@ download: $(addprefix download-,$(DIR_TARGETS))
 .PHONY: verify-%
 verify-%:
 	@[ ! -z "$(DIR_PKG_$*)" ] || (echo $*: package not found && exit 1)
-	make -C $(DIR_PKG_$*) verify
+	$(MAKE) -C $(DIR_PKG_$*) verify
 
 .PHONY: verify
 verify: $(addprefix verify-,$(DIR_TARGETS))
@@ -77,7 +77,7 @@ verify: $(addprefix verify-,$(DIR_TARGETS))
 .PHONY: install-%
 install-%:
 	@[ ! -z "$(DIR_PKG_$*)" ] || (echo $*: package not found && exit 1)
-	make -C $(DIR_PKG_$*) install
+	$(MAKE) -C $(DIR_PKG_$*) install
 
 .PHONY: install
 install: $(addprefix install-,$(DIR_TARGETS))
@@ -85,7 +85,7 @@ install: $(addprefix install-,$(DIR_TARGETS))
 .PHONY: reinstall-%
 reinstall-%:
 	@[ ! -z "$(DIR_PKG_$*)" ] || (echo $*: package not found && exit 1)
-	make -C $(DIR_PKG_$*) reinstall
+	$(MAKE) -C $(DIR_PKG_$*) reinstall
 
 .PHONY: reinstall
 reinstall: $(addprefix reinstall-,$(DIR_TARGETS))
@@ -93,7 +93,7 @@ reinstall: $(addprefix reinstall-,$(DIR_TARGETS))
 .PHONY: uninstall-%
 uninstall-%:
 	@[ ! -z "$(DIR_PKG_$*)" ] || (echo $*: package not found && exit 1)
-	make -C $(DIR_PKG_$*) uninstall
+	$(MAKE) -C $(DIR_PKG_$*) uninstall
 
 .PHONY: uninstall
 uninstall: $(addprefix uninstall-,$(DIR_TARGETS))
@@ -101,7 +101,7 @@ uninstall: $(addprefix uninstall-,$(DIR_TARGETS))
 .PHONY: print-pkgs-%
 print-pkgs-%:
 	@[ ! -z "$(DIR_PKG_$*)" ] || (echo $*: package not found && exit 1)
-	@make -C $(DIR_PKG_$*) print-pkgs
+	@$(MAKE) -C $(DIR_PKG_$*) print-pkgs
 
 .PHONY: print-pkgs
 print-pkgs: $(addprefix print-pkgs-,$(PACKAGES) $(SUBDIRS))
@@ -109,7 +109,7 @@ print-pkgs: $(addprefix print-pkgs-,$(PACKAGES) $(SUBDIRS))
 .PHONY: print-depends-%
 print-depends-%:
 	@[ ! -z "$(DIR_PKG_$*)" ] || (echo $*: package not found && exit 1)
-	@make -C $(DIR_PKG_$*) print-depends
+	@$(MAKE) -C $(DIR_PKG_$*) print-depends
 
 .PHONY: print-depends
 print-depends: $(addprefix print-depends-,$(PACKAGES) $(SUBDIRS))

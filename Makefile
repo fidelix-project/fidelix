@@ -13,11 +13,11 @@ default: install
 # Handle bootstrapping targets
 .PHONY: bootstrap-%
 bootstrap-%:
-	make -C bootstrap $@
+	$(MAKE) -C bootstrap $@
 
 .PHONY: from-bootstrap
 from-bootstrap:
-	make -C bootstrap/packages
+	$(MAKE) -C bootstrap/packages
 
 # Handle /usr/src copying
 copy-src:
