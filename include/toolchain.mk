@@ -1,0 +1,41 @@
+# Toolchain Configuration File
+
+ifndef _INC_TOOLCHAIN
+_INC_TOOLCHAIN=y
+
+include sysconfig.mk
+
+CROSS_HOST_TRIPLET:=$(OS_TARGET_TRIPLET)
+HOST_CC=	cc
+HOST_CXX=	c++
+HOST_LD=	ld
+
+CROSS_TARGET_TRIPLET=$(OS_CROSS_TRIPLET)
+TARGET_CC=	$(CROSS_TARGET_TRIPLET)-gcc
+TARGET_CXX=	$(CROSS_TARGET_TRIPLET)-g++
+TARGET_LD=	$(CROSS_TARGET_TRIPLET)-ld
+TARGET_AR=	$(CROSS_TARGET_TRIPLET)-ar
+TARGET_AS=	$(CROSS_TARGET_TRIPLET)-as
+TARGET_RANLIB=	$(CROSS_TARGET_TRIPLET)-ranlib
+TARGET_STRIP=	$(CROSS_TARGET_TRIPLET)-strip
+
+# The variable CROSS_COMIPLE can be used to determine if we are cross
+# compiling.
+ifneq ($(CROSS_HOST_TRIPLET),$(CROSS_TARGET_TRIPLET))
+CROSS_COMPILE=	y
+endif
+
+CFLAGS+=	-O2
+CXXFLAGS+=	-O2
+export CFLAGS CXXFLAGS LDFLAGS
+
+# If we are installing to a differenc SYSROOT
+ifneq ($(SYSROOT), /)
+ALT_ROOT:=	y
+CFLAGS+=	--sysroot=$(SYSROOT)
+CXXFLAGS+=	--sysroot=$(SYSROOT)
+LDFLAGS+=	--sysroot=$(SYSROOT)
+endif
+
+endif
+

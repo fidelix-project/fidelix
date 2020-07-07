@@ -1,5 +1,6 @@
 include sysconfig.mk
 include buildconfig.mk
+include toolchain.mk
 
 _PKG_DIR:=$(OS_RELEASE_PKG_DIR)/All
 _PKG_DB_DIR:=$(SYSROOT)/var/pkgdb
