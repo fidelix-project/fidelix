@@ -12,7 +12,8 @@ PKG_SRC_DIR=gmp-$(PKG_VERSION)
 
 AUTOCONF_CONFIGURE_ARGS=\
 	--prefix=/usr \
-	--build=$(OS_TARGET_TRIPLET)
+	--build=$(CROSS_HOST_TRIPLET) \
+	--host=$(CROSS_TARGET_TRIPLET)
 
 include package.mk
 
