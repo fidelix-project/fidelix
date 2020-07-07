@@ -20,8 +20,10 @@ ifeq ($(PKG_OS_TAG), bs)
 else
 	cp busybox-config pkg_src/$(PKG_SRC_DIR)/.config
 endif
-	make -C pkg_src/$(PKG_SRC_DIR) $(MAKE_FLAGS)
-	make -C pkg_src/$(PKG_SRC_DIR) install CONFIG_PREFIX=$(PKG_ROOT)
+	make -C pkg_src/$(PKG_SRC_DIR) $(MAKE_FLAGS) \
+		CROSS_COMPILE="$(CROSS_TARGET_TRIPLET)-"
+	make -C pkg_src/$(PKG_SRC_DIR) install CONFIG_PREFIX=$(PKG_ROOT) \
+		CROSS_COMPILE="$(CROSS_TARGET_TRIPLET)-"
 	install -dm 755 $(PKG_ROOT)/var/spool/cron
 	install -dm 1730 $(PKG_ROOT)/var/spool/cron/crontabs
 
