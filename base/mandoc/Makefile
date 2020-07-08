@@ -11,6 +11,7 @@ PKG_SRC_ARCHIVES=mandoc-$(PKG_VERSION).tar.gz
 PKG_SRC_DIR=mandoc-$(PKG_VERSION)
 
 include package.mk
+include toolchain.mk
 
 autoconf-preconfigure:
 	echo 'OSNAME="$(OS_NAME) $(OS_VERSION)"' > \
@@ -20,6 +21,14 @@ autoconf-preconfigure:
 	echo 'MANDIR="/usr/share/man"' >> \
 		pkg_src/$(PKG_SRC_DIR)/configure.local
 	echo 'HAVE_FTS=0' >> \
+		pkg_src/$(PKG_SRC_DIR)/configure.local
+	echo 'HAVE_ENDIAN=1' >> \
+		pkg_src/$(PKG_SRC_DIR)/configure.local
+	echo 'HAVE_NANOSLEEP=1' >> \
+		pkg_src/$(PKG_SRC_DIR)/configure.local
+	echo 'CC="$(TARGET_CC)"' >> \
+		pkg_src/$(PKG_SRC_DIR)/configure.local
+	echo 'CFLAGS="$(CFLAGS)"' >> \
 		pkg_src/$(PKG_SRC_DIR)/configure.local
 # Fix a glitch where mandoc can't find cc
 	sed -i pkg_src/$(PKG_SRC_DIR)/configure -e '/^CC=/c\CC=cc'
