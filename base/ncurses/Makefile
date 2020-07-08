@@ -17,7 +17,8 @@ AUTOCONF_CONFIGURE_ARGS=\
 	--without-debug \
 	--without-normal \
 	--enable-widec \
-	--build=$(OS_TARGET_TRIPLET)
+	--build=$(CROSS_HOST_TRIPLET) \
+	--host=$(CROSS_TARGET_TRIPLET)
 
 include package.mk
 
