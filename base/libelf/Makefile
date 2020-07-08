@@ -12,9 +12,13 @@ include package.mk
 # Add any additional source files that may be modified as dependencies of this
 # target.
 .stamp_build: Makefile
-	make clean
-	cd src; make $(MAKE_FLAGS)
-	cd src; make \
+	$(MAKE) -C src clean
+	$(MAKE) -C src \
+		CC="$(TARGET_CC)" \
+		CFLAGS="$(CFLAGS)" \
+		LDFLAGS="$(LDFLAGS)" \
+		$(MAKE_FLAGS)
+	$(MAKE) -C src \
 		DESTDIR=$(PKG_ROOT) \
 		install
 	touch $@

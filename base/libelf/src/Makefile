@@ -4,9 +4,7 @@ CC?=cc
 INSTALL?=install
 LNS?=ln -sf
 
-CFLAGS?=	-O2 -fpic -DPIC -g
-CFLAGS+=	-Iinclude
-CFLAGS+=	--std=gnu99
+FORCE_CFLAGS=	-O2 -fpic -DPIC -g -Iinclude --std=gnu99
 
 OS=$(shell uname)
 
@@ -94,7 +92,7 @@ native-elf-format.h: util/native-elf-format
 $(addsuffix .pico,$(GENSRC)): $(addsuffix .c,$(GENSRC))
 
 %.pico: %.c $(GENHDR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) $(FORCE_CFLAGS) -c $< -o $@
 
 SRCDIR=	.
 INCS=	libelf.h gelf.h
