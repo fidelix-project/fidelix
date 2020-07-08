@@ -13,6 +13,9 @@ PKG_SRC_ARCHIVES=\
 	tzcode$(PKG_VERSION).tar.gz
 PKG_SRC_DIR=
 
+MAKE_ARGS=cc="$(TARGET_CC)" CFLAGS="$(CFLAGS)" zic="$(HOST_ZIC)"
+MAKE_INSTALL_ARGS=zic="$(HOST_ZIC)"
+
 include package.mk
 
 # All the make- targets below are optional. You can make use of variables
