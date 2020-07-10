@@ -4,7 +4,7 @@ PKG_BUILD=1
 PKG_BUILDSYSTEM=autoconf
 
 # Build time dependencies for this package
-PKG_BUILD_DEPENDS=musl
+PKG_BUILD_DEPENDS=musl zlib ncurses libedit
 
 PKG_WGET_URLS=https://www.gnu.org/software/xorriso/xorriso-$(PKG_VERSION).tar.gz
 PKG_SRC_ARCHIVES=xorriso-$(PKG_VERSION).tar.gz
@@ -15,7 +15,9 @@ AUTOCONF_CONFIGURE_ARGS=\
 	--sysconfdir=/etc \
 	--localstatedir=/var \
 	--disable-static \
-	--build=$(OS_TARGET_TRIPLET)
+	--with-sysroot=$(SYSROOT) \
+	--build=$(CROSS_HOST_TRIPLET) \
+	--host=$(CROSS_TARGET_TRIPLET)
 AUTOCONF_MAKE_ARGS=
 AUTOCONF_MAKE_INSTALL_ARGS=
 
