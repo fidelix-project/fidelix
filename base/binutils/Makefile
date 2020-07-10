@@ -24,7 +24,6 @@ AUTOCONF_CONFIGURE_ARGS=\
 	--host=$(CROSS_TARGET_TRIPLET)
 AUTOCONF_MAKE_ARGS= 'tooldir=/usr'
 AUTOCONF_MAKE_INSTALL_ARGS= 'tooldir=/usr'
-	#--with-sysroot=$(SYSROOT) \
 
 # Handle Cross Compiling
 include toolchain.mk
