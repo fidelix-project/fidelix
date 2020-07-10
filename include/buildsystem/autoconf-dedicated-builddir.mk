@@ -18,7 +18,8 @@ _AUTOCONF_HELPER_TARGETS=\
 	cd pkg_src/build && \
 		make $(AUTOCONF_MAKE_ARGS) \
 		-j $(MAKE_MAXJOBS) \
-		-l $(MAKE_MAXLOAD)
+		-l $(MAKE_MAXLOAD) || \
+		make $(AUTOCONF_MAKE_ARGS)
 	make autoconf-preinstall
 	cd pkg_src/build && \
 		make $(AUTOCONF_MAKE_INSTALL_ARGS) install DESTDIR=$(PKG_ROOT)

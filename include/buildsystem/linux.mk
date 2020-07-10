@@ -1,11 +1,19 @@
 # This Makefile builds a Linux kernel.
 
+include toolchain.mk
+
+ifeq ($(CROSS_COMPILE), y)
+MAKE_ARGS+=	CROSS_COMPILE="$(CROSS_TARGET_TRIPLET)-" \
+		ARCH="$(ARCH_KERNEL)"
+endif
+
 .stamp_build_%: pkg_build_prepare
 	cp -uv $(KERNEL_CONFIG) pkg_src/.config
 	make linux-prebuild
-	make -C pkg_src $(MAKE_FLAGS)
+	make -C pkg_src $(MAKE_ARGS) $(MAKE_FLAGS)
 	make linux-preinstall
-	make -C pkg_src modules_install INSTALL_MOD_PATH=$(PKG_ROOT)
+	make -C pkg_src $(MAKE_ARGS) modules_install \
+		INSTALL_MOD_PATH=$(PKG_ROOT)
 	install -dm 755 $(PKG_ROOT)/boot
 	cp -v $(PKG_SRC)/arch/$(ARCH_KERNEL)/boot/bzImage \
 		$(PKG_ROOT)/boot/vmlinuz-$(PKG_VERSION)

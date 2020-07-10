@@ -15,5 +15,5 @@ $(REPO_DEPENDS):
 
 .PHONY: show-var
 show-var:
-	@echo $($(VARNAME))
+	@echo '$($(VARNAME))'
 
