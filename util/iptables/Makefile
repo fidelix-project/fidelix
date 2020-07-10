@@ -16,7 +16,8 @@ AUTOCONF_CONFIGURE_ARGS=\
 	--localstatedir=/var \
 	--disable-static \
 	--disable-nftables \
-	--build=$(OS_TARGET_TRIPLET)
+	--build=$(CROSS_HOST_TRIPLET) \
+	--host=$(CROSS_TARGET_TRIPLET)
 
 include package.mk
 
