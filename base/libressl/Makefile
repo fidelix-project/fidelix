@@ -15,22 +15,12 @@ AUTOCONF_CONFIGURE_ARGS=\
 	--sysconfdir=/etc \
 	--localstatedir=/var \
 	--with-openssldir=/etc/ssl \
-	--build=$(OS_TARGET_TRIPLET)
+	--with-sysroot=$(SYSROOT) \
+	--build=$(CROSS_HOST_TRIPLET) \
+	--host=$(CROSS_TARGET_TRIPLET)
+
+CC=	$(TARGET_CC)
+export CC
 
 include package.mk
-
-# All the autoconf- targets below are optional. You can make use of variables
-# defined in this Makefile, package.mk, package-common.mk, and autoconf.mk.
-
-# Commands to run before ./configure
-autoconf-preconfigure:
-
-# Commands to run after ./configure, before make
-autoconf-premake:
-
-# Commands to run after make, before make install
-autoconf-preinstall:
-
-# Commands to run after make install
-autoconf-prepackage:
 
