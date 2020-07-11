@@ -15,8 +15,10 @@ AUTOCONF_CONFIGURE_ARGS=\
 	--localstatedir=/var \
 	--disable-werror \
 	--disable-efiemu \
+	--with-sysroot=$(SYSROOT) \
 	--build=$(CROSS_HOST_TRIPLET) \
-	--host=$(CROSS_TARGET_TRIPLET)
+	--host=$(CROSS_TARGET_TRIPLET) \
+	CC="$(TARGET_CC) $(CFLAGS)"
 
 # The Grub configure script aborts if it can't find Python, but Python isn't
 # actually needed to build Grub. Use this to trick ./configure.
