@@ -57,7 +57,7 @@ building from source.
 #### Downloading a Sysroot Tarball
 The easiest way to provide a sysroot for the toolchain to target it to download
 one of the Root Filesystem images for the target architecture (available at
-[https://fidelix.us/download/]). Make sure to download an image for the same
+https://fidelix.us/download/). Make sure to download an image for the same
 version of Fidelix that the cross toolchain was build for. Once downloaded,
 create a directory to serve as your sysroot and extract the root filesystem
 tarball to there.
