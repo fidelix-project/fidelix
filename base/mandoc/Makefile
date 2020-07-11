@@ -26,9 +26,7 @@ autoconf-preconfigure:
 		pkg_src/$(PKG_SRC_DIR)/configure.local
 	echo 'HAVE_NANOSLEEP=1' >> \
 		pkg_src/$(PKG_SRC_DIR)/configure.local
-	echo 'CC="$(TARGET_CC)"' >> \
-		pkg_src/$(PKG_SRC_DIR)/configure.local
-	echo 'CFLAGS="$(CFLAGS)"' >> \
+	echo 'CC="$(TARGET_CC) $(CFLAGS)"' >> \
 		pkg_src/$(PKG_SRC_DIR)/configure.local
 # Fix a glitch where mandoc can't find cc
 	sed -i pkg_src/$(PKG_SRC_DIR)/configure -e '/^CC=/c\CC=cc'
