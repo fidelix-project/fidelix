@@ -5,7 +5,7 @@ include sysconfig.mk
 
 DEFAULT_PACKAGES?=$(PACKAGES) $(TARGETS)
 DIR_TARGETS:=$(DEFAULT_PACKAGES) $(SUBDIRS)
-CLEANING_TARGETS:=$(PACKAGES) $(SUBDIRS) $(TARGETS)
+CLEANING_TARGETS:=$(PACKAGES) $(SUBDIRS) $(TARGETS) $(TARGETS_TO_CLEAN)
 
 .PHONY: build 
 build: $(addprefix build-,$(DIR_TARGETS))
@@ -127,6 +127,11 @@ endif
 ifdef TARGETS
 $(foreach pkg,$(TARGETS),$(eval DIR_PKG_$(pkg):=$(OS_SRC_DIR)/$(DIR)/$(pkg)))
 TARGETS:=
+endif
+
+ifdef TARGETS_TO_CLEAN
+$(foreach pkg,$(TARGETS_TO_CLEAN),$(eval DIR_PKG_$(pkg):=$(OS_SRC_DIR)/$(DIR)/$(pkg)))
+TARGETS_TO_CLEAN:=
 endif
 
 ifdef SUBDIRS
