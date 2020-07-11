@@ -14,8 +14,9 @@ MAKE_ARGS= \
 	lib=lib \
 	prefix=/usr \
 	CC=$(TARGET_CC) \
+	CFLAGS="$(CFLAGS)" \
 	BUILD_CC=$(HOST_CC) \
-	SYSTEM_HEADERS=${STAGING_INCDIR}
+	SYSTEM_HEADERS=$(SYSROOT)/usr/include
 MAKE_INSTALL_ARGS= $(MAKE_ARGS)
 
 include package.mk
