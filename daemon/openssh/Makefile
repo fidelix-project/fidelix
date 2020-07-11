@@ -1,6 +1,6 @@
 PKG_NAME=openssh
 PKG_VERSION=8.3p1
-PKG_BUILD=1
+PKG_BUILD=2
 PKG_BUILDSYSTEM=autoconf
 
 # Build time dependencies for this package
@@ -15,6 +15,7 @@ AUTOCONF_CONFIGURE_ARGS=\
 	--sysconfdir=/etc/ssh \
 	--localstatedir=/var \
 	--disable-static \
+	--disable-strip \
 	--with-privsep-user=_sshd \
 	--with-libedit \
 	--with-sysroot=$(SYSROOT) \
