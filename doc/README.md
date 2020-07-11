@@ -19,21 +19,40 @@ Contents
 --------
 
 1. Getting Started
-   1. [About Fidelix](about.md)
-   2. [Installing Fidelix](install.md)
-   3. Package Management
+   1. Synopsis
+   2. [About Fidelix](about.md)
+   3. [Installing Fidelix](install.md)
+      1. Synopsis
+      2. Minimum Hardware Requirements
+      3. Disk Preparation
+      4. Installing the System Software
+      5. Performing the Initial System Configuration
+   4. Package Management
       1. [Overview](package-management.md)
-      2. [Building Packages Using /usr/src](src.md)
-      3. [Package Selections](package-selections.md)
-      4. [Updating the System](updating.md)
-   4. [Third Party Packages](third-party-packages.md)
+      2. Installing and Removing Additional Packages
+      3. [Updating the System](updating.md)
+   5. [Third Party Packages](third-party-packages.md)
 2. System Administration
-   1. Overview
+   1. Synopsis
    2. The sysconfig Utility
    3. Services
    4. [Configuring the iptables Firewall](firewall.md)
-3. System Specific Documentation
-4. Appendices
+3. Advanced
+   1. Synopsis
+   2. Alternate System Installation Techniques
+   3. Using the /usr/src Heirarchy
+      1. Introduction
+      2. [Building Packages](src.md)
+      3. [Package Selections](package-selections.md)
+      4. Building Installation Images
+   4. Cross Compiling
+      1. Synopsis
+      2. Building a Cross Compiler
+      3. Cross Compiling Fidelix
+   5. Contributing
+4. System Specific Documentation
+   1. Synopsis
+5. Appendices
    1. [Glossary of Terms](glossary.md)
    2. [Table of System Users](users.md)
    3. [Table of System Groups](groups.md)
