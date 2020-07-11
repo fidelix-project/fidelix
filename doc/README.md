@@ -49,9 +49,9 @@ Contents
       4. Building Fidelix from Source
       5. Building Installation Images
    4. Cross Compiling
-      1. Synopsis
-      2. Building a Cross Compiler
-      3. Cross Compiling Fidelix
+      1. [Synopsis](advanced/cross-compiling/README.md)
+      2. [Building a Cross Compiler](advanced/cross-compiling/cross-tools.md)
+      3. [Cross Compiling Fidelix](advanced/cross-compiling/cross-fidelix.md)
    5. Contributing
 4. System Specific Documentation
    1. Synopsis
