@@ -26,12 +26,36 @@ AUTOCONF_CONFIGURE_ARGS=\
 	--disable-bootstrap \
 	--disable-libsanitizer \
 	--enable-checking=release \
-	--build=$(OS_TARGET_TRIPLET)
+	--build=$(CROSS_HOST_TRIPLET) \
+	--host=$(CROSS_TARGET_TRIPLET)
 
 ifneq ($(CONFIG_ENABLE_HARDENING), n)
 AUTOCONF_CONFIGURE_ARGS+=\
 	--enable-default-pie \
 	--enable-default-ssp
+endif
+
+# Handle Cross Compiling
+include toolchain.mk
+
+ifeq ($(ALT_ROOT), y)
+AUTOCONF_CONFIGURE_ARGS+= \
+	--with-libtool-sysroot=$(SYSROOT) \
+	--with-sysroot=/ \
+	--with-build-sysroot=$(SYSROOT)
+#CFLAGS:=	$(filter-out --sysroot=$(SYSROOT),$(CFLAGS))
+#CXXFLAGS:=	$(filter-out --sysroot=$(SYSROOT),$(CXXFLAGS))
+#LDFLAGS:=	$(filter-out --sysroot=$(SYSROOT),$(LDFLAGS))
+
+CC_FOR_TARGET=		$(TARGET_CC)
+CXX_FOR_TARGET=		$(TARGET_CXX)
+LD_FOR_TARGET=		$(TARGET_LD)
+AR_FOR_TARGET=		$(TARGET_AR)
+AS_FOR_TARGET=		$(TARGET_AS)
+RANLIB_FOR_TARGET=	$(TARGET_RANLIB)
+STRIP_FOR_TARGET=	$(TARGET_STRIP)
+export CC_FOR_TARGET CXX_FOR_TARGET LD_FOR_TARGET AR_FOR_TARGET AS_FOR_TARGET
+export RANLIB_FOR_TARGET STRIP_FOR_TARGET
 endif
 
 include package.mk
