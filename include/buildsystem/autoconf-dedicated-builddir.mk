@@ -11,19 +11,19 @@ _AUTOCONF_HELPER_TARGETS=\
 
 .stamp_build_%: pkg_build_prepare
 	mkdir -p pkg_src/build
-	make autoconf-preconfigure
+	$(MAKE) autoconf-preconfigure
 	cd pkg_src/build && ../$(PKG_SRC_DIR)/configure \
 		$(AUTOCONF_CONFIGURE_ARGS) 
-	make autoconf-premake
+	$(MAKE) autoconf-premake
 	cd pkg_src/build && \
 		make $(AUTOCONF_MAKE_ARGS) \
 		-j $(MAKE_MAXJOBS) \
 		-l $(MAKE_MAXLOAD) || \
 		make $(AUTOCONF_MAKE_ARGS)
-	make autoconf-preinstall
+	$(MAKE) autoconf-preinstall
 	cd pkg_src/build && \
 		make $(AUTOCONF_MAKE_INSTALL_ARGS) install DESTDIR=$(PKG_ROOT)
-	make autoconf-prepackage
+	$(MAKE) autoconf-prepackage
 	touch $@
 
 # Commands to run before ./configure
