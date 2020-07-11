@@ -12,8 +12,10 @@ include package.mk
 abs_srctree=$(CURDIR)/pkg_src/$(PKG_SRC_DIR)
 
 .stamp_custom_build: 
-	cd pkg_src/$(PKG_SRC_DIR); make abs_srctree=$(abs_srctree) mrproper
-	cd pkg_src/$(PKG_SRC_DIR); make abs_srctree=$(abs_srctree) headers
+	make -C pkg_src/$(PKG_SRC_DIR) \
+		abs_srctree=$(abs_srctree) mrproper
+	make -C pkg_src/$(PKG_SRC_DIR) \
+		ARCH=$(ARCH_KERNEL) abs_srctree=$(abs_srctree) headers
 	cd pkg_src/$(PKG_SRC_DIR); find usr/include -name '.*' -delete
 	rm pkg_src/$(PKG_SRC_DIR)/usr/include/Makefile
 	install -dm 755 $(PKG_ROOT)/usr/include
