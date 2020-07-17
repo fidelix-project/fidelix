@@ -5,5 +5,5 @@
 # boot related packages.
 
 # The packages in the boot group to build for this system
-BOOT_PACKAGES=
+BOOT_PACKAGES=boot-scripts
 
