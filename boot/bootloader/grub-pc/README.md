@@ -24,7 +24,8 @@ is controlled by the `INSTALL_GRUBCFG` environment variable.
 There are several enviroment variables that will affect the bootloader
 installation if set:
 
-* `INSTALL_MBR`: Whether or not to install the MBR. Must be set to y/n.
+* `INSTALL_MBR`: Whether or not to install the Master Boot Record. Must be set
+  to y/n.
 * `INSTALL_GRUBCFG`: Whether or not to install the new grub.cfg. Must be set to
   y/n.
 * `GRUB_DRIVE`: The device node to install GRUB to (usually /dev/sda). Must be
