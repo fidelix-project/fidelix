@@ -45,27 +45,30 @@ pkgs: $(IMG_PKGS)
 rootfs: $(IMG_ROOTFS)
 minirootfs: $(IMG_MINIROOTFS)
 
-.PHONY: clean
-clean:
-	rm -f *.iso *.img *.img.*
+.PHONY: clean scrub neat tidy
+clean scrub neat tidy:
+	rm -f *.iso *.img *.img.* iso-grub.cfg
 
 .PHONY: world
 world:
-	$(MAKE) -C $(OS_SRC_DIR) world
+	make -C $(OS_SRC_DIR) world
 
-$(IMG_USB): $(OUTDIR) package-grub world
+iso-grub.cfg: support/iso-grub.cfg.in
+	sed -e 's/%OS_VERSION%/$(OS_VERSION)/g' $< > $@
+
+$(IMG_USB): $(OUTDIR) hostpackage-grub world
 	cd support && ./makeusbimage.sh
 
 $(IMG_ISO): $(OUTDIR) $(WORKDIR) world \
-	package-xorriso package-grub package-blkid
+	hostpackage-xorriso hostpackage-grub hostpackage-blkid
 # Setup
 	-rm -rf $(WORKDIR)/iso
 	mkdir -p $(WORKDIR)/iso/root
 	mkdir -p $(WORKDIR)/iso/initrd
 
 # Create the initrd
-	make -C $(OS_SRC_DIR) SYSROOT=$(WORKDIR)/iso/initrd SELECTION=initrd \
-		install-selection
+	make -C $(OS_SRC_DIR) SYSROOT=$(WORKDIR)/iso/initrd \
+		SELECTION=initrd install-selection
 	install -m 755 support/iso-init.sh $(WORKDIR)/iso/initrd/init
 	install -dm 755 $(WORKDIR)/iso/initrd/proc
 	install -dm 755 $(WORKDIR)/iso/initrd/sys
@@ -83,7 +86,7 @@ $(IMG_ISO): $(OUTDIR) $(WORKDIR) world \
 	install -m 644 support/issue.iso $(WORKDIR)/iso/root/etc/issue
 
 # Make the GRUB bootdisk
-	install -m 644 support/iso-grub.cfg \
+	install -m 644 iso-grub.cfg \
 		$(WORKDIR)/iso/root/boot/grub/grub.cfg
 	grub-mkrescue -o $@ "--modules=$(GRUB_MODULES)" \
 		$(WORKDIR)/iso/root -- -volid "FIDELIXLIVE"
@@ -102,13 +105,13 @@ $(IMG_PKGS): $(OUTDIR) $(WORKDIR) world
 	make -C $(OS_SRC_DIR) SYSROOT=$(WORKDIR)/pkgs copy-pkgs
 	tar cf $@ -C "$(WORKDIR)/pkgs/var" packages
 
-$(IMG_ROOTFS): $(OUTDIR) $(WORKDIR) package-bsdtar
+$(IMG_ROOTFS): $(OUTDIR) $(WORKDIR) hostpackage-bsdtar
 	rm -rf $(WORKDIR)/rootfs
 	mkdir -p $(WORKDIR)/rootfs
 	make -C $(OS_SRC_DIR) SYSROOT=$(WORKDIR)/rootfs SYSTEM=chroot install
 	bsdtar cZf $@ -C "$(WORKDIR)/rootfs" --xattrs .
 
-$(IMG_MINIROOTFS): $(OUTDIR) $(WORKDIR) package-bsdtar
+$(IMG_MINIROOTFS): $(OUTDIR) $(WORKDIR) hostpackage-bsdtar
 	rm -rf $(WORKDIR)/minirootfs
 	mkdir -p $(WORKDIR)/minirootfs
 	make -C $(OS_SRC_DIR) \
