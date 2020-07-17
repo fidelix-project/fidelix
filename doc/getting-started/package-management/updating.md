@@ -41,15 +41,15 @@ Go to https://github.com/Z5T1/fidelix/compare/. Select a base and compare
 branch/tag. Add a `.patch` suffix to the end of the resultant URL. Download
 this patch file.
 
-For example, to upgrade from snapshot20200429a to the latest version of the
-system, use the following wget command:
+For example, to upgrade from version 0.2.0 to 0.2.1 of the system, use the
+following wget command:
 
-    wget https://github.com/Z5T1/fidelix/compare/snapshot20200429a...master.patch
+    wget https://github.com/Z5T1/fidelix/compare/0.2.0...0.2.1.patch
 
 Once you have the patch, go over to `/usr/src`. Apply the patch with the
 following patch command, substituting in the path to the patch you downloaded:
 
-    patch -p1 < ~/snapshot20200429a...master.patch
+    patch -p1 < ~/0.2.0...0.2.1.patch
 
 Now run the following command to update all the installed packages:
 

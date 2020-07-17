@@ -26,7 +26,7 @@ use `bmake` instead of `make` when building pkgsrc provided packages.
 
 # Installing Prebuilt Binary Packages
 
-This capability will be forecoming in the future for select packages on select
+This capability will be forthcoming in the future for select packages on select
 architectures. In the meantime, it will be necessary to build third party
 packages from source.
 
@@ -71,5 +71,5 @@ precedence without the system administrator's knowledge.
 ## Additional Hints
 
 There are additional hints for using pkgsrc on Fidelix at
-`/usr/src/util/pkgsrc/HINTS.md`.
+[/usr/src/util/pkgsrc/HINTS.md](../.../usr/src/util/pkgsrc/HINTS.md).
 

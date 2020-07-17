@@ -19,14 +19,16 @@ gets built as a separate package.
 To build and install cross toolchains for every supported architecture, do the
 following:
 
-    make -C /usr/src/util/cross-tools install
+    cd /usr/src/util/cross-tools 
+    make install
 
 You may not have a need build a toolchain for every architecture. In this case,
 the following can be done to build and install a toolchain targeting one
 specific architecture (in this case i686, adjust this to the desired
 architecture):
 
-    make -C /usr/src/util/cross-tools/cross-tools-i686 install
+    cd /usr/src/util/cross-tools/cross-tools-i686 
+    make install
 
 Setting up the Toolchain Environment
 ------------------------------------
@@ -89,7 +91,7 @@ located at /var/chroot/i686):
     i686-fidelix-linux-musl-gcc --sysroot=/var/chroot/i686 test.c -o test
 
 ### Building Third Party Software
-When using the cross toolchain to build third party software, it will often be
+When using the cross toolchain to build third party software, it will be
 necessary adjust the CC and CFLAGS variables and/or host triplet so that the
 package is built using the cross toolchain.
 

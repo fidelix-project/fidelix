@@ -3,13 +3,7 @@ Fidelix /usr/src README
 
 This directory contains a series of Makefiles that can be used for building,
 installing, and maintaining the Fidelix system software. It functions very
-similarly to the BSD /usr/src and /usr/ports heirarchies.
-
-Fidelix is a light weight Linux distribution that focuses on proactive
-security. It aims to eliminate unnecessary code and is targeted primarily
-towards servers and embedded systems.
-
-More information about Fidelix can be found in `doc/about.md`.
+similarly to the BSD /usr/src, /usr/ports, and /usr/pkgsrc heirarchies.
 
 # Single Package Targets
 
@@ -118,7 +112,7 @@ system. If you wish to skip redownloading all the package sources, use
 
     cd /usr/src
     make clean
-    make install
+    make reinstall
 
 # Notes
 

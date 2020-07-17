@@ -1,1 +1,1 @@
-doc/install.md
+doc/getting-started/install.md
