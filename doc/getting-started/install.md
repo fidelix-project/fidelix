@@ -2,7 +2,7 @@ Fidelix Installation Guide
 ==========================
 
 This file documents how to perform a standard Fidelix installation: that is
-bootind from one of the bootable installation media (either .iso or .img) and
+booting from one of the bootable installation media (either .iso or .img) and
 installing to a disk. If you are new to Fidelix, you may want to read through
 the entire guide before beginning.
 
@@ -159,12 +159,13 @@ bootloader for your system, run:
     make SYSROOT=/mnt install-bootloader
 
 Note that many systems will require you to set additional environment variables
-in order for the bootloader to be install. If your system does require that
+in order for the bootloader to be installed. If your system does require that
 additional variables be set, Make will inform you to set them.
 
-Documentation for your system's bootloader can be found in
-`./boot/bootloader/BOOT_LOADER`, where BOOT_LOADER is the bootloader target
-for your system. The bootloader for your system can be determined by running:
+Documentation for your system's bootloader can be found in the
+`boot/bootloader/BOOT_LOADER` directory, where BOOT_LOADER is the bootloader
+target for your system. The bootloader for your system can be determined by
+running:
 
     make -C boot/bootloader which
 
