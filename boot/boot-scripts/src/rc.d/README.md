@@ -1,24 +1,33 @@
-/etc/rc.d README
-================
+System Boot/Shutdown Process
+============================
 
-This directory contains scripts for handling system startup and shutdown.
+The /etc/rc.d directory contains scripts for handling system startup and
+shutdown.
 
-# The Startup Process
+The Startup Process
+-------------------
 
-When the system boots, `init` runs the `/etc/rc.d/rc` script. This script first
-performs any essential system initialization tasks, then starts any services
-symlinked into /etc/rc.d/enabled, and finally runs the `/etc/rc.d/rc.local`
-script if it exists and is executable.
+When the system boots, the kernel (that's Linux) performs the basic hardware
+initialization. Once that is complete, it mounts the root filessytem. At this
+point, /sbin/init is started as PID 1. It is up then up to init to perform the
+rest of the system initialization.
 
-# The Shutdown Process
+Once started, `init` runs the `/etc/rc.d/rc` script. This script first performs
+any essential system initialization tasks, then starts any services symlinked
+into /etc/rc.d/enabled, and finally runs the `/etc/rc.d/rc.local` script if it
+exists and is executable.
+
+The Shutdown Process
+--------------------
 
 When the system shuts down or reboots, `init` runs the `/etc/rc.d/rc.shutdown`
 script. This script does the inverse of the `rc` script: it runs the 
 `/etc/rc.d/rc.shutdown.local` script if it exists and is executable, then stops
 any services symlinked into /etc/rc.d/enabled, and finally performs the
-essential system shutdown tasks.
+essential system shutdown tasks and powers off (or reboots) the system.
 
-# Starting/Stopping Services on Boot/Shutdown
+Starting/Stopping Services on Boot/Shutdown
+-------------------------------------------
 
 On boot, any services in /etc/rc.d/enabled are started in ls order. On
 shutdown, any services in /etc/rc.d/enabled are stopped in reverse ls order.
@@ -29,6 +38,6 @@ before it and stopped after it.
 Alternatively, one can use the `service` utility to enable and disable
 services:
 
-    service enable syslogd
-    service disable crond
+    service syslogd enable
+    service crond disable
 
