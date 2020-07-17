@@ -1,4 +1,4 @@
-PKG_NAME=ntpd
+PKG_NAME=openntpd
 PKG_VERSION=6.2p3
 PKG_BUILD=1
 PKG_BUILDSYSTEM=autoconf
