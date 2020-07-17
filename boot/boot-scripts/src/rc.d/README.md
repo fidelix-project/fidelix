@@ -9,7 +9,7 @@ The Startup Process
 
 When the system boots, the kernel (that's Linux) performs the basic hardware
 initialization. Once that is complete, it mounts the root filessytem. At this
-point, /sbin/init is started as PID 1. It is up then up to init to perform the
+point, /sbin/init is started as PID 1. It is then up to init to perform the
 rest of the system initialization.
 
 Once started, `init` runs the `/etc/rc.d/rc` script. This script first performs
