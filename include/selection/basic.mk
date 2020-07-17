@@ -22,6 +22,7 @@ SELECTED_PACKAGES=\
         zoneinfo \
         ncurses \
         kmod \
+	release-files \
 	boot \
 	blkid \
 	util
