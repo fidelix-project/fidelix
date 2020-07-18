@@ -43,9 +43,6 @@ AUTOCONF_CONFIGURE_ARGS+= \
 	--with-libtool-sysroot=$(SYSROOT) \
 	--with-sysroot=/ \
 	--with-build-sysroot=$(SYSROOT)
-#CFLAGS:=	$(filter-out --sysroot=$(SYSROOT),$(CFLAGS))
-#CXXFLAGS:=	$(filter-out --sysroot=$(SYSROOT),$(CXXFLAGS))
-#LDFLAGS:=	$(filter-out --sysroot=$(SYSROOT),$(LDFLAGS))
 
 CC_FOR_TARGET=		$(TARGET_CC)
 CXX_FOR_TARGET=		$(TARGET_CXX)
