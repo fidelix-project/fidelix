@@ -1,4 +1,5 @@
 *.iso
 *.img
 *.img.*
+iso-grub.cfg
 

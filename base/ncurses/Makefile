@@ -1,6 +1,6 @@
 PKG_NAME=ncurses
 PKG_VERSION=6.2
-PKG_BUILD=1
+PKG_BUILD=2
 PKG_BUILDSYSTEM=autoconf
 
 PKG_BUILD_DEPENDS=musl
@@ -17,7 +17,9 @@ AUTOCONF_CONFIGURE_ARGS=\
 	--without-debug \
 	--without-normal \
 	--enable-widec \
-	--build=$(OS_TARGET_TRIPLET)
+	--disable-stripping \
+	--build=$(CROSS_HOST_TRIPLET) \
+	--host=$(CROSS_TARGET_TRIPLET)
 
 include package.mk
 

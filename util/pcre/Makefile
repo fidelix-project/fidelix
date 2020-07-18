@@ -19,7 +19,9 @@ AUTOCONF_CONFIGURE_ARGS=\
 	--enable-pcregrep-libz \
 	--enable-pcretest-libedit \
 	--disable-static \
-	--build=$(OS_TARGET_TRIPLET)
+	--with-sysroot=$(SYSROOT) \
+	--build=$(CROSS_HOST_TRIPLET) \
+	--host=$(CROSS_TARGET_TRIPLET)
 
 include package.mk
 

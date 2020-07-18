@@ -25,7 +25,9 @@ SUBDIRS=
 
 # Subdirectories that should have Make run on them but do not produce binary
 # packages.
-TARGETS=pkgsrc
+TARGETS=\
+	pkgsrc \
+	cross-tools
 
 include dir.mk
 

@@ -19,7 +19,8 @@ AUTOCONF_CONFIGURE_ARGS=\
 	--sysconfdir=/etc \
 	--localstatedir=/var \
 	--program-prefix=util-linux- \
-	--build=$(OS_TARGET_TRIPLET)
+	--build=$(CROSS_HOST_TRIPLET) \
+	--host=$(CROSS_TARGET_TRIPLET)
 AUTOCONF_MAKE_ARGS=blkid
 AUTOCONF_SKIP_MAKE_INSTALL=y
 

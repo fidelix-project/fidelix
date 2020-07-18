@@ -17,7 +17,10 @@ AUTOCONF_CONFIGURE_ARGS=\
 	--enable-bsdtar \
 	--disable-bsdcpio \
 	--disable-shared \
-	--build=$(OS_TARGET_TRIPLET)
+	--without-xml2 \
+	--with-sysroot=$(SYSROOT) \
+	--build=$(CROSS_HOST_TRIPLET) \
+	--host=$(CROSS_TARGET_TRIPLET)
 
 include package.mk
 

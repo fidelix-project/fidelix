@@ -13,7 +13,16 @@ PKG_SRC_DIR=mpc-$(PKG_VERSION)
 AUTOCONF_CONFIGURE_ARGS=\
 	--prefix=/usr \
 	--disable-static \
-	--build=$(OS_TARGET_TRIPLET)
+	--with-sysroot=$(SYSROOT) \
+	--build=$(CROSS_HOST_TRIPLET) \
+	--host=$(CROSS_TARGET_TRIPLET)
+
+# Handle Cross Compiling
+include toolchain.mk
+
+ifeq ($(ALT_ROOT), y)
+AUTOCONF_CONFIGURE_ARGS+= 
+endif
 
 include package.mk
 

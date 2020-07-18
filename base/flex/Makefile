@@ -14,7 +14,9 @@ AUTOCONF_CONFIGURE_ARGS=\
 	--sysconfdir=/etc \
 	--localstatedir=/var \
 	--disable-static \
-	--build=$(OS_TARGET_TRIPLET)
+	--disable-bootstrap \
+	--build=$(CROSS_HOST_TRIPLET) \
+	--host=$(CROSS_TARGET_TRIPLET)
 
 include package.mk
 

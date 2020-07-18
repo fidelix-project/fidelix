@@ -12,7 +12,8 @@ PKG_SRC_DIR=m4-$(PKG_VERSION)
 
 AUTOCONF_CONFIGURE_ARGS=\
 	--prefix=/usr \
-	--target=$(OS_TARGET_TRIPLET)
+	--target=$(CROSS_HOST_TRIPLET) \
+	--host=$(CROSS_TARGET_TRIPLET)
 
 include package.mk
 

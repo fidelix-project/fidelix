@@ -12,6 +12,8 @@ PKG_SRC_DIR=zlib-$(PKG_VERSION)
 
 AUTOCONF_CONFIGURE_ARGS= --prefix=/usr
 
+export CC=$(TARGET_CC)
+
 include package.mk
 
 # Commands to run after make install

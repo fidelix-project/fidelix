@@ -13,3 +13,7 @@ $(REPO_CONTENTS):
 $(REPO_DEPENDS):
 	$(QUIET_MAKE) -C $(OS_SRC_DIR) print-depends | sort > $@
 
+.PHONY: show-var
+show-var:
+	@echo '$($(VARNAME))'
+

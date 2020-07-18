@@ -16,7 +16,7 @@ OS_PKG_DIR?=/var/packages
 OS_RELEASE_PKG_DIR?=$(OS_PKG_DIR)/$(OS_VERSION)-$(OS_PKG_TAG)/$(OS_ARCH)
 
 # Patch and prerelease versioning
-OS_PATCH:=0
+OS_PATCH:=1
 OS_PRERELEASE:=
 
 # Package file configuration
@@ -24,8 +24,10 @@ OS_PKG_TAG:=build20b
 PKG_EXTENSION:=tgz
 
 # Set the system architecture
-OS_ARCH?=$(shell arch)
-OS_TARGET_TRIPLET:=$(OS_ARCH)-$(OS_NAME_LOWERCASE)-linux-musl
+HOST_ARCH?=$(shell arch)
+OS_ARCH?=$(HOST_ARCH)
+OS_TARGET_TRIPLET:=$(HOST_ARCH)-$(OS_NAME_LOWERCASE)-linux-musl
+OS_CROSS_TRIPLET?=$(OS_ARCH)-$(OS_NAME_LOWERCASE)-linux-musl
 
 # Set the system type
 SYSTEM?=generic-$(OS_ARCH)

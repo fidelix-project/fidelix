@@ -12,14 +12,30 @@ PKG_SRC_DIR=binutils-$(PKG_VERSION)
 
 AUTOCONF_CONFIGURE_ARGS=\
 	--prefix=/usr \
+	--disable-multilib \
 	--enable-ld=default \
 	--enable-plugins \
 	--enable-shared \
 	--disable-werror \
 	--enable-64-bit-bfd \
-	--build=$(OS_TARGET_TRIPLET)
+	--without-flex \
+	--with-system-zlib \
+	--build=$(CROSS_HOST_TRIPLET) \
+	--host=$(CROSS_TARGET_TRIPLET)
 AUTOCONF_MAKE_ARGS= 'tooldir=/usr'
 AUTOCONF_MAKE_INSTALL_ARGS= 'tooldir=/usr'
+
+# Handle Cross Compiling
+include toolchain.mk
+
+ifeq ($(ALT_ROOT), y)
+AUTOCONF_CONFIGURE_ARGS+= \
+	--enable-poison-system-directories \
+	--with-libtool-sysroot=$(SYSROOT)
+endif
+
+autoconf-premake:
+#	$(MAKE) -C pkg_src/build configure-host
 
 include package.mk
 

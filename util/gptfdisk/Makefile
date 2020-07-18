@@ -14,6 +14,10 @@ MAKE_ARGS=gdisk cgdisk fixparts
 MAKE_INSTALL_ARGS=
 MAKE_SKIP_MAKE_INSTALL=y
 
+include toolchain.mk
+
+MAKE_ARGS+=	CC="$(TARGET_CC)" CXX="$(TARGET_CXX)"
+
 include package.mk
 
 make-premake:

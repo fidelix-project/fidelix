@@ -12,5 +12,8 @@ package-%.mk:
 package-%:
 	make -C $(OS_SRC_DIR) install-$*
 
+hostpackage-%:
+	make -C $(OS_SRC_DIR) OS_ARCH=$(HOST_ARCH) SYSROOT=/ install-$*
+
 endif
 

@@ -1,5 +1,6 @@
 include sysconfig.mk
 include buildconfig.mk
+include toolchain.mk
 
 _PKG_DIR:=$(OS_RELEASE_PKG_DIR)/All
 _PKG_DB_DIR:=$(SYSROOT)/var/pkgdb
@@ -12,6 +13,7 @@ PKG_SRC=$(CURDIR)/pkg_src/$(PKG_SRC_DIR)
 CMD_UPGRADEPKG=$(OS_SRC_DIR)/scripts/upgradepkg 
 CMD_MAKEPKG=$(OS_SRC_DIR)/scripts/makepkg 
 CMD_REMOVEPKG=$(OS_SRC_DIR)/scripts/removepkg
+CMD_INSTALLPKG=$(OS_SRC_DIR)/scripts/installpkg
 
 ifneq ($(filter $(PKG_NAME), $(ARCH_SKIP_PKGS)), )
 .PHONY: default
@@ -25,7 +27,7 @@ $(_PKG_FILE): | .stamp_dependencies
 else
 $(_PKG_FILE):
 endif
-	make .stamp_build_$(_PKG_FULL_NAME)
+	$(MAKE) .stamp_build_$(_PKG_FULL_NAME)
 	install -dm 755 -o 0 -g 0 $(_PKG_DIR)
 # Make sure the OS_PKG_DIR is created if need be
 	$(CMD_MAKEPKG) -d $(PKG_ROOT) -m $(CURDIR) -o $(_PKG_FILE)
@@ -69,7 +71,7 @@ print-depends:
 	@echo $(PKG_NAME): $(PKG_BUILD_DEPENDS)
 
 .stamp_dependencies: 
-	cd $(OS_SRC_DIR) && make $(addprefix install-,$(PKG_BUILD_DEPENDS)) 
+	cd $(OS_SRC_DIR) && $(MAKE) $(addprefix install-,$(PKG_BUILD_DEPENDS)) 
 	touch $@
 
 $(_PKG_DB_DIR)/$(_PKG_FULL_NAME): $(_PKG_FILE)

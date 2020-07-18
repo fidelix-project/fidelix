@@ -1,4 +1,4 @@
-PKG_NAME=ntpd
+PKG_NAME=openntpd
 PKG_VERSION=6.2p3
 PKG_BUILD=1
 PKG_BUILDSYSTEM=autoconf
@@ -16,7 +16,9 @@ AUTOCONF_CONFIGURE_ARGS=\
 	--with-privsep-user=_ntpd \
 	--with-privsep-path=/var/empty \
 	--disable-static \
-	--build=$(OS_TARGET_TRIPLET)
+	--with-sysroot=$(SYSROOT) \
+	--build=$(CROSS_HOST_TRIPLET) \
+	--host=$(CROSS_TARGET_TRIPLET)
 
 include package.mk
 

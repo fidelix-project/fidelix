@@ -9,7 +9,7 @@ ARCH_FAMILY=arm
 ARCH_LIBDIR_SUFFIX=64
 
 # The directory for this architecture in the Linux kernel source
-ARCH_KERNEL=aarch64
+ARCH_KERNEL=arm64
 
 # The architecture tag that appears in the dynamic linker: /lib/ld-musl-*.so.1
 DYNLD_ARCH=aarch64

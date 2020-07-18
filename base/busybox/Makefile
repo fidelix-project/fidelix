@@ -10,6 +10,13 @@ PKG_WGET_URLS=https://busybox.net/downloads/busybox-$(PKG_VERSION).tar.bz2
 PKG_SRC_ARCHIVES=busybox-$(PKG_VERSION).tar.bz2
 PKG_SRC_DIR=busybox-$(PKG_VERSION)
 
+include toolchain.mk
+
+ifeq ($(CROSS_COMPILE), y)
+MAKE_ARGS+=		CROSS_COMPILE="$(CROSS_TARGET_TRIPLET)-"
+MAKE_INSTALL_ARGS+=	CROSS_COMPILE="$(CROSS_TARGET_TRIPLET)-"
+endif
+
 include package.mk
 
 # Put custom build rules here. This target runs with $PWD set to the directory
@@ -20,8 +27,9 @@ ifeq ($(PKG_OS_TAG), bs)
 else
 	cp busybox-config pkg_src/$(PKG_SRC_DIR)/.config
 endif
-	make -C pkg_src/$(PKG_SRC_DIR) $(MAKE_FLAGS)
-	make -C pkg_src/$(PKG_SRC_DIR) install CONFIG_PREFIX=$(PKG_ROOT)
+	make -C pkg_src/$(PKG_SRC_DIR) $(MAKE_FLAGS) $(MAKE_ARGS)
+	make -C pkg_src/$(PKG_SRC_DIR) install CONFIG_PREFIX=$(PKG_ROOT) \
+		$(MAKE_INSTALL_ARGS)
 	install -dm 755 $(PKG_ROOT)/var/spool/cron
 	install -dm 1730 $(PKG_ROOT)/var/spool/cron/crontabs
 
