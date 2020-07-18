@@ -68,7 +68,8 @@ does not match the package version ($(PKG_VERSION)).)
 endif
 
 .SECONDARY: pkg_build_prepare
-pkg_build_prepare: pkg_src_prepare pkg_root_prepare $(PKG_SRC_ARCHIVES)
+pkg_build_prepare: pkg_src_prepare pkg_root_prepare pkg_src/.arch_$(OS_ARCH) \
+	$(PKG_SRC_ARCHIVES)
 
 else
 
@@ -77,9 +78,12 @@ $(info Using in place kernel source tree)
 endif
 
 .SECONDARY: pkg_build_prepare
-pkg_build_prepare: pkg_root_prepare
+pkg_build_prepare: pkg_root_prepare pkg_src/.arch_$(OS_ARCH)
 
 endif
+
+pkg_src/.arch_$(OS_ARCH): $(PKG_SRC_ARCHIVES)
+	touch $@
 
 .SECONDARY: pkg_root_prepare
 pkg_root_prepare: .stamp_verify_$(PKG_NAME)-$(PKG_VERSION)
